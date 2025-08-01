@@ -245,7 +245,7 @@ const DailyQuest: React.FC = () => {
                     </>
                 )}
             </WheelItem>
-            {showSpinTheWheel && <WheelOfFortune />}
+            {showSpinTheWheel && <WheelOfFortune onClose={() => setShowSpinTheWheel(false)} />}
         </Container>
     );
 };

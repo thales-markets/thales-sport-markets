@@ -1,6 +1,7 @@
 import pointer from 'assets/images/svgs/pointer.svg';
 import axios from 'axios';
 import Button from 'components/Button';
+import Modal from 'components/Modal';
 import { generalConfig } from 'config/general';
 import { OVERDROP_WHEEL_IMAGES } from 'constants/overdrop';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -15,7 +16,11 @@ import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
 import { useAccount } from 'wagmi';
 
-const WheelOfFortune: React.FC = () => {
+type WheelProps = {
+    onClose: () => void;
+};
+
+const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
     const { address, isConnected } = useAccount();
@@ -80,65 +85,64 @@ const WheelOfFortune: React.FC = () => {
     }, [userData, spinTheWheelOptions]);
 
     return (
-        <Wrapper>
-            <WheelWrapper>
-                {data && (
-                    <Wheel
-                        mustStartSpinning={mustSpin}
-                        prizeNumber={prizeNumber}
-                        data={data}
-                        outerBorderColor={theme.textColor.tertiary}
-                        outerBorderWidth={2}
-                        innerBorderWidth={10}
-                        innerBorderColor={theme.textColor.tertiary}
-                        radiusLineColor={theme.textColor.tertiary}
-                        radiusLineWidth={2}
-                        textColors={[theme.textColor.tertiary]}
-                        textDistance={55}
-                        fontWeight={600}
-                        onStopSpinning={() => {
-                            setMustSpin(false);
-                            refetchUserOverdrop(address as any);
-                        }}
-                        pointerProps={{
-                            style: {
-                                transform: `rotate(45deg)`,
-                                width: 70,
-                                height: 70,
-                            },
-                            src: pointer,
-                        }}
-                    />
-                )}
-            </WheelWrapper>
+        <Modal containerStyle={{ border: 'none', background: 'transparent' }} hideHeader title="" onClose={onClose}>
+            <Wrapper>
+                <WheelWrapper>
+                    {data && (
+                        <Wheel
+                            mustStartSpinning={mustSpin}
+                            prizeNumber={prizeNumber}
+                            data={data}
+                            innerBorderWidth={10}
+                            innerBorderColor={theme.textColor.tertiary}
+                            radiusLineColor={theme.textColor.tertiary}
+                            radiusLineWidth={2}
+                            textColors={[theme.textColor.tertiary]}
+                            textDistance={55}
+                            fontWeight={600}
+                            onStopSpinning={() => {
+                                setMustSpin(false);
+                                refetchUserOverdrop(address as any);
+                            }}
+                            pointerProps={{
+                                style: {
+                                    transform: `rotate(45deg)`,
+                                    width: 70,
+                                    height: 70,
+                                },
+                                src: pointer,
+                            }}
+                        />
+                    )}
+                </WheelWrapper>
 
-            <Footer>
-                <FlexDivSpaceBetween>
-                    <div>
-                        <Text>Daily Spin the Wheel</Text>
-                        <Description>Spin once every 24 hours • Guaranteed rewards</Description>
-                    </div>
-                </FlexDivSpaceBetween>
-                <Button
-                    width="100%"
-                    backgroundColor="#FFD607"
-                    height="30"
-                    borderColor="none"
-                    borderRadius="8px"
-                    onClick={handleSpinClick}
-                    fontSize="18px"
-                    textColor={theme.textColor.tertiary}
-                    margin="20px 0 0 0"
-                >
-                    Spin Now
-                </Button>
-            </Footer>
-        </Wrapper>
+                <Footer>
+                    <FlexDivSpaceBetween>
+                        <div>
+                            <Text>Daily Spin the Wheel</Text>
+                            <Description>Spin once every 24 hours • Guaranteed rewards</Description>
+                        </div>
+                    </FlexDivSpaceBetween>
+                    <Button
+                        width="100%"
+                        backgroundColor="#FFD607"
+                        height="30"
+                        borderColor="none"
+                        borderRadius="8px"
+                        onClick={handleSpinClick}
+                        fontSize="18px"
+                        textColor={theme.textColor.tertiary}
+                        margin="20px 0 0 0"
+                    >
+                        Spin Now
+                    </Button>
+                </Footer>
+            </Wrapper>
+        </Modal>
     );
 };
 
 const Wrapper = styled.div`
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -159,10 +163,6 @@ const Footer = styled.div`
     border: 1px solid #4e5fb1;
     width: 100%;
     background: #151b36;
-    margin-top: -60px;
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        margin-top: 0;
-    }
 `;
 
 const Text = styled.p`

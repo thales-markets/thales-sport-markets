@@ -235,6 +235,7 @@ export default {
             octonary: Colors.OVERDROP_BLUE,
             active: Colors.NAVY_BLUE_DARK,
             progressBar: Colors.YELLOW,
+            gradient: 'linear-gradient(90deg, #DBA111 0%, #FACC15 100%)',
         },
         textColor: {
             primary: Colors.YELLOW,
@@ -252,6 +253,7 @@ export default {
             secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
             tertiary: Colors.GOLD,
             quaternary: Colors.TORY_BLUE,
+            progressBar: `linear-gradient(90deg, ${Colors.TORY_BLUE} 0%, ${Colors.BLUE} 100%)`,
         },
         badge: {
             background: {

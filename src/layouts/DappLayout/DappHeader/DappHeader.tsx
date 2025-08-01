@@ -28,6 +28,7 @@ import { OverdropLevel, ThemeInterface } from 'types/ui';
 import { buildHref } from 'utils/routes';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import OverdropHeader from './components/OverdropHeader';
 import { ProfileIconWidget } from './components/ProfileItem/ProfileItem';
 import {
     BlockedGamesNotificationCount,
@@ -157,18 +158,15 @@ const DappHeader: React.FC = () => {
                     <MiddleContainer>
                         <MiddleContainerSectionLeft>
                             <OverdropWrapper>
-                                <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
-                                    {levelItem.level > 0 ? (
-                                        <OverdropButtonContainer>
-                                            <SmallBadgeImage src={levelItem.smallBadge} />
-                                            {`LVL ${levelItem.level} ${levelItem.levelName}`}
-                                        </OverdropButtonContainer>
-                                    ) : (
+                                {isConnected ? (
+                                    <OverdropHeader />
+                                ) : (
+                                    <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
                                         <OverdropIconWrapper>
                                             <OverdropIcon />
                                         </OverdropIconWrapper>
-                                    )}
-                                </SPAAnchor>
+                                    </SPAAnchor>
+                                )}
                             </OverdropWrapper>
                         </MiddleContainerSectionLeft>
                         {isConnected && (
