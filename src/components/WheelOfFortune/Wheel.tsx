@@ -85,7 +85,12 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
     }, [userData, spinTheWheelOptions]);
 
     return (
-        <Modal containerStyle={{ border: 'none', background: 'transparent' }} hideHeader title="" onClose={onClose}>
+        <Modal
+            containerStyle={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
+            hideHeader
+            title=""
+            onClose={onClose}
+        >
             <Wrapper>
                 <WheelWrapper>
                     {data && (
