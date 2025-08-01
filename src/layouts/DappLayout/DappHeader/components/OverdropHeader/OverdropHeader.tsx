@@ -116,7 +116,6 @@ const OverdropHeader: React.FC = () => {
                     <Dot completed={isOTTradeCompleted} />
                     <Dot completed={isSpeedTradeCompleted} />
                     <Dot completed={isSocialQuestDone} />
-                    <Dot completed={isSpinTheWheelCompleted} />
                 </FlexDivCentered>
                 <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
             </FlexDivRowCentered>
@@ -130,7 +129,6 @@ const OverdropHeader: React.FC = () => {
                                 <Dot completed={isOTTradeCompleted} />
                                 <Dot completed={isSpeedTradeCompleted} />
                                 <Dot completed={isSocialQuestDone} />
-                                <Dot completed={isSpinTheWheelCompleted} />
                             </FlexDivCentered>
                         </FlexDivStart>
                         <BadgeLabel>200XP</BadgeLabel>
