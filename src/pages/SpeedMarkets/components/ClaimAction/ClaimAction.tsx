@@ -31,6 +31,7 @@ import {
     getCollateralByAddress,
     getCollateralIndex,
     getDefaultCollateral,
+    getSpeedNativeCollateralsText,
     getSpeedOfframpCollaterals,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -104,15 +105,27 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
     const isAllPositionsInSameCollateral =
         positions.every((marketData) => marketData.isDefaultCollateral) ||
-        positions.every((marketData) => !marketData.isDefaultCollateral);
-    const claimablePositions = isAllPositionsInSameCollateral
-        ? positions
-        : positions.filter((marketData) => marketData.isDefaultCollateral);
-    const nativeCollateralAddress = positions.find((marketData) => !marketData.isDefaultCollateral)?.collateralAddress;
-    const nativeCollateral =
-        isAllPositionsInSameCollateral && nativeCollateralAddress
-            ? getCollateralByAddress(nativeCollateralAddress, networkId)
-            : null;
+        positions.every(
+            (marketData) =>
+                !marketData.isDefaultCollateral &&
+                !!positions.length &&
+                positions[0].collateralAddress === marketData.collateralAddress
+        );
+    const hasPositionsDefaultCollateral = positions.some((marketData) => marketData.isDefaultCollateral);
+
+    const nativeCollateralAddress = positions.find(
+        (marketData) => !hasPositionsDefaultCollateral && !marketData.isDefaultCollateral
+    )?.collateralAddress;
+
+    const nativeCollateral = nativeCollateralAddress
+        ? getCollateralByAddress(nativeCollateralAddress, networkId)
+        : null;
+
+    const claimablePositions = positions.filter((marketData) =>
+        nativeCollateralAddress
+            ? nativeCollateralAddress === marketData.collateralAddress
+            : marketData.isDefaultCollateral
+    );
 
     const payout = useMemo(() => (isClaimAll ? sumBy(claimablePositions, 'payout') : position.payout), [
         isClaimAll,
@@ -361,7 +374,9 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                   currencyKey: claimCollateral,
                                   defaultCurrency: defaultCollateral,
                               })
-                            : t('speed-markets.tooltips.claim-all-except-over')
+                            : t('speed-markets.tooltips.claim-all-except-native', {
+                                  collaterals: getSpeedNativeCollateralsText(networkId, nativeCollateral),
+                              })
                     }
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                 >
@@ -380,23 +395,26 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                         padding="3px 10px"
                     >
                         {hasAllowance ? (
-                            `${t(
-                                `speed-markets.user-positions.${
-                                    isClaimAll
-                                        ? `claim-all${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
-                                              isSubmitting ? '-progress' : ''
-                                          }`
-                                        : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
-                                              isSubmitting ? '-progress' : ''
-                                          }`
-                                }`
-                            )} ${
-                                nativeCollateral
-                                    ? nativeCollateral
-                                    : isClaimDefaultCollateral
-                                    ? formatCurrencyWithSign(USD_SIGN, payout, 2)
-                                    : claimCollateral
-                            }`
+                            <>
+                                {t(
+                                    `speed-markets.user-positions.${
+                                        isClaimAll
+                                            ? `claim-all${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
+                                                  isSubmitting ? '-progress' : ''
+                                              }`
+                                            : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
+                                                  isSubmitting ? '-progress' : ''
+                                              }`
+                                    }`
+                                )}{' '}
+                                <CollateralText>
+                                    {nativeCollateral
+                                        ? nativeCollateral
+                                        : isClaimDefaultCollateral
+                                        ? formatCurrencyWithSign(USD_SIGN, payout, 2)
+                                        : claimCollateral}
+                                </CollateralText>
+                            </>
                         ) : isAllowing ? (
                             <Trans
                                 i18nKey="common.enable-wallet-access.approve-progress-label"
