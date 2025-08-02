@@ -15,6 +15,7 @@ import { buildReffererLink } from 'utils/routes';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useSignMessage } from 'wagmi';
 import Activity from './components/Activity';
+import FAQ from './components/FAQ';
 import Leaderboard from './components/Leaderboard';
 import Summary from './components/Summary';
 import {
@@ -25,10 +26,6 @@ import {
     CopyIcon,
     CreateButton,
     CreateIcon,
-    FAQAnswer,
-    FAQIcon,
-    FAQItem,
-    FAQQuestion,
     FAQSection,
     FAQSubtitle,
     FAQTitle,
@@ -75,7 +72,6 @@ const Referral: React.FC = () => {
     const [savedReffererID, setSavedReffererID] = useState('');
 
     const [selectedTab, setSelectedTab] = useState(0);
-    const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
     useEffect(() => {
         if (reffererIDQuery.isSuccess) {
@@ -363,17 +359,7 @@ const Referral: React.FC = () => {
                 <FAQSubtitle>{t('referral.faq.subtitle')}</FAQSubtitle>
 
                 {Array.from({ length: 4 }).map((_, index) => (
-                    <FAQItem key={index} expanded={expandedFAQ === index}>
-                        <FAQQuestion onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}>
-                            {t(`referral.faq.questions.${index}`)}
-                            <FAQIcon expanded={expandedFAQ === index}>
-                                <i
-                                    className={expandedFAQ === index ? `icon icon--arrow-up` : `icon icon--arrow-down`}
-                                />
-                            </FAQIcon>
-                        </FAQQuestion>
-                        {expandedFAQ === index && <FAQAnswer>{t(`referral.faq.answers.${index}`)}</FAQAnswer>}
-                    </FAQItem>
+                    <FAQ key={index} index={index} />
                 ))}
             </FAQSection>
         </PageWrapper>
