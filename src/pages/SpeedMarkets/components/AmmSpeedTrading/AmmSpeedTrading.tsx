@@ -751,6 +751,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
 const Container = styled(FlexDivColumn)`
     position: relative;
+    gap: 5px;
 `;
 
 const OverdropRowSummary = styled(FlexDivCentered)``;

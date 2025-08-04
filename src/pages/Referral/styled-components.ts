@@ -170,9 +170,8 @@ export const MainSubtitle = styled.p`
     font-size: 16px;
     font-weight: 400;
     color: #cbd5e0;
-    line-height: 16px;
-    margin: 0 0 60px 0;
-    height: 20px;
+    line-height: 20px;
+    margin-bottom: 20px;
     @media (max-width: 768px) {
         font-size: 12px;
     }
@@ -501,7 +500,7 @@ export const StepsContainer = styled(FlexDivRow)`
 
 export const Step = styled.div`
     width: 322px;
-    height: 196px;
+    height: 220px;
     background: #1b2141;
     border-radius: 12px;
     padding: 24px;
