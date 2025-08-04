@@ -622,7 +622,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     onClick={() => dispatch(setWalletConnectModalVisibility({ visibility: true }))}
                     {...getDefaultButtonProps(theme)}
                 >
-                    {t('common.wallet.connect-your-wallet')}
+                    {t('common.wallet.sign-in')}
                 </Button>
             );
         }
