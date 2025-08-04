@@ -16,7 +16,7 @@ import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { isUserWinner } from 'utils/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
-const NotificationsCount: React.FC<{ isClaimable: boolean }> = ({ isClaimable }) => {
+const NotificationsCount: React.FC<{ isClaimable: boolean; topPosition?: string }> = ({ isClaimable, topPosition }) => {
     const { t } = useTranslation();
 
     const networkId = useChainId();
@@ -87,7 +87,7 @@ const NotificationsCount: React.FC<{ isClaimable: boolean }> = ({ isClaimable })
             }
             zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
         >
-            <Notification isClaimable={isClaimable}>
+            <Notification isClaimable={isClaimable} topPosition={topPosition}>
                 <Count>{notificationsCount}</Count>
             </Notification>
         </Tooltip>
@@ -96,9 +96,9 @@ const NotificationsCount: React.FC<{ isClaimable: boolean }> = ({ isClaimable })
     );
 };
 
-const Notification = styled.div<{ isClaimable: boolean }>`
+const Notification = styled.div<{ isClaimable: boolean; topPosition?: string }>`
     position: absolute;
-    top: -10px;
+    top: ${(props) => (props.topPosition ? props.topPosition : '-10px')};
     ${(props) => (props.isClaimable ? 'left: 2px;' : '')}
     ${(props) => (!props.isClaimable ? 'right: 2px;' : '')}
     background-color: ${(props) =>

@@ -448,7 +448,7 @@ export const ProgressPercent = styled.div`
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    color: #dba111;
+    color: ${(props) => props.theme.overdrop.textColor.octonary};
     line-height: 12px;
 `;
 
@@ -690,7 +690,7 @@ export const UserXP = styled.div`
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 700;
-    color: #dba111;
+    color: ${(props) => props.theme.overdrop.textColor.octonary};
     @media (max-width: 768px) {
         font-size: 12px;
     }
