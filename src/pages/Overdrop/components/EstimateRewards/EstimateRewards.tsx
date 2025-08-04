@@ -50,7 +50,7 @@ const EstimateRewards: React.FC = () => {
                 </FlexDivCentered>
             </FullWidthSpaceBetween>
             <RewardsWrapper>
-                <Rewards>~{formatCurrencyWithSign(USD_SIGN, estimateRewardsInUSD, 2)}</Rewards>
+                <Rewards>{formatCurrencyWithSign(USD_SIGN, estimateRewardsInUSD, 2)}</Rewards>
             </RewardsWrapper>
         </Wrapper>
     ) : (

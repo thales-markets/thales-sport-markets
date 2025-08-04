@@ -447,9 +447,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             refetchActiveSpeedMarkets(networkId);
             refetchSpeedMarketsLimits(networkId);
             refetchBalances(walletAddress, networkId);
-            refetchUserOverdrop(walletAddress);
+            setTimeout(() => refetchUserOverdrop(address as any), 5000);
         },
-        [networkId, resetData, t, walletAddress]
+        [networkId, resetData, t, walletAddress, address]
     );
 
     const handleSubmit = async () => {

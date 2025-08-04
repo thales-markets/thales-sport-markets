@@ -223,6 +223,7 @@ export const executeBiconomyTransaction = async (params: {
     value?: any;
     isEth?: boolean;
     buyInAmountParam?: bigint;
+    isSpeed?: boolean;
 }): Promise<any | undefined> => {
     if (smartAccountConnector.biconomyAccount && params.contract) {
         const encodedCall = encodeFunctionData({
@@ -272,6 +273,7 @@ export const executeBiconomyTransaction = async (params: {
                             mode: PaymasterMode.SPONSORED,
                             webhookData: {
                                 networkId: params.networkId,
+                                isSpeed: params.isSpeed,
                             },
                         },
                     }
@@ -288,6 +290,7 @@ export const executeBiconomyTransaction = async (params: {
                             mode: PaymasterMode.SPONSORED,
                             webhookData: {
                                 networkId: params.networkId,
+                                isSpeed: params.isSpeed,
                             },
                         },
                         params: {
@@ -329,6 +332,7 @@ export const executeBiconomyTransaction = async (params: {
                                 mode: PaymasterMode.SPONSORED,
                                 webhookData: {
                                     networkId: params.networkId,
+                                    isSpeed: params.isSpeed,
                                 },
                             },
                             params: {

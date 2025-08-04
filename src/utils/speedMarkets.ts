@@ -64,6 +64,7 @@ export const getTransactionForSpeedAMM = async (
             value: undefined,
             isEth,
             buyInAmountParam: buyInAmount,
+            isSpeed: true,
         });
     } else {
         txHash = await creatorContractWithSigner.write.addPendingSpeedMarket([

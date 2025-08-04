@@ -209,6 +209,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                     contract: collateralContractWithSigner,
                     methodName: 'approve',
                     data: [addressToApprove, approveAmount],
+                    isSpeed: true,
                 });
             } else {
                 hash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
@@ -296,6 +297,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                           data: [position.market, priceUpdateData, claimCollateralAddress, isEth],
                           value: undefined,
                           isEth,
+                          isSpeed: true,
                       })
                     : await executeBiconomyTransaction({
                           collateralAddress: claimCollateralAddress,
@@ -303,6 +305,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarket',
                           data: [position.market, priceUpdateData],
+                          isSpeed: true,
                       });
             } else {
                 hash = isOfframp
