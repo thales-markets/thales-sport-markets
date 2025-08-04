@@ -55,6 +55,7 @@
             "connect-wallet-modal-subtitle": "Choose how you want to sign in",
             "or-connect-with": "or connect via wallet",
             "connect-your-wallet": "Connect wallet",
+            "sign-in": "Sign in",
             "connect-with-wallet": "Connect with wallet",
             "view-all-wallets": "View all wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
@@ -1770,7 +1771,6 @@
         "amm-trading": {
             "choose-direction": "choose direction",
             "choose-time": "choose duration",
-            "estimate-gas": "Estimated transaction cost",
             "trading-details-default": "Build your position above to see your win.",
             "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<slippageTooltip />) in {{duration}}, you win {{payout}}<payotuTooltip />."
         },
