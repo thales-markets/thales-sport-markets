@@ -69,6 +69,9 @@ export const refetchAfterBuy = (walletAddress: string, networkId: Network, gameI
         queryConnector.queryClient.invalidateQueries({
             queryKey: QUERY_KEYS.OtherSingles(networkId, walletAddress, gameId),
         });
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Overdrop.UserData(walletAddress),
+    });
 };
 
 export const refetchUserLiveTradingData = (walletAddress: string, networkId: Network) => {
