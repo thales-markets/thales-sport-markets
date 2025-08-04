@@ -9,6 +9,7 @@ import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
+import NotificationsCount from 'pages/SpeedMarkets/components/NotificationsCount';
 import SpeedMarketsWidget from 'pages/SpeedMarkets/components/SpeedMarketsWidget';
 import useGetFreeBetQuery from 'queries/freeBets/useGetFreeBetQuery';
 import queryString from 'query-string';
@@ -158,7 +159,10 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
                     className="speed-markets"
                     isOpen={speedMarketsWidgetOpen}
                     onClick={() => setSpeedMarketsWidgetOpen(!speedMarketsWidgetOpen)}
-                />
+                >
+                    <NotificationsCount isClaimable topPosition="5px" />
+                    <NotificationsCount isClaimable={false} topPosition="5px" />
+                </SpeedMarketsButton>
                 {speedMarketsWidgetOpen && <SpeedMarketsWidget onClose={() => setSpeedMarketsWidgetOpen(false)} />}
             </Wrapper>
             <ToastContainer stacked theme={'colored'} />
