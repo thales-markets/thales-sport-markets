@@ -170,9 +170,8 @@ export const MainSubtitle = styled.p`
     font-size: 16px;
     font-weight: 400;
     color: #cbd5e0;
-    line-height: 16px;
-    margin: 0 0 60px 0;
-    height: 20px;
+    line-height: 20px;
+    margin-bottom: 20px;
     @media (max-width: 768px) {
         font-size: 12px;
     }

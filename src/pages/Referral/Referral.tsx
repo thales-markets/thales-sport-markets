@@ -132,6 +132,8 @@ const Referral: React.FC = () => {
                         {t('referral.header.subtitle')}
                         <br />
                         {t('referral.header.subtitle-2')}
+                        <br />
+                        {t('referral.header.subtitle-3')}
                     </MainSubtitle>
 
                     <AffiliateContainer>

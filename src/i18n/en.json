@@ -823,7 +823,7 @@
                 "speed-markets": "Speed markets",
                 "digital-options": "Digital options",
                 "resources": "Resources",
-                "referral": "Referral",
+                "referral": "Affiliate",
                 "migrate": "Migrate"
             },
             "buttons": {
@@ -1611,8 +1611,9 @@
         },
         "header": {
             "title": "Create Your Affiliate Link",
-            "subtitle": "Refer users to Overtime and earn 20% of the XP they generate on bets.",
-            "subtitle-2": "Spread your unique affiliate link, onboard new users to Overtime, track your ETH and Free Bet rewards, and climb the leaderboard.",
+            "subtitle": "Refer users to Overtime to earn 12.5% of protocol fees and 20% of the XP they generate on bets.",
+            "subtitle-2": "Spread your unique affiliate link, onboard new users to Overtime, track your ETH, Free Bet and Protocol Fee rewards, and climb the leaderboard!",
+            "subtitle-3": "By Overtime's discretion, successful affiliates can be upgraded to earn 50% of Protocol Fees.",
             "affiliate-id-label": "Your Affiliate ID",
             "affiliate-id-placeholder": "Enter affiliate ID",
             "create": "Create",
