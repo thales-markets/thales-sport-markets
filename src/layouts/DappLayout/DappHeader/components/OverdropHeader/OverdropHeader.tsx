@@ -114,15 +114,9 @@ const OverdropHeader: React.FC = () => {
                 <img src={dailyQuest} />
                 <QuestTitle>Daily Quest</QuestTitle>
                 <FlexDivCentered gap={4}>
-                    {completedQuest === 3 ? (
-                        <CheckmarkIconInHeader className="icon icon--resolvedmarkets" />
-                    ) : (
-                        <>
-                            <Dot completed={isOTTradeCompleted} />
-                            <Dot completed={isSpeedTradeCompleted} />
-                            <Dot completed={isSocialQuestDone} />
-                        </>
-                    )}
+                    <QuestDot className="icon icon--resolvedmarkets" completed={isOTTradeCompleted} />
+                    <QuestDot className="icon icon--resolvedmarkets" completed={isSpeedTradeCompleted} />
+                    <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                 </FlexDivCentered>
                 <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
             </FlexDivRowCentered>
@@ -134,9 +128,12 @@ const OverdropHeader: React.FC = () => {
                             <FlexDivStart gap={8}>
                                 <DropdownTitle>Daily Quest</DropdownTitle>
                                 <FlexDivCentered gap={4}>
-                                    <Dot completed={isOTTradeCompleted} />
-                                    <Dot completed={isSpeedTradeCompleted} />
-                                    <Dot completed={isSocialQuestDone} />
+                                    <QuestDot className="icon icon--resolvedmarkets" completed={isOTTradeCompleted} />
+                                    <QuestDot
+                                        className="icon icon--resolvedmarkets"
+                                        completed={isSpeedTradeCompleted}
+                                    />
+                                    <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
                             <BadgeLabel>200XP</BadgeLabel>
@@ -275,7 +272,7 @@ const Title = styled.p`
     font-size: 10px;
 
     font-weight: 500;
-    line-height: 16px; /* 160% */
+    line-height: 16px;
     letter-spacing: 0.5px;
 `;
 
@@ -285,14 +282,7 @@ const QuestTitle = styled.p`
     font-size: 10px;
 
     font-weight: 500;
-    line-height: 16px; /* 160% */
-`;
-
-const Dot = styled.div<{ completed?: boolean }>`
-    width: 6px;
-    height: 6px;
-    background: ${(props) => (props.completed ? props.theme.background.quaternary : props.theme.background.tertiary)};
-    border-radius: 20px;
+    line-height: 16px;
 `;
 
 const Arrow = styled.i`
@@ -337,7 +327,7 @@ const BadgeLabel = styled.div`
     font-size: 12px;
 
     font-weight: 600;
-    line-height: 16px; /* 133.333% */
+    line-height: 16px;
 `;
 
 const ItemWrapper = styled(FlexDivSpaceBetween)<{ completed?: boolean }>`
@@ -389,11 +379,6 @@ const CheckmarkIcon = styled.i`
     margin-right: 16px;
 `;
 
-const CheckmarkIconInHeader = styled.i`
-    color: ${(props) => props.theme.textColor.quaternary};
-    font-size: 14px;
-`;
-
 const WheelReward = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
@@ -409,4 +394,9 @@ const SpinTheWheelInfo = styled.p<{ completed?: boolean }>`
     margin: 0 10px;
     margin-top: -4px;
     margin-left: 12px;
+`;
+
+const QuestDot = styled.i<{ completed?: boolean }>`
+    color: ${(props) => (props.completed ? props.theme.textColor.quaternary : props.theme.background.tertiary)};
+    font-size: 10px;
 `;
