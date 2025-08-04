@@ -1532,6 +1532,32 @@
             "spin-info": "Spin once every 24 hours • Guaranteed rewards",
             "spin-now": "Spin now",
             "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Dont forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
+        },
+        "daily-quest": {
+            "title": "Daily Quest",
+            "reward": "Earn 200XP + 10% XP Boost",
+            "explainer": "Complete your Daily Quest tasks every day to earn 200 XP, 10% XP Boost for the day and to upgrade your next Daily Spin the Wheel with extra options!",
+            "finished": "Finished",
+            "daily-spin": "Daily Spin the Wheel",
+            "complete-daily-quest": "Complete Daily Quest to upgrade your SPIN!",
+            "spin": "Spin",
+            "badge": {
+                "boost": "XP BOOST",
+                "xp": "OVERDROP XP"
+            },
+            "ot": {
+                "title": "Place Overtime Bet",
+                "desc": "Place any bet on Overtime'"
+            },
+            "speed": {
+                "title": "Speed Market Trade",
+                "desc": "Place a Speed Markets trade"
+            },
+            "social": {
+                "title": "Post about @overtime_io on socials",
+                "desc": "Make a post that mentions @overtime_io on X.com",
+                "placeholder": "Post your tweet or cast URL here"
+            }
         }
     },
     "resolve-blocker": {

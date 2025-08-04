@@ -199,29 +199,25 @@ const Footer = styled.div`
 
 const Text = styled.p`
     color: #fff;
-    font-family: Inter;
     font-size: 20px;
-    font-style: normal;
     font-weight: 500;
-    line-height: 29.742px; /* 148.711% */
+    line-height: 30px;
 `;
 
 const Description = styled.p`
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    font-family: Inter;
     font-size: 14px;
-    font-style: normal;
     font-weight: 400;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px;
 `;
 
 const RewardWrapper = styled.div`
     border-radius: 16px;
-    border: 1px solid #5f6180;
+    border: 1px solid ${(props) => props.theme.button.borderColor.senary};
     max-width: 480px;
     width: 100%;
-    background: #1f274d;
+    background: ${(props) => props.theme.background.secondary};
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -253,18 +249,15 @@ const RewardTitle = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     text-align: center;
     font-size: 24px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 32px; /* 133.333% */
+    line-height: 32px;
 `;
 
 const RewardDesc = styled.p`
     color: #eab308;
 
     text-align: center;
-    font-family: Inter;
     font-size: 14px;
-    font-style: normal;
     font-weight: 600;
     line-height: normal;
     letter-spacing: 0.7px;
@@ -285,9 +278,7 @@ const Reward = styled.p`
     color: #eab308;
 
     text-align: center;
-    font-family: Inter;
     font-size: 36px;
-    font-style: normal;
     font-weight: 800;
     line-height: normal;
 `;
@@ -298,7 +289,6 @@ const RewardLabel = styled.p`
     text-align: center;
     font-family: Inter;
     font-size: 14px;
-    font-style: normal;
     font-weight: 500;
     line-height: normal;
 `;
@@ -309,9 +299,7 @@ const FooterText = styled.p`
     color: #d1d5db;
 
     text-align: center;
-    font-family: Inter;
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
 `;

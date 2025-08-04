@@ -24,23 +24,23 @@ import { useAccount } from 'wagmi';
 const DAILY_QUESTS = [
     {
         icon: 'icon icon--logo',
-        title: 'Place Overtime Bet',
-        description: 'Place any bet on Overtime',
+        title: 'overdrop.daily-quest.ot.title',
+        description: 'overdrop.daily-quest.ot.desc',
         buttonText: 'Start',
         completed: false,
     },
     {
         icon: 'sidebar-icon sidebar-icon--speed-markets',
-        title: 'Speed Market Trade',
-        description: 'Place a Speed Markets trade',
+        title: 'overdrop.daily-quest.speed.title',
+        description: 'overdrop.daily-quest.speed.title',
         buttonText: 'Start',
         completed: false,
         speed: true,
     },
     {
         icon: 'icon icon--social',
-        title: 'Post about @overtime_io on socials',
-        description: 'Make a post that mentions @overtime_io on X.com',
+        title: 'overdrop.daily-quest.social.title',
+        description: 'overdrop.daily-quest.social.title',
         buttonText: 'Send',
         completed: false,
         social: true,
@@ -147,20 +147,17 @@ const DailyQuest: React.FC = () => {
     return (
         <Container>
             <FlexDivSpaceBetween>
-                <HeaderTitle>Daily Quest</HeaderTitle>
-                <Reward>Earn 200XP + 10% XP Boost</Reward>
+                <HeaderTitle>{t('overdrop.daily-quest.title')}</HeaderTitle>
+                <Reward>{t('overdrop.daily-quest.reward')}</Reward>
             </FlexDivSpaceBetween>
-            <Explainer>
-                Complete your Daily Quest tasks every day to earn 200 XP, 10% XP Boost for the day and to upgrade your
-                next Daily Spin the Wheel with extra options!
-            </Explainer>
+            <Explainer>{t('overdrop.daily-quest.explainer')}</Explainer>
             {DAILY_QUESTS.map((quest, index) => (
                 <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
                     <FlexDivCentered>
                         <Icon className={quest.icon} />
                         <HeaderWrapper>
-                            <Title>{quest.title}</Title>
-                            <Description>{quest.description}</Description>
+                            <Title>{t(quest.title)}</Title>
+                            <Description>{t(quest.description)}</Description>
                         </HeaderWrapper>
                     </FlexDivCentered>
 
@@ -177,7 +174,7 @@ const DailyQuest: React.FC = () => {
                                     height="30px"
                                     disabled={quest.completed}
                                     borderColor="transparent"
-                                    placeholder="Place your tweet or cast url here"
+                                    placeholder={t('overdrop.daily-quest.social.placeholder')}
                                     value={tweetUrl}
                                     inputFontSize={'12px'}
                                     onChange={(e: any) => setTweetUrl(e.target.value)}
@@ -213,9 +210,10 @@ const DailyQuest: React.FC = () => {
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />
                     <HeaderWrapper>
-                        <Title>Daily Spin the Wheel</Title>
+                        <Title>{t('overdrop.daily-quest.daily-spin')}</Title>
                         <BadgeWrapper>
-                            <Badge1>XP BOOST</Badge1> <Badge2>OVERDROP XP</Badge2>
+                            <Badge1>{t('overdrop.daily-quest.badge.boost')}</Badge1>{' '}
+                            <Badge2>{t('overdrop.daily-quest.badge.xp')}</Badge2>
                         </BadgeWrapper>
                     </HeaderWrapper>
                 </FlexDivCentered>
@@ -226,7 +224,7 @@ const DailyQuest: React.FC = () => {
                     </FlexDivCentered>
                 ) : (
                     <>
-                        <SpinTheWheelText>Complete Daily Quest to upgrade your SPIN!</SpinTheWheelText>
+                        <SpinTheWheelText>{t('overdrop.daily-quest.complete-daily-quest')}</SpinTheWheelText>
 
                         <Button
                             borderRadius="8px"
@@ -240,7 +238,7 @@ const DailyQuest: React.FC = () => {
                             additionalStyles={{ textTransform: 'capitalize' }}
                             onClick={() => setShowSpinTheWheel(!showSpinTheWheel)}
                         >
-                            Spin
+                            {t('overdrop.daily-quest.spin')}
                         </Button>
                     </>
                 )}
@@ -268,7 +266,6 @@ const Container = styled.div`
 
 const HeaderTitle = styled.h3`
     font-size: 18px;
-    font-style: normal;
     font-weight: 500;
     line-height: 28px; /* 155.556% */
 `;
@@ -281,7 +278,6 @@ const Explainer = styled(FlexDiv)`
 const Reward = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 18px;
-    font-style: normal;
     font-weight: 700;
     line-height: 28px; /* 140% */
 `;
@@ -334,7 +330,6 @@ const Title = styled.h3`
 
 const Description = styled.p`
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: 16px; /* 133.333% */
     color: ${(props) => props.theme.textColor.secondary};
@@ -344,7 +339,6 @@ const SpinTheWheelText = styled.p`
     color: #3c498a;
     color: ${(props) => props.theme.textColor.septenary};
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: normal;
     @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
