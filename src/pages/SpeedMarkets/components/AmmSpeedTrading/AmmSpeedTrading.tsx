@@ -4,10 +4,9 @@ import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
-import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { APPROVAL_BUFFER } from 'constants/markets';
-import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
 import { DEFAULT_MAX_CREATOR_DELAY_TIME_SEC, POSITIONS_TO_SIDE_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
@@ -35,10 +34,8 @@ import {
     Coins,
     COLLATERAL_DECIMALS,
     DEFAULT_CURRENCY_DECIMALS,
-    formatCurrencyWithSign,
     localStore,
     LONG_CURRENCY_DECIMALS,
-    NetworkId,
     roundNumberToDecimals,
     truncToDecimals,
 } from 'thales-utils';
@@ -70,7 +67,7 @@ import {
     refetchUserSpeedMarkets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
-import { executeBiconomyTransaction, getPaymasterData } from 'utils/smartAccount/biconomy/biconomy';
+import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getFeeByTimeThreshold, getTransactionForSpeedAMM } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
@@ -90,7 +87,6 @@ type AmmSpeedTradingProps = {
         profit: { [SpeedPositions.UP]: number; [SpeedPositions.DOWN]: number };
         skew: { [SpeedPositions.UP]: number; [SpeedPositions.DOWN]: number };
     }>;
-    setBuyinGasFee: Dispatch<number>;
     resetData: Dispatch<void>;
     hasError: boolean;
 };
@@ -103,7 +99,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     priceSlippage,
     ammSpeedMarketsLimits,
     setProfitAndSkewPerPosition,
-    setBuyinGasFee,
     resetData,
     hasError,
 }) => {
@@ -132,7 +127,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     const [outOfLiquidityPerDirection, setOutOfLiquidityPerDirection] = useState(false);
     const [hasAllowance, setAllowance] = useState(false);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
-    const [gasFee, setGasFee] = useState(0);
 
     const isPositionSelected = selectedPosition !== undefined;
 
@@ -709,68 +703,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         );
     };
 
-    useMemo(async () => {
-        if (isBiconomy && !isButtonDisabled) {
-            const speedMarketsCreatorContract = getContractInstance(ContractType.SPEED_MARKETS_AMM_CREATOR, {
-                networkId,
-                client: walletClient.data,
-            }) as ViemContract;
-            const asset = stringToHex(selectedAsset, { size: 32 });
-            const sides = selectedPosition !== undefined ? [POSITIONS_TO_SIDE_MAP[selectedPosition]] : [];
-            const strikePriceSlippage = parseUnits(priceSlippage.toString(), 18);
-            const collateralAddressParam = !isDefaultCollateral ? collateralAddress : '';
-            const buyInAmountParam = coinParser(
-                truncToDecimals(buyinAmount, COLLATERAL_DECIMALS[selectedCollateral]),
-                networkId,
-                selectedCollateral
-            );
-
-            const skewImpactParam = selectedPosition
-                ? parseUnits(skewImpact[selectedPosition].toString(), 18)
-                : undefined;
-
-            const paymasterData = await getPaymasterData(
-                networkId,
-                speedMarketsCreatorContract,
-                'addPendingSpeedMarket',
-                [
-                    [
-                        asset,
-                        0,
-                        deltaTimeSec,
-                        sides,
-                        strikePriceSlippage,
-                        sides[0],
-                        collateralAddressParam || ZERO_ADDRESS,
-                        buyInAmountParam,
-                        referral || ZERO_ADDRESS,
-                        skewImpactParam,
-                    ],
-                ]
-            );
-            if (paymasterData && paymasterData.maxGasFeeUSD) {
-                setGasFee(paymasterData.maxGasFeeUSD);
-                setBuyinGasFee(paymasterData.maxGasFeeUSD);
-            }
-        }
-    }, [
-        isBiconomy,
-        collateralAddress,
-        selectedAsset,
-        priceSlippage,
-        buyinAmount,
-        isDefaultCollateral,
-        deltaTimeSec,
-        networkId,
-        selectedPosition,
-        referral,
-        selectedCollateral,
-        skewImpact,
-        walletClient.data,
-        isButtonDisabled,
-        setBuyinGasFee,
-    ]);
-
     return (
         <Container>
             {false && (
@@ -795,20 +727,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     selectedCollateral={selectedCollateral}
                 />
             </TradingDetailsWrapper>
-            <ButtonWrapper>
-                {getSubmitButton()}
-                {gasFee > 0 && !isButtonDisabled && (
-                    <Tooltip
-                        overlay={t('speed-markets.amm-trading.estimate-gas')}
-                        zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                    >
-                        <GasText $isStrikeThrough={networkId === NetworkId.Base}>
-                            <GasIcon className={`speedmarkets-logo-icon speedmarkets-logo-icon--gas`} />
-                            {formatCurrencyWithSign(USD_SIGN, gasFee, 2)}
-                        </GasText>
-                    </Tooltip>
-                )}
-            </ButtonWrapper>
+            <ButtonWrapper>{getSubmitButton()}</ButtonWrapper>
 
             {openApprovalModal && (
                 <ApprovalModal
@@ -853,30 +772,12 @@ const ButtonWrapper = styled(FlexDivColumn)`
     justify-content: end;
 `;
 
-const GasIcon = styled.i`
-    font-size: 18px;
-    line-height: 100%;
-    color: ${(props) => props.theme.speedMarkets.button.textColor.active};
-    margin-right: 2px;
-`;
-
 const ConversionInfo = styled.span`
     font-weight: 400;
     font-size: 12px;
     letter-spacing: 0.13px;
     color: ${(props) => props.theme.speedMarkets.textColor.primary};
     padding: 5px 0px;
-`;
-
-const GasText = styled.span<{ $isStrikeThrough?: boolean }>`
-    display: flex;
-    position: absolute;
-    right: 16px;
-    bottom: 6px;
-    font-size: 15px;
-    line-height: 18px;
-    color: ${(props) => props.theme.speedMarkets.button.textColor.active};
-    text-decoration: ${(props) => (props.$isStrikeThrough ? 'line-through' : '')};
 `;
 
 const getDefaultButtonProps = (theme: ThemeInterface) => ({

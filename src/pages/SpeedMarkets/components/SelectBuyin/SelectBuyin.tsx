@@ -44,7 +44,6 @@ type SelectBuyinProps = {
     selectedAsset: string;
     buyinAmount: number | string;
     setBuyinAmount: Dispatch<SetStateAction<string | number>>;
-    buyinGasFee: number;
     ammSpeedMarketsLimits: AmmSpeedMarketsLimits | null;
     setHasError: Dispatch<boolean>;
 };
@@ -53,7 +52,6 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     selectedAsset,
     buyinAmount,
     setBuyinAmount,
-    buyinGasFee,
     ammSpeedMarketsLimits,
     setHasError,
 }) => {
@@ -158,7 +156,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         let errorMessageKey = '';
 
         if (buyinAmount !== '') {
-            const buyinAmountWithGas = isBiconomy ? Number(buyinAmount) + buyinGasFee : Number(buyinAmount);
+            const buyinAmountWithGas = isBiconomy ? Number(buyinAmount) : Number(buyinAmount);
             if ((isConnected && buyinAmountWithGas > paymentTokenBalance) || paymentTokenBalance === 0) {
                 errorMessageKey = 'common.errors.insufficient-balance-wallet';
             }
@@ -186,7 +184,6 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         convertToStable,
         networkId,
         setHasError,
-        buyinGasFee,
     ]);
 
     const onMaxClick = () => {

@@ -1559,7 +1559,6 @@
         "amm-trading": {
             "choose-direction": "choose direction",
             "choose-time": "choose duration",
-            "estimate-gas": "Estimated transaction cost",
             "trading-details-default": "Build your position above to see your win.",
             "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<slippageTooltip />) in {{duration}}, you win {{payout}}<payotuTooltip />."
         },
