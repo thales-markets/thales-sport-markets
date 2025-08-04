@@ -250,7 +250,7 @@ export default {
         },
         borderColor: {
             primary: Colors.JONQUIL,
-            secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
+            secondary: `linear-gradient(160deg, ${Colors.OVERDROP_BLUE_BORDER},  ${Colors.REFERALL_YELLOW})`,
             tertiary: Colors.GOLD,
             quaternary: Colors.TORY_BLUE,
             progressBar: `linear-gradient(90deg, ${Colors.TORY_BLUE} 0%, ${Colors.BLUE} 100%)`,

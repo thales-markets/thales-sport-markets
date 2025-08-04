@@ -1523,6 +1523,15 @@
             "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
             "active-daily-streak": "Active daily streak xp boost",
             "dont-show-this": "Don't show this again"
+        },
+        "wheel": {
+            "congratulations": "CONGRATULATIONS!",
+            "epic-rewards": "Epic rewards unlocked",
+            "xp-boost-activated": "XP BOOST ACTIVATED",
+            "daily-spin": "Daily Spin the Wheel",
+            "spin-info": "Spin once every 24 hours • Guaranteed rewards",
+            "spin-now": "Spin now",
+            "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Dont forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
         }
     },
     "resolve-blocker": {

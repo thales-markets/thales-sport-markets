@@ -9,8 +9,9 @@ import useDailyQuestOptions from 'queries/overdrop/useDailyQuestOptions';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
+import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivSpaceBetween } from 'styles/common';
+import { Colors, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData, SpinThewheelOption } from 'types/overdrop';
 import { hasUserDoneDailyQuests } from 'utils/overdrop';
 import { refetchUserOverdrop } from 'utils/queryConnector';
@@ -26,6 +27,8 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
     const { address, isConnected } = useAccount();
     const [isInfoModalOpen, setInfoModalOpen] = useState(false);
     const theme = useTheme();
+
+    const { t } = useTranslation();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
@@ -71,7 +74,7 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                 return {
                     ...item,
                     style: {
-                        backgroundColor: index % 2 ? '#DBA111' : '#03DAE5',
+                        backgroundColor: index % 2 ? Colors.REFERALL_YELLOW : '#03DAE5',
                         fontFamily: 'Arial',
                         fontSize: 16,
                         fontWeight: 500,
@@ -98,18 +101,18 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                 <RewardWrapper>
                     <CloseIcon onClick={onClose} />
                     <TrophyIcon className="icon icon--ticket-win" />
-                    <RewardTitle>CONGRATULATIONS!</RewardTitle>
-                    <RewardDesc>Epic rewards unlocked</RewardDesc>
+                    <RewardTitle>{t('overdrop.wheel.congratulations')}</RewardTitle>
+                    <RewardDesc>{t('overdrop.wheel.epic-rewards')}</RewardDesc>
                     <GradientWrapper>
                         <Reward> {userData?.wheel?.reward?.boostAmount}%</Reward>
-                        <RewardLabel>XP BOOST ACTIVATED</RewardLabel>
+                        <RewardLabel>{t('overdrop.wheel.xp-boost-activated')}</RewardLabel>
                         {showExtraRewards && <ExtraReward> + {userData?.wheel?.reward?.xpAmount}XP</ExtraReward>}
                     </GradientWrapper>
                     <FooterText>
-                        You just won {userData?.wheel?.reward?.boostAmount}% XP boost for the next 24h
-                        {showExtraRewards ? +`+ ${userData?.wheel?.reward?.xpAmount}XP` : ''}! Come back again tomorrow
-                        for another spin. Dont forget to complete the Daily Quest before spinning the wheel to get
-                        upgraded rewards!
+                        {t('overdrop.wheel.reward-info', {
+                            boostAmount: userData?.wheel?.reward?.boostAmount,
+                            xpReward: showExtraRewards ? userData?.wheel?.reward?.xpAmount + 'XP' : '',
+                        })}
                     </FooterText>
                 </RewardWrapper>
             ) : (
@@ -147,8 +150,8 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                     <Footer>
                         <FlexDivSpaceBetween>
                             <div>
-                                <Text>Daily Spin the Wheel</Text>
-                                <Description>Spin once every 24 hours • Guaranteed rewards</Description>
+                                <Text>{t('overdrop.wheel.daily-spin')}</Text>
+                                <Description>{t('overdrop.wheel.spin-info')}</Description>
                             </div>
                         </FlexDivSpaceBetween>
                         <Button
@@ -162,7 +165,7 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                             textColor={theme.textColor.tertiary}
                             margin="20px 0 0 0"
                         >
-                            Spin Now
+                            {t('overdrop.wheel.spin-now')}
                         </Button>
                     </Footer>
                 </Wrapper>
