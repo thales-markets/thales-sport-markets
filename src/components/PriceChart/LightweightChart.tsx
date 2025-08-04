@@ -3,11 +3,12 @@ import TooltipInfo from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { LINKS } from 'constants/links';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
-import { subDays } from 'date-fns';
+import { hoursToSeconds, minutesToSeconds, secondsToMilliseconds, subDays } from 'date-fns';
 import { SpeedPositions } from 'enums/speedMarkets';
+import useInterval from 'hooks/useInterval';
 import usePythCandlestickQuery from 'queries/prices/usePythCandlestickQuery';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivSpaceBetween } from 'styles/common';
@@ -17,8 +18,6 @@ import { ThemeInterface } from 'types/ui';
 import { useChainId, useClient } from 'wagmi';
 import { ChartComponent } from './components/Chart/ChartContext';
 import CurrentPrice from './components/CurrentPrice';
-
-const now = new Date();
 
 type LightweightChartProps = {
     asset: string;
@@ -33,16 +32,18 @@ type LightweightChartProps = {
     hideLiquidity?: boolean;
 };
 
-const SpeedMarketsToggleButtons = [
+const getSpeedMarketsToggleButtons = (now: Date) => [
     { label: '1m', resolution: '1', value: 1, startDate: Number(subDays(now, 1)) },
-    { label: '5m', resolution: '5', value: 1, startDate: Number(subDays(now, 1)) },
+    { label: '2m', resolution: '2', value: 1, startDate: Number(subDays(now, 1)) },
+    { label: '5m', resolution: '5', value: 2, startDate: Number(subDays(now, 2)) },
     { label: '15m', resolution: '15', value: 2, startDate: Number(subDays(now, 2)) },
-    { label: '30m', resolution: '30', value: 4, startDate: Number(subDays(now, 4)) },
-    { label: '1H', resolution: '60', value: 30, startDate: Number(subDays(now, 30)) },
-    { label: '1D', resolution: '1D', value: 365, startDate: Number(subDays(now, 365)) },
+    // { label: '30m', resolution: '30', value: 4, startDate: Number(subDays(now, 4)) },
+    // { label: '1H', resolution: '60', value: 30, startDate: Number(subDays(now, 30)) },
+    // { label: '1D', resolution: '1D', value: 365, startDate: Number(subDays(now, 365)) },
 ];
 
 const SPEED_DEFAULT_TOGGLE_BUTTON_INDEX = 0;
+const CHART_REFRESH_INTERVAL_SEC = 30;
 
 const LightweightChart: React.FC<LightweightChartProps> = ({
     asset,
@@ -62,17 +63,53 @@ const LightweightChart: React.FC<LightweightChartProps> = ({
     const networkId = useChainId();
     const client = useClient();
 
-    const [dateRange] = useState(SpeedMarketsToggleButtons[SPEED_DEFAULT_TOGGLE_BUTTON_INDEX]);
-
+    const [now, setNow] = useState(new Date());
+    const [dateRange, setDateRange] = useState(getSpeedMarketsToggleButtons(now)[SPEED_DEFAULT_TOGGLE_BUTTON_INDEX]);
     const [candleData, setCandleData] = useState<any>();
-
     const [currentDeltaTimeSec, setCurrentDeltaTimeSec] = useState(deltaTimeSec);
 
     const exchangeRatesMarketDataQuery = useExchangeRatesQuery({ networkId, client });
 
     const pythQuery = usePythCandlestickQuery(asset, dateRange.startDate, dateRange.resolution, {
-        refetchInterval: 30 * 1000,
+        refetchInterval: secondsToMilliseconds(30),
     });
+
+    const handleDateRangeChange = useCallback(
+        (value: number) => setDateRange(getSpeedMarketsToggleButtons(now)[value]),
+        [now]
+    );
+
+    useInterval(() => {
+        setNow(new Date());
+    }, secondsToMilliseconds(CHART_REFRESH_INTERVAL_SEC));
+
+    // changing the dateRange on chart when user clicks on speed markets buttons for time
+    useEffect(() => {
+        if (deltaTimeSec && deltaTimeSec !== prevDeltaTimeSecRef.current) {
+            if (deltaTimeSec >= hoursToSeconds(1)) {
+                const toggleButtonIndex = 3;
+                if (dateRange.resolution !== getSpeedMarketsToggleButtons(now)[toggleButtonIndex].resolution) {
+                    handleDateRangeChange(toggleButtonIndex);
+                }
+            } else if (deltaTimeSec >= minutesToSeconds(30)) {
+                const toggleButtonIndex = 2;
+                if (dateRange.resolution !== getSpeedMarketsToggleButtons(now)[toggleButtonIndex].resolution) {
+                    handleDateRangeChange(toggleButtonIndex);
+                }
+            } else if (deltaTimeSec >= minutesToSeconds(10)) {
+                const toggleButtonIndex = 1;
+                if (dateRange.resolution !== getSpeedMarketsToggleButtons(now)[toggleButtonIndex].resolution) {
+                    handleDateRangeChange(toggleButtonIndex);
+                }
+            } else {
+                const toggleButtonIndex = 0;
+                if (dateRange.resolution !== getSpeedMarketsToggleButtons(now)[toggleButtonIndex].resolution) {
+                    handleDateRangeChange(toggleButtonIndex);
+                }
+                handleDateRangeChange(toggleButtonIndex);
+            }
+        }
+    }, [deltaTimeSec, dateRange.resolution, handleDateRangeChange, now]);
 
     const candleStickData = useMemo(() => {
         if (pythQuery.isSuccess && pythQuery.data) {
