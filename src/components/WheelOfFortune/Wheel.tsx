@@ -24,6 +24,7 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
     const [mustSpin, setMustSpin] = useState(false);
     const [prizeNumber, setPrizeNumber] = useState(0);
     const { address, isConnected } = useAccount();
+    const [isInfoModalOpen, setInfoModalOpen] = useState(false);
     const theme = useTheme();
 
     const userDataQuery = useUserDataQuery(address as string, {
@@ -84,6 +85,8 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
         }
     }, [userData, spinTheWheelOptions]);
 
+    const showExtraRewards = userData?.wheel?.reward?.xpAmount !== 0;
+
     return (
         <Modal
             containerStyle={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
@@ -91,58 +94,79 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
             title=""
             onClose={onClose}
         >
-            <Wrapper>
-                <WheelWrapper>
-                    {data && (
-                        <Wheel
-                            mustStartSpinning={mustSpin}
-                            prizeNumber={prizeNumber}
-                            data={data}
-                            innerBorderWidth={10}
-                            innerBorderColor={theme.textColor.tertiary}
-                            radiusLineColor={theme.textColor.tertiary}
-                            radiusLineWidth={2}
-                            textColors={[theme.textColor.tertiary]}
-                            textDistance={55}
-                            fontWeight={600}
-                            onStopSpinning={() => {
-                                setMustSpin(false);
-                                refetchUserOverdrop(address as any);
-                            }}
-                            pointerProps={{
-                                style: {
-                                    transform: `rotate(45deg)`,
-                                    width: 70,
-                                    height: 70,
-                                },
-                                src: pointer,
-                            }}
-                        />
-                    )}
-                </WheelWrapper>
+            {isInfoModalOpen ? (
+                <RewardWrapper>
+                    <CloseIcon onClick={onClose} />
+                    <TrophyIcon className="icon icon--ticket-win" />
+                    <RewardTitle>CONGRATULATIONS!</RewardTitle>
+                    <RewardDesc>Epic rewards unlocked</RewardDesc>
+                    <GradientWrapper>
+                        <Reward> {userData?.wheel?.reward?.boostAmount}%</Reward>
+                        <RewardLabel>XP BOOST ACTIVATED</RewardLabel>
+                        {showExtraRewards && <ExtraReward> + {userData?.wheel?.reward?.xpAmount}XP</ExtraReward>}
+                    </GradientWrapper>
+                    <FooterText>
+                        You just won {userData?.wheel?.reward?.boostAmount}% XP boost for the next 24h
+                        {showExtraRewards ? +`+ ${userData?.wheel?.reward?.xpAmount}XP` : ''}! Come back again tomorrow
+                        for another spin. Dont forget to complete the Daily Quest before spinning the wheel to get
+                        upgraded rewards!
+                    </FooterText>
+                </RewardWrapper>
+            ) : (
+                <Wrapper>
+                    <WheelWrapper>
+                        {data && (
+                            <Wheel
+                                mustStartSpinning={mustSpin}
+                                prizeNumber={prizeNumber}
+                                data={data}
+                                innerBorderWidth={10}
+                                innerBorderColor={theme.textColor.tertiary}
+                                radiusLineColor={theme.textColor.tertiary}
+                                radiusLineWidth={2}
+                                textColors={[theme.textColor.tertiary]}
+                                textDistance={55}
+                                fontWeight={600}
+                                onStopSpinning={() => {
+                                    setMustSpin(false);
+                                    refetchUserOverdrop(address as any);
+                                    setInfoModalOpen(true);
+                                }}
+                                pointerProps={{
+                                    style: {
+                                        transform: `rotate(45deg)`,
+                                        width: 70,
+                                        height: 70,
+                                    },
+                                    src: pointer,
+                                }}
+                            />
+                        )}
+                    </WheelWrapper>
 
-                <Footer>
-                    <FlexDivSpaceBetween>
-                        <div>
-                            <Text>Daily Spin the Wheel</Text>
-                            <Description>Spin once every 24 hours • Guaranteed rewards</Description>
-                        </div>
-                    </FlexDivSpaceBetween>
-                    <Button
-                        width="100%"
-                        backgroundColor="#FFD607"
-                        height="30"
-                        borderColor="none"
-                        borderRadius="8px"
-                        onClick={handleSpinClick}
-                        fontSize="18px"
-                        textColor={theme.textColor.tertiary}
-                        margin="20px 0 0 0"
-                    >
-                        Spin Now
-                    </Button>
-                </Footer>
-            </Wrapper>
+                    <Footer>
+                        <FlexDivSpaceBetween>
+                            <div>
+                                <Text>Daily Spin the Wheel</Text>
+                                <Description>Spin once every 24 hours • Guaranteed rewards</Description>
+                            </div>
+                        </FlexDivSpaceBetween>
+                        <Button
+                            width="100%"
+                            backgroundColor="#FFD607"
+                            height="30"
+                            borderColor="none"
+                            borderRadius="8px"
+                            onClick={handleSpinClick}
+                            fontSize="18px"
+                            textColor={theme.textColor.tertiary}
+                            margin="20px 0 0 0"
+                        >
+                            Spin Now
+                        </Button>
+                    </Footer>
+                </Wrapper>
+            )}
         </Modal>
     );
 };
@@ -189,15 +213,104 @@ const Description = styled.p`
     line-height: 20px; /* 142.857% */
 `;
 
-// const Time = styled.p`
-//     color: #3fffff;
+const RewardWrapper = styled.div`
+    border-radius: 16px;
+    border: 1px solid #5f6180;
+    max-width: 480px;
+    width: 100%;
+    background: #1f274d;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+`;
 
-//     text-align: right;
-//     font-family: Inter;
-//     font-size: 21px;
-//     font-style: normal;
-//     font-weight: 700;
-//     line-height: 32px;
-// `;
+const CloseIcon = styled.i`
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    font-size: 12px;
+    margin-top: 1px;
+    cursor: pointer;
+    &:before {
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0031';
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+`;
+
+const TrophyIcon = styled.i`
+    font-size: 48px;
+    color: ${(props) => props.theme.overdrop.borderColor.primary};
+`;
+
+const RewardTitle = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px; /* 133.333% */
+`;
+
+const RewardDesc = styled.p`
+    color: #eab308;
+
+    text-align: center;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.7px;
+`;
+
+const GradientWrapper = styled.div`
+    border-radius: 12px;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    background: linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(34, 211, 238, 0.1) 100%);
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Reward = styled.p`
+    color: #eab308;
+
+    text-align: center;
+    font-family: Inter;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+`;
+
+const RewardLabel = styled.p`
+    color: ${(props) => props.theme.textColor.quaternary};
+
+    text-align: center;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+`;
+const ExtraReward = styled(Reward)`
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+const FooterText = styled.p`
+    color: #d1d5db;
+
+    text-align: center;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
 
 export default WheelOfFortune;
