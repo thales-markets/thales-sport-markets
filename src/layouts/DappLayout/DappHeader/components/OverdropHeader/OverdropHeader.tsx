@@ -1,6 +1,7 @@
 import badge from 'assets/images/overdrop/badge.png';
 import dailyQuest from 'assets/images/overdrop/dailyQuest.png';
 import Button from 'components/Button';
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
@@ -93,7 +94,7 @@ const OverdropHeader: React.FC = () => {
     const spintTheWheelRewardText = useMemo(() => {
         if (userData && isSpinTheWheelCompleted) {
             if (userData.wheel?.reward?.xpAmount) {
-                return `${userData.wheel?.reward?.boostAmount}% XP Boost + ${userData.wheel?.reward?.xpAmount}XP`;
+                return `${userData.wheel?.reward?.boostAmount}% XP Boost \n+ ${userData.wheel?.reward?.xpAmount} XP`;
             } else {
                 return `${userData.wheel?.reward?.boostAmount}% XP Boost`;
             }
@@ -113,123 +114,132 @@ const OverdropHeader: React.FC = () => {
                 <img src={dailyQuest} />
                 <QuestTitle>Daily Quest</QuestTitle>
                 <FlexDivCentered gap={4}>
-                    <Dot completed={isOTTradeCompleted} />
-                    <Dot completed={isSpeedTradeCompleted} />
-                    <Dot completed={isSocialQuestDone} />
+                    {completedQuest === 3 ? (
+                        <CheckmarkIconInHeader className="icon icon--resolvedmarkets" />
+                    ) : (
+                        <>
+                            <Dot completed={isOTTradeCompleted} />
+                            <Dot completed={isSpeedTradeCompleted} />
+                            <Dot completed={isSocialQuestDone} />
+                        </>
+                    )}
                 </FlexDivCentered>
                 <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
             </FlexDivRowCentered>
 
             {isDropdownOpen && (
-                <DropdownWrapper>
-                    <DropdownHeader>
-                        <FlexDivStart gap={8}>
-                            <DropdownTitle>Daily Quest</DropdownTitle>
-                            <FlexDivCentered gap={4}>
-                                <Dot completed={isOTTradeCompleted} />
-                                <Dot completed={isSpeedTradeCompleted} />
-                                <Dot completed={isSocialQuestDone} />
-                            </FlexDivCentered>
-                        </FlexDivStart>
-                        <BadgeLabel>200XP</BadgeLabel>
-                    </DropdownHeader>
-                    <ItemWrapper completed={isOTTradeCompleted}>
-                        <ItemFirstSection gap={4}>
-                            <Icon className="icon icon--logo" />
-                            <FlexDivColumnStart>
-                                <ItemTitle>Place Overtime Bet</ItemTitle>
-                                <ItemDescription>Make any bet on Overtime</ItemDescription>
-                            </FlexDivColumnStart>
-                        </ItemFirstSection>
-                        {isOTTradeCompleted ? (
-                            <CheckmarkIcon className="icon icon--resolvedmarkets" />
-                        ) : (
-                            <Button
-                                padding="6px 12px"
-                                textColor={theme.textColor.primary}
-                                backgroundColor={theme.borderColor.senary}
-                                borderRadius="8px"
-                                width="54px"
-                                borderColor={theme.borderColor.senary}
-                                fontSize="12px"
-                                additionalStyles={{ textTransform: 'capitalize' }}
-                                fontWeight="600"
-                                onClick={() => navigateTo(ROUTES.Markets.Home)}
-                            >
-                                Start
-                            </Button>
-                        )}
-                    </ItemWrapper>
-                    <ItemWrapper completed={isSpeedTradeCompleted}>
-                        <ItemFirstSection gap={4}>
-                            <Icon className="sidebar-icon sidebar-icon--speed-markets" />
-                            <FlexDivColumnStart>
-                                <ItemTitle>Speed Market Trade</ItemTitle>
-                                <ItemDescription>Complete 1 speed market position</ItemDescription>
-                            </FlexDivColumnStart>
-                        </ItemFirstSection>
-                        {isSpeedTradeCompleted ? (
-                            <CheckmarkIcon className="icon icon--resolvedmarkets" />
-                        ) : (
-                            <Button
-                                padding="6px 12px"
-                                textColor={theme.textColor.primary}
-                                backgroundColor={theme.borderColor.senary}
-                                borderRadius="8px"
-                                borderColor={'transparent'}
-                                width="54px"
-                                fontSize="12px"
-                                additionalStyles={{ textTransform: 'capitalize' }}
-                                fontWeight="600"
-                                onClick={() => dispatch(setSpeedMarketsWidgetOpen(true))}
-                            >
-                                Start
-                            </Button>
-                        )}
-                    </ItemWrapper>
-                    <ItemWrapper completed={isSocialQuestDone}>
-                        <ItemFirstSection gap={4}>
-                            <Icon className="icon icon--social" />
-                            <FlexDivColumnStart>
-                                <ItemTitle>Share on Social</ItemTitle>
-                                <ItemDescription>Post URL</ItemDescription>
-                            </FlexDivColumnStart>
-                        </ItemFirstSection>
-                    </ItemWrapper>
-                    <ProgressBar>
-                        <Completed width={(completedQuest * 100) / 3} />
-                    </ProgressBar>
-                    <SpinTheWheelInfo completed={completedQuest === 3}>
-                        {completedQuest === 3 ? 'Completed' : `Complete ${3 - completedQuest} more → Spin bonus`}
-                    </SpinTheWheelInfo>
-                    <ItemWrapper completed={isSpinTheWheelCompleted}>
-                        <ItemFirstSection gap={4}>
-                            <Icon className="icon icon--wheel" />
-                            <FlexDivColumnStart>
-                                <ItemTitle>Daily Spin the Wheel</ItemTitle>
-                                <ItemDescription>Spin for Bonus</ItemDescription>
-                            </FlexDivColumnStart>
-                        </ItemFirstSection>
-                        {isSpinTheWheelCompleted ? (
-                            <WheelReward>{spintTheWheelRewardText}</WheelReward>
-                        ) : (
-                            <Button
-                                padding="6px 12px"
-                                textColor={theme.textColor.tertiary}
-                                backgroundColor={theme.overdrop.background.gradient}
-                                borderRadius="8px"
-                                width="54px"
-                                borderColor={'transparent'}
-                                fontSize="12px"
-                                additionalStyles={{ textTransform: 'capitalize' }}
-                                fontWeight="600"
-                                onClick={() => setShowSpinTheWheel(true)}
-                            >
-                                Spin
-                            </Button>
-                        )}
-                    </ItemWrapper>
-                </DropdownWrapper>
+                <OutsideClickHandler onOutsideClick={() => setIsDropdownOpen(false)}>
+                    <DropdownWrapper>
+                        <DropdownHeader>
+                            <FlexDivStart gap={8}>
+                                <DropdownTitle>Daily Quest</DropdownTitle>
+                                <FlexDivCentered gap={4}>
+                                    <Dot completed={isOTTradeCompleted} />
+                                    <Dot completed={isSpeedTradeCompleted} />
+                                    <Dot completed={isSocialQuestDone} />
+                                </FlexDivCentered>
+                            </FlexDivStart>
+                            <BadgeLabel>200XP</BadgeLabel>
+                        </DropdownHeader>
+                        <ItemWrapper completed={isOTTradeCompleted}>
+                            <ItemFirstSection gap={4}>
+                                <Icon className="icon icon--logo" />
+                                <FlexDivColumnStart>
+                                    <ItemTitle>Place Overtime Bet</ItemTitle>
+                                    <ItemDescription>Make any bet on Overtime</ItemDescription>
+                                </FlexDivColumnStart>
+                            </ItemFirstSection>
+                            {isOTTradeCompleted ? (
+                                <CheckmarkIcon className="icon icon--resolvedmarkets" />
+                            ) : (
+                                <Button
+                                    padding="6px 12px"
+                                    textColor={theme.textColor.primary}
+                                    backgroundColor={theme.borderColor.senary}
+                                    borderRadius="8px"
+                                    width="54px"
+                                    borderColor={theme.borderColor.senary}
+                                    fontSize="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    fontWeight="600"
+                                    onClick={() => navigateTo(ROUTES.Markets.Home)}
+                                >
+                                    Start
+                                </Button>
+                            )}
+                        </ItemWrapper>
+                        <ItemWrapper completed={isSpeedTradeCompleted}>
+                            <ItemFirstSection gap={4}>
+                                <Icon className="sidebar-icon sidebar-icon--speed-markets" />
+                                <FlexDivColumnStart>
+                                    <ItemTitle>Speed Market Trade</ItemTitle>
+                                    <ItemDescription>Complete 1 speed market position</ItemDescription>
+                                </FlexDivColumnStart>
+                            </ItemFirstSection>
+                            {isSpeedTradeCompleted ? (
+                                <CheckmarkIcon className="icon icon--resolvedmarkets" />
+                            ) : (
+                                <Button
+                                    padding="6px 12px"
+                                    textColor={theme.textColor.primary}
+                                    backgroundColor={theme.borderColor.senary}
+                                    borderRadius="8px"
+                                    borderColor={'transparent'}
+                                    width="54px"
+                                    fontSize="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    fontWeight="600"
+                                    onClick={() => dispatch(setSpeedMarketsWidgetOpen(true))}
+                                >
+                                    Start
+                                </Button>
+                            )}
+                        </ItemWrapper>
+                        <ItemWrapper completed={isSocialQuestDone}>
+                            <ItemFirstSection gap={4}>
+                                <Icon className="icon icon--social" />
+                                <FlexDivColumnStart>
+                                    <ItemTitle>Share on Social</ItemTitle>
+                                    <ItemDescription>Post URL</ItemDescription>
+                                </FlexDivColumnStart>
+                            </ItemFirstSection>
+                            {isSocialQuestDone && <CheckmarkIcon className="icon icon--resolvedmarkets" />}
+                        </ItemWrapper>
+                        <ProgressBar>
+                            <Completed width={(completedQuest * 100) / 3} />
+                        </ProgressBar>
+                        <SpinTheWheelInfo completed={completedQuest === 3}>
+                            {completedQuest === 3 ? 'Completed' : `Complete ${3 - completedQuest} more → Spin bonus`}
+                        </SpinTheWheelInfo>
+                        <ItemWrapper completed={isSpinTheWheelCompleted}>
+                            <ItemFirstSection gap={4}>
+                                <Icon className="icon icon--wheel" />
+                                <FlexDivColumnStart>
+                                    <ItemTitle>Daily Spin the Wheel</ItemTitle>
+                                    <ItemDescription>Spin for Bonus</ItemDescription>
+                                </FlexDivColumnStart>
+                            </ItemFirstSection>
+                            {isSpinTheWheelCompleted ? (
+                                <WheelReward>{spintTheWheelRewardText}</WheelReward>
+                            ) : (
+                                <Button
+                                    padding="6px 12px"
+                                    textColor={theme.textColor.tertiary}
+                                    backgroundColor={theme.overdrop.background.gradient}
+                                    borderRadius="8px"
+                                    width="54px"
+                                    borderColor={'transparent'}
+                                    fontSize="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    fontWeight="600"
+                                    onClick={() => setShowSpinTheWheel(true)}
+                                >
+                                    Spin
+                                </Button>
+                            )}
+                        </ItemWrapper>
+                    </DropdownWrapper>
+                </OutsideClickHandler>
             )}
             {showSpinTheWheel && <WheelOfFortune onClose={() => setShowSpinTheWheel(false)} />}
         </Wrapper>
@@ -340,15 +350,15 @@ const ItemWrapper = styled(FlexDivSpaceBetween)<{ completed?: boolean }>`
 
 const ItemTitle = styled.p`
     font-size: 12px;
-
     font-weight: 500;
     line-height: normal;
+    white-space: pre;
 `;
 
 const ItemDescription = styled.p`
     color: ${(props) => props.theme.textColor.secondary};
     font-size: 10px;
-
+    white-space: pre;
     font-weight: 400;
     line-height: normal;
 `;
@@ -379,9 +389,15 @@ const CheckmarkIcon = styled.i`
     margin-right: 16px;
 `;
 
+const CheckmarkIconInHeader = styled.i`
+    color: ${(props) => props.theme.textColor.quaternary};
+    font-size: 14px;
+`;
+
 const WheelReward = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 12px;
+    max-width: 85px;
 `;
 
 const SpinTheWheelInfo = styled.p<{ completed?: boolean }>`
@@ -389,7 +405,7 @@ const SpinTheWheelInfo = styled.p<{ completed?: boolean }>`
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 16px; /* 133.333% */
+    line-height: 16px;
     margin: 0 10px;
     margin-top: -4px;
     margin-left: 12px;

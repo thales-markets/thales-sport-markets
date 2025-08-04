@@ -67,7 +67,7 @@ const DailyQuest: React.FC = () => {
             const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
             try {
                 const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
-                    address,
+                    walletAddress: address,
                     tweetUrl,
                 });
 
