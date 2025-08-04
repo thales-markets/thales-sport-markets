@@ -44,7 +44,7 @@ import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { resolveAllSpeedPositions } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
-import { Address, Client, getContract } from 'viem';
+import { Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
@@ -111,7 +111,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 !!positions.length &&
                 positions[0].collateralAddress === marketData.collateralAddress
         );
-    const hasPositionsDefaultCollateral = positions.some((marketData) => marketData.isDefaultCollateral);
+    const hasPositionsDefaultCollateral = isClaimAll && positions.some((marketData) => marketData.isDefaultCollateral);
 
     const nativeCollateralAddress = positions.find(
         (marketData) => !hasPositionsDefaultCollateral && !marketData.isDefaultCollateral
@@ -279,7 +279,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
             const isEth = claimCollateralAddress === ZERO_ADDRESS;
             const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress;
-            const collateralAddress = positions[0].collateralAddress as Address;
 
             const speedMarketsAMMResolverContractWithSigner = getContractInstance(
                 ContractType.SPEED_MARKETS_AMM_RESOLVER,
@@ -290,16 +289,16 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             if (isBiconomy) {
                 hash = isOfframp
                     ? await executeBiconomyTransaction({
-                          collateralAddress,
+                          collateralAddress: claimCollateralAddress,
                           networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketWithOfframp',
-                          data: [position.market, priceUpdateData, collateralAddress, isEth],
+                          data: [position.market, priceUpdateData, claimCollateralAddress, isEth],
                           value: undefined,
                           isEth,
                       })
                     : await executeBiconomyTransaction({
-                          collateralAddress,
+                          collateralAddress: claimCollateralAddress,
                           networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarket',
@@ -308,7 +307,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             } else {
                 hash = isOfframp
                     ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
-                          [position.market, priceUpdateData, collateralAddress, isEth],
+                          [position.market, priceUpdateData, claimCollateralAddress, isEth],
                           { value: updateFee }
                       )
                     : await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
@@ -350,7 +349,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     const handleResolveAll = async () => {
         setIsSubmitting(true);
 
-        const collateralAddress = claimablePositions[0].collateralAddress as Address;
+        const collateralAddress = nativeCollateralAddress || claimCollateralAddress;
 
         await resolveAllSpeedPositions(
             claimablePositions,

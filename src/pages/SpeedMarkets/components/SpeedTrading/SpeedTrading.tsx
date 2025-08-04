@@ -28,7 +28,6 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
         profit: { [SpeedPositions.UP]: 0, [SpeedPositions.DOWN]: 0 },
         skew: { [SpeedPositions.UP]: 0, [SpeedPositions.DOWN]: 0 },
     });
-    const [buyinGasFee, setBuyinGasFee] = useState(0);
     const [hasError, setHasError] = useState(false);
 
     const ammSpeedMarketsLimitsQuery = useAmmSpeedMarketsLimitsQuery({ networkId, client }, undefined);
@@ -72,7 +71,6 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 selectedAsset={selectedAsset}
                 buyinAmount={buyinAmount}
                 setBuyinAmount={setBuyinAmount}
-                buyinGasFee={buyinGasFee}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setHasError={setHasError}
             />
@@ -84,7 +82,6 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 priceSlippage={priceSlippage}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setProfitAndSkewPerPosition={setProfitAndSkewPerPosition}
-                setBuyinGasFee={setBuyinGasFee}
                 resetData={resetData}
                 hasError={hasError}
             />
