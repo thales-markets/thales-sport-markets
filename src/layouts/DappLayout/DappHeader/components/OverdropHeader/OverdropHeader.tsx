@@ -32,6 +32,7 @@ const OverdropHeader: React.FC = () => {
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
+        refetchInterval: 5000,
     });
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
