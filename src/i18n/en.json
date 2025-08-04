@@ -1639,8 +1639,8 @@
                 "description": "Each new user that signs up using your link becomes connected to your account."
             },
             "step3": {
-                "title": "Earn XP Rewards",
-                "description": "Receive 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
+                "title": "Earn Fees and XP Rewards",
+                "description": "Receive 12.5% protocol fees and 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
             }
         },
         "tabs": {

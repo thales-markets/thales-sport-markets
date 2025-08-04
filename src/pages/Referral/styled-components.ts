@@ -500,7 +500,7 @@ export const StepsContainer = styled(FlexDivRow)`
 
 export const Step = styled.div`
     width: 322px;
-    height: 196px;
+    height: 220px;
     background: #1b2141;
     border-radius: 12px;
     padding: 24px;
