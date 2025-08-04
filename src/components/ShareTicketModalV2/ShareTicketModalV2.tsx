@@ -13,12 +13,13 @@ import { t } from 'i18next';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Oval } from 'react-loader-spinner';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -92,6 +93,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
     const [aiContent, setAiContent] = useState<string>('');
+    const [loadingAiContent, setLoadingAiContent] = useState<boolean>(false);
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
     const [reffererID, setReffererID] = useState('');
@@ -427,9 +429,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         <StyledAIIcon />
                         <GenerateButton
                             onClick={async () => {
+                                setLoadingAiContent(true);
                                 const aiResponse = await axios.get(
                                     `${generalConfig.OVERDROP_API_URL}/generate-social-content`
                                 );
+                                setLoadingAiContent(false);
                                 if (aiResponse.data) {
                                     setAiContent(aiResponse.data);
                                 }
@@ -438,6 +442,18 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         >
                             Generate
                         </GenerateButton>
+                        {loadingAiContent && (
+                            <LoaderWrapper>
+                                <Oval
+                                    color={theme.textColor.quaternary}
+                                    height={20}
+                                    width={20}
+                                    secondaryColor={theme.textColor.primary}
+                                    ariaLabel="loading-indicator"
+                                    strokeWidth={2}
+                                />
+                            </LoaderWrapper>
+                        )}
                     </AreaWrapper>
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
@@ -603,6 +619,12 @@ const StyledAIIcon = styled(AIIcon)`
     position: absolute;
     top: 6px;
     left: 10px;
+`;
+
+const LoaderWrapper = styled(FlexDivCentered)`
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 11px);
 `;
 
 export default React.memo(ShareTicketModal);
