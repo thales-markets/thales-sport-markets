@@ -1528,11 +1528,11 @@
         "wheel": {
             "congratulations": "CONGRATULATIONS!",
             "epic-rewards": "Epic rewards unlocked",
-            "xp-boost-activated": "XP BOOST ACTIVATED",
+            "xp-boost": "XP BOOST",
             "daily-spin": "Daily Spin the Wheel",
             "spin-info": "Spin once every 24 hours • Guaranteed rewards",
             "spin-now": "Spin now",
-            "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Dont forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
+            "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Don't forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
         },
         "daily-quest": {
             "title": "Daily Quest",

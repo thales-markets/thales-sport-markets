@@ -92,7 +92,7 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
 
     return (
         <Modal
-            containerStyle={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
+            containerStyle={{ border: 'none', background: isInfoModalOpen ? 'transparent' : '', overflow: 'hidden' }}
             hideHeader
             title=""
             onClose={onClose}
@@ -104,19 +104,22 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                     <RewardTitle>{t('overdrop.wheel.congratulations')}</RewardTitle>
                     <RewardDesc>{t('overdrop.wheel.epic-rewards')}</RewardDesc>
                     <GradientWrapper>
-                        <Reward> {userData?.wheel?.reward?.boostAmount}%</Reward>
-                        <RewardLabel>{t('overdrop.wheel.xp-boost-activated')}</RewardLabel>
-                        {showExtraRewards && <ExtraReward> + {userData?.wheel?.reward?.xpAmount}XP</ExtraReward>}
+                        <Reward>
+                            {userData?.wheel?.reward?.boostAmount}% {t('overdrop.wheel.xp-boost')}
+                        </Reward>
+
+                        {showExtraRewards && <ExtraReward> + {userData?.wheel?.reward?.xpAmount} XP</ExtraReward>}
                     </GradientWrapper>
                     <FooterText>
                         {t('overdrop.wheel.reward-info', {
                             boostAmount: userData?.wheel?.reward?.boostAmount,
-                            xpReward: showExtraRewards ? userData?.wheel?.reward?.xpAmount + 'XP' : '',
+                            xpReward: showExtraRewards ? ` + ${userData?.wheel?.reward?.xpAmount}  XP` : '',
                         })}
                     </FooterText>
                 </RewardWrapper>
             ) : (
                 <Wrapper>
+                    <CloseIcon onClick={onClose} />
                     <WheelWrapper>
                         {data && (
                             <Wheel
@@ -283,15 +286,6 @@ const Reward = styled.p`
     line-height: normal;
 `;
 
-const RewardLabel = styled.p`
-    color: ${(props) => props.theme.textColor.quaternary};
-
-    text-align: center;
-    font-family: Inter;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: normal;
-`;
 const ExtraReward = styled(Reward)`
     color: ${(props) => props.theme.textColor.quaternary};
 `;
