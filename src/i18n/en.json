@@ -1654,12 +1654,14 @@
         },
         "tabs": {
             "affiliate": "Affiliate Leaderboard",
-            "summary": "Referred Users Leaderboard",
-            "activity": "Referred Bets"
+            "summary": "Your Referred Users",
+            "activity": "Your Referred Bets"
         },
         "leaderboard": {
             "time-filter": "This Month",
             "your-position": "Your rank",
+            "overdrop-league": "Earned XP makes you eligible for monthly ETH and $OVER Free Bet rewards.",
+            "overdrop-league-link": "Check Overdrop pages for more details.",
             "progress-to-next": "Progress to next rank",
             "table-headers": {
                 "rank": "Rank",
@@ -1667,6 +1669,7 @@
                 "total-bets": "Referred bets",
                 "referrals": "Referred Users",
                 "betVolume": "Referred Volume",
+                "earnedFees": "Earned Fees",
                 "xp": "Affiliate XP Earned",
                 "level": "Overdrop XP Level"
             },

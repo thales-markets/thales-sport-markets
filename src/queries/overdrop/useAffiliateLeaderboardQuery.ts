@@ -14,6 +14,7 @@ const useAffiliateLeaderboardQuery = (options?: Omit<UseQueryOptions<any>, 'quer
                     return response.data.map((item: any, index: number) => ({
                         ...item,
                         rank: index + 1,
+                        fees: item.betVolume * 0.0025,
                     }));
                 return [];
             } catch (e) {

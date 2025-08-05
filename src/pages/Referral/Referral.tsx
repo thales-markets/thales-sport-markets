@@ -30,6 +30,7 @@ import {
     FAQSubtitle,
     FAQTitle,
     HeaderSection,
+    HintText,
     HowItWorksSection,
     InputRow,
     LeaderboardHeader,
@@ -88,9 +89,13 @@ const Referral: React.FC = () => {
             return null;
         }
 
-        const position = leaderboard.find((item) => item.owner.toLowerCase() === walletAddress.toLowerCase());
+        const position = leaderboard.find(
+            (item) =>
+                item.owner.toLowerCase() === walletAddress.toLowerCase() ||
+                item.owner.toLowerCase() === address?.toLowerCase()
+        );
         return position ? position : null;
-    }, [leaderboard, walletAddress]);
+    }, [leaderboard, walletAddress, address]);
 
     const onSubmit = useCallback(async () => {
         const signature = isBiconomy
@@ -179,7 +184,7 @@ const Referral: React.FC = () => {
                         <TrophyIcon />
                         <StatsTitle>{t('referral.header.stats-title')}</StatsTitle>
                     </StatsHeader>
-                    
+
                     <StatsContent>
                         <StatRow>
                             <StatLabel>{t('referral.header.stats.referrals')}</StatLabel>
@@ -255,6 +260,14 @@ const Referral: React.FC = () => {
                         )}
                     </TabsContainer>
                 </LeaderboardHeader>
+
+                <HintText>
+                    {t('referral.leaderboard.overdrop-league')}{' '}
+                    <a href="/overdrop" target="_blank" rel="noopener noreferrer">
+                        {t('referral.leaderboard.overdrop-league-link')}
+                    </a>
+                    .
+                </HintText>
 
                 {/* User Position */}
                 {yourPosition && (

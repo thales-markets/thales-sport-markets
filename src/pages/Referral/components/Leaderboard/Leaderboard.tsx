@@ -90,23 +90,20 @@ const Leaderboard: React.FC = () => {
                             ),
                         },
                         {
+                            header: <>{t('referral.leaderboard.table-headers.earnedFees')}</>,
+                            accessorKey: 'fees',
+                            cell: (cellProps: any) => (
+                                <>{formatCurrencyWithSign(USD_SIGN, cellProps.cell.getValue(), 2)}</>
+                            ),
+                            size: 170,
+                        },
+                        {
                             header: <>{t('referral.leaderboard.table-headers.xp')}</>,
                             accessorKey: 'xp',
                             cell: (cellProps: any) => <UserXP>{formatCurrency(cellProps.cell.getValue(), 2)}</UserXP>,
                             size: 170,
                         },
-                    ].concat(
-                        isMobile
-                            ? []
-                            : [
-                                  {
-                                      header: <>{t('referral.leaderboard.table-headers.level')}</>,
-                                      accessorKey: 'level.levelName',
-                                      cell: (cellProps: any) => <>{cellProps.cell.getValue()}</>,
-                                      size: 200,
-                                  },
-                              ]
-                    ) as any
+                    ] as any
                 }
                 data={tableData}
                 isLoading={false}

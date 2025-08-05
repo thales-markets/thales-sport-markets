@@ -1165,3 +1165,18 @@ export const getTableProps = (isMobile?: boolean) =>
               tableRowStyles: { minHeight: '50px', fontSize: '12px' },
               tableRowCellStyles: { justifyContent: 'center' },
           };
+
+export const HintText = styled.p`
+    font-size: 12px;
+    color: #999; // light gray for hint text
+    margin-top: 4px;
+    margin-bottom: 16px;
+
+    a {
+        color: #3fffff; // match your hover or accent color
+        text-decoration: underline;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+`;
