@@ -44,7 +44,7 @@ import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { resolveAllSpeedPositions } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
-import { Client, getContract } from 'viem';
+import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
@@ -278,6 +278,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             const priceUpdateData = priceFeedUpdate.binary.data.map((vaa: string) => '0x' + vaa);
             const updateFee = await pythContract.read.getUpdateFee([priceUpdateData]);
 
+            const collateralAddress = (nativeCollateralAddress || claimCollateralAddress) as Address;
             const isEth = claimCollateralAddress === ZERO_ADDRESS;
             const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress;
 
@@ -290,7 +291,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             if (isBiconomy) {
                 hash = isOfframp
                     ? await executeBiconomyTransaction({
-                          collateralAddress: claimCollateralAddress,
+                          collateralAddress,
                           networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarketWithOfframp',
@@ -300,7 +301,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                           isSpeed: true,
                       })
                     : await executeBiconomyTransaction({
-                          collateralAddress: claimCollateralAddress,
+                          collateralAddress,
                           networkId,
                           contract: speedMarketsAMMResolverContractWithSigner,
                           methodName: 'resolveMarket',
@@ -310,7 +311,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             } else {
                 hash = isOfframp
                     ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
-                          [position.market, priceUpdateData, claimCollateralAddress, isEth],
+                          [position.market, priceUpdateData, collateralAddress, isEth],
                           { value: updateFee }
                       )
                     : await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
