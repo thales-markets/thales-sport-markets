@@ -7,8 +7,10 @@ import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
@@ -22,7 +24,6 @@ import {
 import { OverdropUserData } from 'types/overdrop';
 import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
-import { useTranslation } from 'react-i18next';
 
 const OverdropHeader: React.FC = () => {
     const { address, isConnected } = useAccount();
@@ -30,6 +31,7 @@ const OverdropHeader: React.FC = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
+    const [showSocialModal, setShowSocialModal] = useState(false);
     const { t } = useTranslation();
 
     const userDataQuery = useUserDataQuery(address as string, {
@@ -202,7 +204,24 @@ const OverdropHeader: React.FC = () => {
                                     <ItemDescription>{t('overdrop.daily-quest.social.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
-                            {isSocialQuestDone && <CheckmarkIcon className="icon icon--resolvedmarkets" />}
+                            {isSocialQuestDone ? (
+                                <CheckmarkIcon className="icon icon--resolvedmarkets" />
+                            ) : (
+                                <Button
+                                    padding="6px 12px"
+                                    textColor={theme.textColor.primary}
+                                    backgroundColor={theme.borderColor.senary}
+                                    borderRadius="8px"
+                                    borderColor={'transparent'}
+                                    width="54px"
+                                    fontSize="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    fontWeight="600"
+                                    onClick={() => setShowSocialModal(true)}
+                                >
+                                    Start
+                                </Button>
+                            )}
                         </ItemWrapper>
                         <ProgressBar>
                             <Completed width={(completedQuest * 100) / 3} />
@@ -241,6 +260,7 @@ const OverdropHeader: React.FC = () => {
                 </OutsideClickHandler>
             )}
             {showSpinTheWheel && <WheelOfFortune onClose={() => setShowSpinTheWheel(false)} />}
+            {showSocialModal && <SocialShareModal onClose={() => setShowSocialModal(false)} />}
         </Wrapper>
     );
 };
@@ -293,12 +313,12 @@ const Arrow = styled.i`
 `;
 
 const DropdownWrapper = styled.div`
-    width: 100%;
+    width: 120%;
     background: ${(props) => props.theme.background.primary};
 
     position: absolute;
     top: 40px;
-    left: 0;
+    left: -10%;
     z-index: 1000;
     border-radius: 12px;
     border: 1px solid ${(props) => props.theme.overdrop.background.octonary};
