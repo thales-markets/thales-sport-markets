@@ -118,11 +118,23 @@ const OverdropHeader: React.FC = () => {
                     <QuestDot className="icon icon--resolvedmarkets" completed={isSpeedTradeCompleted} />
                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                 </FlexDivCentered>
-                <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+                <Arrow
+                    className="icon icon--arrow-down"
+                    onClick={() => {
+                        setIsDropdownOpen(!isDropdownOpen);
+                    }}
+                />
             </FlexDivRowCentered>
 
             {isDropdownOpen && (
-                <OutsideClickHandler onOutsideClick={() => setIsDropdownOpen(false)}>
+                <OutsideClickHandler
+                    onOutsideClick={(e) => {
+                        if ((e as any).target.className.includes('icon icon--arrow-down')) {
+                            return;
+                        }
+                        setIsDropdownOpen(false);
+                    }}
+                >
                     <DropdownWrapper>
                         <DropdownHeader>
                             <FlexDivStart gap={8}>
