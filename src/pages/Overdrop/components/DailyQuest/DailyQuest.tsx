@@ -1,25 +1,19 @@
-import axios from 'axios';
 import Button from 'components/Button';
-import TextInput from 'components/fields/TextInput';
 import WheelOfFortune from 'components/WheelOfFortune';
-import { generalConfig } from 'config/general';
-import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { getIsMobile } from 'redux/modules/app';
+import { useDispatch } from 'react-redux';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
-import { refetchUserOverdrop } from 'utils/queryConnector';
 import { navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
+import SocialShareModal from '../SocialShareModal';
 
 const DAILY_QUESTS = [
     {
@@ -41,7 +35,7 @@ const DAILY_QUESTS = [
         icon: 'icon icon--social',
         title: 'overdrop.daily-quest.social.title',
         description: 'overdrop.daily-quest.social.title',
-        buttonText: 'Send',
+        buttonText: 'Start',
         completed: false,
         social: true,
     },
@@ -50,10 +44,11 @@ const DAILY_QUESTS = [
 const DailyQuest: React.FC = () => {
     const theme = useTheme();
     const { t } = useTranslation();
+
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
+    const [showSocialModal, setShowSocialModal] = useState(false);
+
     const { address, isConnected } = useAccount();
-    const [tweetUrl, setTweetUrl] = useState('');
-    const isMobile = useSelector(getIsMobile);
     const dispatch = useDispatch();
 
     const userDataQuery = useUserDataQuery(address as string, {
@@ -61,28 +56,6 @@ const DailyQuest: React.FC = () => {
     });
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
-
-    const postTweet = useCallback(async () => {
-        if (address) {
-            const toastTwitter = toast.loading(t('markets.parlay.share-ticket.verifying-tweet'));
-            try {
-                const response = await axios.post(`${generalConfig.OVERDROP_API_URL}/user-twitter`, {
-                    walletAddress: address,
-                    tweetUrl,
-                });
-
-                if (response.data.success) {
-                    toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
-                    refetchUserOverdrop(address);
-                } else {
-                    toast.update(toastTwitter, getErrorToastOptions(response.data.error));
-                }
-            } catch (e) {
-                console.log(e);
-                toast.update(toastTwitter, getErrorToastOptions(t('markets.parlay.share-ticket.network-error')));
-            }
-        }
-    }, [address, tweetUrl, t]);
 
     useMemo(() => {
         if (userData) {
@@ -142,8 +115,6 @@ const DailyQuest: React.FC = () => {
         return false;
     }, [isSpinTheWheelCompleted, userData]);
 
-    const isSocialUrlValid = tweetUrl.startsWith('https://x.com/') || tweetUrl.startsWith('https://twitter.com/');
-
     return (
         <Container>
             <FlexDivSpaceBetween>
@@ -168,24 +139,10 @@ const DailyQuest: React.FC = () => {
                         </FlexDivCentered>
                     ) : (
                         <ActionWrapper full={quest.social} gap={10}>
-                            {quest.social && (
-                                <TextInput
-                                    width={isMobile ? '100%' : '350px'}
-                                    height="30px"
-                                    disabled={quest.completed}
-                                    borderColor="transparent"
-                                    placeholder={t('overdrop.daily-quest.social.placeholder')}
-                                    value={tweetUrl}
-                                    inputFontSize={'12px'}
-                                    onChange={(e: any) => setTweetUrl(e.target.value)}
-                                    margin={'0px'}
-                                />
-                            )}
                             <Button
                                 borderRadius="8px"
                                 textColor={theme.textColor.quaternary}
                                 borderColor={theme.borderColor.quaternary}
-                                disabled={quest.social ? !isSocialUrlValid : false}
                                 backgroundColor="transparent"
                                 width="62px"
                                 height="30px"
@@ -194,7 +151,7 @@ const DailyQuest: React.FC = () => {
                                 additionalStyles={{ textTransform: 'capitalize' }}
                                 onClick={
                                     quest.social
-                                        ? postTweet
+                                        ? () => setShowSocialModal(true)
                                         : quest.speed
                                         ? () => dispatch(setSpeedMarketsWidgetOpen(true))
                                         : () => navigateTo(ROUTES.Markets.Home)
@@ -244,6 +201,7 @@ const DailyQuest: React.FC = () => {
                 )}
             </WheelItem>
             {showSpinTheWheel && <WheelOfFortune onClose={() => setShowSpinTheWheel(false)} />}
+            {showSocialModal && <SocialShareModal onClose={() => setShowSocialModal(false)} />}
         </Container>
     );
 };

@@ -1,7 +1,7 @@
-import AIIcon from 'assets/images/svgs/ai-icon.svg?react';
 import axios from 'axios';
 import Button from 'components/Button';
-import { Input, TextAreaInput } from 'components/fields/common';
+import { Input } from 'components/fields/common';
+import GenerateAIContent from 'components/GenerateAIContent';
 import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -13,13 +13,12 @@ import { t } from 'i18next';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Oval } from 'react-loader-spinner';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
@@ -93,7 +92,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
     const [aiContent, setAiContent] = useState<string>('');
-    const [loadingAiContent, setLoadingAiContent] = useState<boolean>(false);
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
     const [reffererID, setReffererID] = useState('');
@@ -214,8 +212,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     if (aiContent) {
                         twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
-                            aiContent +
+                            encodeURIComponent(aiContent) +
                             LINKS.OvertimeMarkets +
+                            ' ' +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
                             (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
                     } else {
@@ -417,44 +416,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </SwitchWrapper>
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
-                    <AreaWrapper>
-                        <Area
-                            hasContent={!!aiContent}
-                            onChange={(e) => {
-                                setAiContent(e.target.value);
-                            }}
-                            value={aiContent}
-                            placeholder={'Tweet content...'}
-                        />
-                        <StyledAIIcon />
-                        <GenerateButton
-                            onClick={async () => {
-                                setLoadingAiContent(true);
-                                const aiResponse = await axios.get(
-                                    `${generalConfig.OVERDROP_API_URL}/generate-social-content`
-                                );
-                                setLoadingAiContent(false);
-                                if (aiResponse.data) {
-                                    setAiContent(aiResponse.data);
-                                }
-                            }}
-                            height="16px"
-                        >
-                            Generate
-                        </GenerateButton>
-                        {loadingAiContent && (
-                            <LoaderWrapper>
-                                <Oval
-                                    color={theme.textColor.quaternary}
-                                    height={20}
-                                    width={20}
-                                    secondaryColor={theme.textColor.primary}
-                                    ariaLabel="loading-indicator"
-                                    strokeWidth={2}
-                                />
-                            </LoaderWrapper>
-                        )}
-                    </AreaWrapper>
+                    <GenerateAIContent aiContent={aiContent} setAiContent={setAiContent} />
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
@@ -586,45 +548,6 @@ const Label = styled.span`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
-`;
-
-const AreaWrapper = styled.div`
-    position: relative;
-    width: 100%;
-`;
-
-const Area = styled(TextAreaInput)<{ hasContent?: boolean }>`
-    ${(props) => props.hasContent && 'padding-top: 30px !important;'}
-    field-sizing: content;
-    ${(props) => (props.hasContent ? 'height: auto;' : 'height: 34px;')}
-    ${(props) => props.hasContent && 'padding-bottom: 10px !important;'}
-    ${(props) => !props.hasContent && 'padding-left: 130px !important;'}
-`;
-
-const GenerateButton = styled(Button)`
-    position: absolute;
-    height: 16px;
-    top: 8px;
-    left: 37px;
-    padding: 8px;
-    text-transform: none;
-    background-color: ${(props) => props.theme.textColor.quaternary};
-    border-color: ${(props) => props.theme.textColor.quaternary};
-    :hover {
-        background-color: ${(props) => props.theme.textColor.quaternary};
-    }
-`;
-
-const StyledAIIcon = styled(AIIcon)`
-    position: absolute;
-    top: 6px;
-    left: 10px;
-`;
-
-const LoaderWrapper = styled(FlexDivCentered)`
-    position: absolute;
-    right: 10px;
-    top: calc(50% - 11px);
 `;
 
 export default React.memo(ShareTicketModal);
