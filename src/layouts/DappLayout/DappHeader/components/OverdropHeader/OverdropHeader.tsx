@@ -9,7 +9,7 @@ import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
@@ -32,10 +32,12 @@ const OverdropHeader: React.FC = () => {
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const [showSocialModal, setShowSocialModal] = useState(false);
+    const [isRefetching, setIsRefetching] = useState(true);
     const { t } = useTranslation();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
+        refetchInterval: isRefetching ? 5000 : false,
     });
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
@@ -106,6 +108,10 @@ const OverdropHeader: React.FC = () => {
         return false;
     }, [isSpinTheWheelCompleted, userData]);
 
+    useEffect(() => {
+        setIsRefetching(!isOTTradeCompleted || !isSpeedTradeCompleted);
+    }, [isOTTradeCompleted, isSpeedTradeCompleted]);
+
     return (
         <Wrapper>
             <SPAAnchor style={{ display: 'flex' }} href={buildHref(ROUTES.Overdrop)}>
@@ -122,11 +128,23 @@ const OverdropHeader: React.FC = () => {
                     <QuestDot className="icon icon--resolvedmarkets" completed={isSpeedTradeCompleted} />
                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                 </FlexDivCentered>
-                <Arrow className="icon icon--arrow-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+                <Arrow
+                    className="icon icon--arrow-down"
+                    onClick={() => {
+                        setIsDropdownOpen(!isDropdownOpen);
+                    }}
+                />
             </FlexDivRowCentered>
 
             {isDropdownOpen && (
-                <OutsideClickHandler onOutsideClick={() => setIsDropdownOpen(false)}>
+                <OutsideClickHandler
+                    onOutsideClick={(e) => {
+                        if ((e as any).target.className.includes('icon icon--arrow-down')) {
+                            return;
+                        }
+                        setIsDropdownOpen(false);
+                    }}
+                >
                     <DropdownWrapper>
                         <DropdownHeader>
                             <FlexDivStart gap={8}>
@@ -140,7 +158,7 @@ const OverdropHeader: React.FC = () => {
                                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
-                            <BadgeLabel>200 XP</BadgeLabel>
+                            <BadgeLabel>10% BOOST + 200 XP</BadgeLabel>
                         </DropdownHeader>
                         <ItemWrapper completed={isOTTradeCompleted}>
                             <ItemFirstSection gap={4}>
@@ -339,8 +357,7 @@ const DropdownTitle = styled(QuestTitle)`
 
 const BadgeLabel = styled.div`
     border-radius: 20px;
-    padding: 4px;
-    width: 80px;
+    padding: 6px 12px;
     display: flex;
     align-items: center;
     justify-content: center;

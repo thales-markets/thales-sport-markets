@@ -132,7 +132,9 @@ const DailyQuest: React.FC = () => {
                         </HeaderWrapper>
                     </FlexDivCentered>
 
-                    {quest.completed ? (
+                    {!isConnected ? (
+                        <></>
+                    ) : quest.completed ? (
                         <FlexDivCentered gap={4}>
                             <FinishedText>Finished</FinishedText>
                             <FinishedIcon />
@@ -174,7 +176,10 @@ const DailyQuest: React.FC = () => {
                         </BadgeWrapper>
                     </HeaderWrapper>
                 </FlexDivCentered>
-                {isSpinTheWheelCompleted ? (
+
+                {!isConnected ? (
+                    <></>
+                ) : isSpinTheWheelCompleted ? (
                     <FlexDivCentered gap={4}>
                         <FinishedText>{spintTheWheelRewardText}</FinishedText>
                         <FinishedIcon />
