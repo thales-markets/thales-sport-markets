@@ -1535,7 +1535,7 @@
             "epic-rewards": "Epic rewards unlocked",
             "xp-boost": "XP BOOST",
             "daily-spin": "Daily Spin the Wheel",
-            "spin-info": "Spin once every 24 hours • Guaranteed rewards",
+            "spin-info": "One spin per day • Complete Daily Quest before spinning for extra Spin rewards",
             "spin-now": "Spin now",
             "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Don't forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
         },

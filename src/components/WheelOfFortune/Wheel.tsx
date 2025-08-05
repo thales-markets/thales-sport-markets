@@ -208,7 +208,6 @@ const Text = styled.p`
 
 const Description = styled.p`
     color: rgba(255, 255, 255, 0.6);
-    text-align: center;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
