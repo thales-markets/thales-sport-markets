@@ -74,6 +74,7 @@ import { delay } from 'utils/timer';
 import { Client, parseUnits, stringToHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
+import OverdropSummary from '../OverdropSummary';
 import TradingDetails from '../TradingDetails';
 
 type AmmSpeedTradingProps = {
@@ -705,11 +706,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     return (
         <Container>
-            {false && (
-                <OverdropRowSummary>
-                    <OverdropText>{'TODO: Overdrop info'}</OverdropText>
-                </OverdropRowSummary>
-            )}
+            <OverdropSummary buyinAmount={buyinAmount} />
             <TradingDetailsWrapper>
                 <TradingDetails
                     selectedAsset={selectedAsset}
@@ -749,15 +746,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
 const Container = styled(FlexDivColumn)`
     position: relative;
-    gap: 5px;
-`;
-
-const OverdropRowSummary = styled(FlexDivCentered)``;
-
-const OverdropText = styled.span`
-    text-align: center;
-    font-size: 14px;
-    line-height: 16px;
+    gap: 2px;
 `;
 
 const TradingDetailsWrapper = styled(FlexDivCentered)`
