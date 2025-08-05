@@ -64,7 +64,6 @@ import {
     refetchActiveSpeedMarkets,
     refetchBalances,
     refetchSpeedMarketsLimits,
-    refetchUserOverdrop,
     refetchUserSpeedMarkets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
@@ -447,9 +446,8 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             refetchActiveSpeedMarkets(networkId);
             refetchSpeedMarketsLimits(networkId);
             refetchBalances(walletAddress, networkId);
-            setTimeout(() => refetchUserOverdrop(address as any), 5000);
         },
-        [networkId, resetData, t, walletAddress, address]
+        [networkId, resetData, t, walletAddress]
     );
 
     const handleSubmit = async () => {
