@@ -92,8 +92,8 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
 
     return (
         <Modal
-            containerStyle={{ border: 'none', background: isInfoModalOpen ? 'transparent' : '', overflow: 'hidden' }}
-            hideHeader
+            containerStyle={{ border: 'none', background: 'transparent', overflow: 'hidden' }}
+            hideHeader={isInfoModalOpen}
             title=""
             onClose={onClose}
         >
@@ -119,7 +119,6 @@ const WheelOfFortune: React.FC<WheelProps> = ({ onClose }) => {
                 </RewardWrapper>
             ) : (
                 <Wrapper>
-                    <CloseIcon onClick={onClose} />
                     <WheelWrapper>
                         {data && (
                             <Wheel

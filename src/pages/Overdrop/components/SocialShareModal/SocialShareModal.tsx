@@ -199,9 +199,9 @@ const CloseIcon = styled.i`
     position: absolute;
     top: -20px;
     right: -20px;
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.theme.textColor.secondary};
     @media (max-width: 950px) {
         top: 10px;
         right: 10px;
