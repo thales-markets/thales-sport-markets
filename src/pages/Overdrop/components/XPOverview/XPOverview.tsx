@@ -102,6 +102,12 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                     </InfoWrapper>
 
                     <CurrentLevelProgressLine height={'26px'} hideLevelLabel={true} />
+                    <ReferralCTA>
+                        {t('overdrop.overdrop-home.affiliate-cta')}{' '}
+                        <a href="/referral" target="_blank" rel="noopener noreferrer">
+                            {t('overdrop.overdrop-home.affiliate-cta-link')}
+                        </a>
+                    </ReferralCTA>
                 </ProgressOverviewWrapper>
             </Wrapper>
         </GradientBorder>
@@ -229,6 +235,36 @@ const Level = styled(Label)`
     white-space: pre;
     @media (max-width: 767px) {
         font-size: 20px;
+    }
+`;
+
+const ReferralCTA = styled.div`
+    font-size: 12px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-top: -12px;
+    margin-bottom: 4px;
+    padding: 2px 10px;
+    text-align: center;
+
+    a {
+        color: #3fffff;
+        text-decoration: underline;
+        font-weight: 500;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    @media (max-width: 767px) {
+        font-size: 11px;
+        padding: 6px 12px;
+        margin-top: 6px; // ✅ more breathing room from progress bar
+        margin-bottom: 12px; // ✅ clean spacing above level badges
+        line-height: 1.4; // ✅ improve legibility on mobile
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
     }
 `;
 
