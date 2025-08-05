@@ -22,6 +22,7 @@ import {
 import { OverdropUserData } from 'types/overdrop';
 import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
+import { useTranslation } from 'react-i18next';
 
 const OverdropHeader: React.FC = () => {
     const { address, isConnected } = useAccount();
@@ -29,6 +30,7 @@ const OverdropHeader: React.FC = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
+    const { t } = useTranslation();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
@@ -136,14 +138,14 @@ const OverdropHeader: React.FC = () => {
                                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
-                            <BadgeLabel>200XP</BadgeLabel>
+                            <BadgeLabel>200 XP</BadgeLabel>
                         </DropdownHeader>
                         <ItemWrapper completed={isOTTradeCompleted}>
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--logo" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Place Overtime Bet</ItemTitle>
-                                    <ItemDescription>Make any bet on Overtime</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.ot.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.ot.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isOTTradeCompleted ? (
@@ -169,8 +171,8 @@ const OverdropHeader: React.FC = () => {
                             <ItemFirstSection gap={4}>
                                 <Icon className="sidebar-icon sidebar-icon--speed-markets" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Speed Market Trade</ItemTitle>
-                                    <ItemDescription>Complete 1 speed market position</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.speed.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.speed.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isSpeedTradeCompleted ? (
@@ -196,8 +198,8 @@ const OverdropHeader: React.FC = () => {
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--social" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Share on Social</ItemTitle>
-                                    <ItemDescription>Post URL</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.social.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.social.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isSocialQuestDone && <CheckmarkIcon className="icon icon--resolvedmarkets" />}
@@ -206,14 +208,14 @@ const OverdropHeader: React.FC = () => {
                             <Completed width={(completedQuest * 100) / 3} />
                         </ProgressBar>
                         <SpinTheWheelInfo completed={completedQuest === 3}>
-                            {completedQuest === 3 ? 'Completed' : `Complete ${3 - completedQuest} more → Spin bonus`}
+                            {t('overdrop.daily-quest.complete-daily-quest')}
                         </SpinTheWheelInfo>
                         <ItemWrapper completed={isSpinTheWheelCompleted}>
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--wheel" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Daily Spin the Wheel</ItemTitle>
-                                    <ItemDescription>Spin for Bonus</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.daily-spin')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.bonus-spin')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isSpinTheWheelCompleted ? (
