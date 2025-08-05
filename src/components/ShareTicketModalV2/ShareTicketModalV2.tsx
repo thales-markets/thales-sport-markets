@@ -416,7 +416,10 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </SwitchWrapper>
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
-                    <GenerateAIContent aiContent={aiContent} setAiContent={setAiContent} />
+                    <HintText>{t('markets.parlay.share-ticket.generate-content-flex')}</HintText>
+                    <div style={{ display: 'none' }}>
+                        <GenerateAIContent aiContent={aiContent} setAiContent={setAiContent} />
+                    </div>
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
@@ -425,7 +428,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
                     />
-                    <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
+                    <Button height="32px" disabled={isLoading || !tweetUrl.trim()} margin="8px 0" onClick={onSubmit}>
                         {t('common.submit')}
                     </Button>
                 </ShareWrapper>
@@ -548,6 +551,14 @@ const Label = styled.span`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const HintText = styled.span`
+    font-size: 11px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin: 6px 0 12px 0; /* top, right/left, bottom */
+    display: block;
+    text-align: left;
 `;
 
 export default React.memo(ShareTicketModal);

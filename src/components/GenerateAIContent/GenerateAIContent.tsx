@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Oval } from 'react-loader-spinner';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
+import { CopyIcon } from '../../pages/FreeBets/StatsTable';
 
 type GenerateAIContentProps = {
     aiContent: string;
@@ -15,8 +16,13 @@ type GenerateAIContentProps = {
 
 const GenerateAIContent: React.FC<GenerateAIContentProps> = ({ aiContent, setAiContent }) => {
     const theme = useTheme();
-
     const [loadingAiContent, setLoadingAiContent] = useState<boolean>(false);
+
+    const handleCopy = () => {
+        if (aiContent) {
+            navigator.clipboard.writeText(aiContent);
+        }
+    };
 
     return (
         <AreaWrapper>
@@ -26,7 +32,7 @@ const GenerateAIContent: React.FC<GenerateAIContentProps> = ({ aiContent, setAiC
                     setAiContent(e.target.value);
                 }}
                 value={aiContent}
-                placeholder={'Tweet content...'}
+                placeholder={'Post content...'}
             />
             <StyledAIIcon />
             <GenerateButton
@@ -42,6 +48,13 @@ const GenerateAIContent: React.FC<GenerateAIContentProps> = ({ aiContent, setAiC
             >
                 Generate
             </GenerateButton>
+
+            {aiContent && (
+                <CopyIconWrapper onClick={handleCopy} title="Copy text">
+                    <CopyIcon className="icon icon--copy" />
+                </CopyIconWrapper>
+            )}
+
             {loadingAiContent && (
                 <LoaderWrapper>
                     <Oval
@@ -89,6 +102,18 @@ const StyledAIIcon = styled(AIIcon)`
     position: absolute;
     top: 6px;
     left: 10px;
+`;
+
+const CopyIconWrapper = styled.div`
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    cursor: pointer;
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+    }
 `;
 
 const LoaderWrapper = styled(FlexDivCentered)`

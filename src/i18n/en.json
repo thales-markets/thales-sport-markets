@@ -926,8 +926,8 @@
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
                 "positions": "Number of Positions",
-                "share": "Share",
-                "copy": "Copy",
+                "share": "Post",
+                "copy": "Copy image",
                 "download": "Download",
                 "winner": "Winner",
                 "loser": "Loser",
@@ -938,8 +938,9 @@
                     "usd-amount": "USD amount"
                 },
                 "display-as-usdc": "Display amount as USDC",
-                "submit-url": "Submit your tweet URL for Overdrop boost",
-                "generate-content": "Auto-generate x.com post that mentions @overtime_io",
+                "submit-url": "Submit your post URL for Overdrop boost",
+                "generate-content": "Need help with content? Use our AI helper below.",
+                "generate-content-flex": "*you will need to paste the image into the generated post",
                 "verifying-tweet": "Verifying tweet",
                 "network-error": "Network error, check browser console for more info"
             },
@@ -1559,10 +1560,10 @@
             "social": {
                 "title": "Post about @overtime_io on socials",
                 "desc": "Make a post that mentions @overtime_io on X.com",
-                "placeholder": "Post your tweet or cast URL here",
+                "placeholder": "Post your post or cast URL here",
                 "share": {
                     "title": "Post about Overtime on X",
-                    "desc": "Mention @overtime_io in a tweet and submit the post's link below",
+                    "desc": "Mention @overtime_io in a post and submit the post's link below",
                     "submit": "Submit your post url to complete task"
                 }
             }
