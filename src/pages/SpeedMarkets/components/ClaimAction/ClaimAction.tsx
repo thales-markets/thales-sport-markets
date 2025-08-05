@@ -11,7 +11,7 @@ import { PYTH_CONTRACT_ADDRESS } from 'constants/pyth';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { differenceInSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { sumBy } from 'lodash';
+import { sumBy, uniq } from 'lodash';
 import useAmmSpeedMarketsLimitsQuery from 'queries/speedMarkets/useAmmSpeedMarketsLimitsQuery';
 import React, { Dispatch, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -378,7 +378,15 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                   defaultCurrency: defaultCollateral,
                               })
                             : t('speed-markets.tooltips.claim-all-except-native', {
-                                  collaterals: getSpeedNativeCollateralsText(networkId, nativeCollateral),
+                                  collaterals: getSpeedNativeCollateralsText(
+                                      uniq(
+                                          positions.map((position) =>
+                                              getCollateralByAddress(position.collateralAddress, networkId)
+                                          )
+                                      ),
+                                      nativeCollateral,
+                                      networkId
+                                  ),
                               })
                     }
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}

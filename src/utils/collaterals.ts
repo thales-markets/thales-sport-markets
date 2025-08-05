@@ -1,10 +1,4 @@
-import {
-    COLLATERALS,
-    CRYPTO_CURRENCY_MAP,
-    FREE_BET_COLLATERALS,
-    SPEED_NATIVE_COLLATERALS,
-    STABLE_COINS,
-} from 'constants/currency';
+import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { t } from 'i18next';
 import _ from 'lodash';
@@ -78,9 +72,13 @@ export const isLpSupported = (currencyKey: Coins, isSpeedMarkets = false) => {
               isOverCurrency(currencyKey);
 };
 
-export const getSpeedNativeCollateralsText = (networkId: SupportedNetwork, excludeCollateral: Coins | null) => {
-    const collaterals = SPEED_NATIVE_COLLATERALS[networkId]
-        .filter((collateral) => collateral !== excludeCollateral)
+export const getSpeedNativeCollateralsText = (
+    nativeCollaterals: Coins[],
+    excludeCollateral: Coins | null,
+    networkId: SupportedNetwork
+) => {
+    const collaterals = nativeCollaterals
+        .filter((collateral) => collateral !== excludeCollateral && collateral !== getDefaultCollateral(networkId))
         .map((collateral) => (isOverCurrency(collateral) ? `$${collateral}` : collateral));
     return collaterals.length > 1
         ? `${collaterals.slice(0, -1).join(', ')} ${t('common.and')} ${collaterals.slice(-1)}`

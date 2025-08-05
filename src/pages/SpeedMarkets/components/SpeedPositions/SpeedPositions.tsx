@@ -5,7 +5,7 @@ import { MARKET_DURATION_IN_DAYS } from 'constants/markets';
 import { millisecondsToSeconds } from 'date-fns';
 import { PositionsFilter } from 'enums/speedMarkets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import { orderBy } from 'lodash';
+import { orderBy, uniq } from 'lodash';
 import usePythPriceQueries from 'queries/prices/usePythPriceQueries';
 import useUserActiveSpeedMarketsDataQuery from 'queries/speedMarkets/useUserActiveSpeedMarketsDataQuery';
 import useUserResolvedSpeedMarketsQuery from 'queries/speedMarkets/useUserResolvedSpeedMarketsQuery';
@@ -219,7 +219,15 @@ const SpeedPositions: React.FC = () => {
                     {isMobile && !isAllPositionsInSameCollateral && (
                         <FlexDivRow>
                             <Info>{`* ${t('speed-markets.tooltips.claim-all-except-native', {
-                                collaterals: getSpeedNativeCollateralsText(networkId, nativeCollateral),
+                                collaterals: getSpeedNativeCollateralsText(
+                                    uniq(
+                                        positions.map((position) =>
+                                            getCollateralByAddress(position.collateralAddress, networkId)
+                                        )
+                                    ),
+                                    nativeCollateral,
+                                    networkId
+                                ),
                             })}`}</Info>
                         </FlexDivRow>
                     )}
