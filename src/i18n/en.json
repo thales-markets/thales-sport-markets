@@ -1506,7 +1506,8 @@
             "no-results": "No results",
             "date-time": "Date | Time",
             "received": "Received",
-            "tx-link": "TX link"
+            "tx-link": "TX link",
+            "type": "Type"
         },
         "leaderboard": {
             "table": {
@@ -1558,8 +1559,8 @@
                 "desc": "Place a Speed Markets trade"
             },
             "social": {
-                "title": "Post about @overtime_io on socials",
-                "desc": "Make a post that mentions @overtime_io on X.com",
+                "title": "Post about @overtime_io on X.com",
+                "desc": "Mention @overtime_io on X.com",
                 "placeholder": "Post your post or cast URL here",
                 "share": {
                     "title": "Post about Overtime on X",

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { SelectedPosition } from 'types/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import AmmSpeedTrading from '../AmmSpeedTrading';
-import OverdropSummary from '../OverdropSummary';
 import SelectAsset from '../SelectAsset';
 import SelectBuyin from '../SelectBuyin';
 import SelectPosition from '../SelectPosition';
@@ -75,7 +74,6 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setHasError={setHasError}
             />
-            <OverdropSummary buyinAmount={buyinAmount} />
             <AmmSpeedTrading
                 selectedAsset={selectedAsset}
                 selectedPosition={selectedPosition}

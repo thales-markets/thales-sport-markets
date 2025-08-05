@@ -30,9 +30,7 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ startIndex, endIndex }) => {
 
     const levelItem: OverdropLevel | undefined = useMemo(() => {
         if (userData) {
-            console.log('userData', userData);
             const levelItem = getCurrentLevelByPoints(userData.points);
-            console.log('levelItem', levelItem);
             return levelItem;
         }
     }, [userData]);

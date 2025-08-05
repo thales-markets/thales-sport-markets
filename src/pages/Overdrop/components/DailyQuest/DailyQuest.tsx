@@ -140,7 +140,7 @@ const DailyQuest: React.FC = () => {
                             <FinishedIcon />
                         </FlexDivCentered>
                     ) : (
-                        <ActionWrapper full={quest.social} gap={10}>
+                        <FlexDivCentered gap={10}>
                             <Button
                                 borderRadius="8px"
                                 textColor={theme.textColor.quaternary}
@@ -161,7 +161,7 @@ const DailyQuest: React.FC = () => {
                             >
                                 {quest.buttonText}
                             </Button>
-                        </ActionWrapper>
+                        </FlexDivCentered>
                     )}
                 </DailyQuestItem>
             ))}
@@ -230,7 +230,7 @@ const Container = styled.div`
 const HeaderTitle = styled.h3`
     font-size: 18px;
     font-weight: 500;
-    line-height: 28px; /* 155.556% */
+    line-height: 28px;
 `;
 
 const Explainer = styled(FlexDiv)`
@@ -242,7 +242,7 @@ const Reward = styled.p`
     color: ${(props) => props.theme.textColor.quaternary};
     font-size: 18px;
     font-weight: 700;
-    line-height: 28px; /* 140% */
+    line-height: 28px;
 `;
 
 const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social?: boolean }>`
@@ -254,17 +254,9 @@ const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social
     background: ${(props) => props.theme.overdrop.background.octonary};
     border: ${(props) =>
         props.completed ? ' 2px solid #8AF6A8' : `2px solid ${props.theme.overdrop.background.octonary}`};
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        ${(props) =>
-            props.social &&
-            `
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto;
-        width: 100%;
-        gap: 10px;
 
-       `}
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        padding: 18px 12px;
     }
 `;
 
@@ -289,13 +281,15 @@ const Title = styled.h3`
     font-weight: 600;
     line-height: 20px;
     color: ${(props) => props.theme.textColor.primary};
+    white-space: pre;
 `;
 
 const Description = styled.p`
     font-size: 12px;
     font-weight: 400;
-    line-height: 16px; /* 133.333% */
+    line-height: 16px;
     color: ${(props) => props.theme.textColor.secondary};
+    white-space: pre;
 `;
 
 const SpinTheWheelText = styled.p`
@@ -349,10 +343,4 @@ const FinishedText = styled.p`
 
 const FinishedIcon = styled.i.attrs({ className: 'icon icon--resolvedmarkets' })`
     color: #8af6a8;
-`;
-
-const ActionWrapper = styled(FlexDivCentered)<{ full?: boolean }>`
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        width: ${(props) => (props.full ? '100%' : '')};
-    }
 `;

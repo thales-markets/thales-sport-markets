@@ -59,7 +59,7 @@ const SelectPosition: React.FC<SelectPositionProps> = ({
 };
 
 const Container = styled(FlexDivRow)`
-    min-height: 54px;
+    min-height: 50px;
     gap: 8px;
 `;
 

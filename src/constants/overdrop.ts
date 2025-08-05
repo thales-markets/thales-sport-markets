@@ -182,3 +182,10 @@ export const SEASON_2: { month: number; year: number }[] = [
         year: 2026,
     },
 ];
+export enum XP_POINTS_TYPE {
+    'speed' = 'Speed markets trade',
+    'referral' = 'Referral',
+    'ticket' = 'Overtime bet',
+    'wheel' = 'Wheel spin',
+    'daily' = 'Daily quest',
+}
