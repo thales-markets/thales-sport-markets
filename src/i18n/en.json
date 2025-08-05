@@ -1505,7 +1505,8 @@
             "no-results": "No results",
             "date-time": "Date | Time",
             "received": "Received",
-            "tx-link": "TX link"
+            "tx-link": "TX link",
+            "type": "Type"
         },
         "leaderboard": {
             "table": {
