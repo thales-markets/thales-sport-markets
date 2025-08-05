@@ -106,7 +106,7 @@ const TradingDetails: React.FC<TradingDetailsProps> = ({
 };
 
 const TradingDetailsText = styled.span`
-    text-align: center;
+    text-align: justify;
     font-size: 14px;
     line-height: 16px;
 `;
