@@ -6,7 +6,6 @@ import useOver from 'assets/images/banner-v2/use-over.png';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import ROUTES from 'constants/routes';
 import { NetworkConfig } from 'types/network';
 
 export type Banner = {
@@ -29,19 +28,20 @@ export const useBannersQuery = (
                     image: `${generalConfig.API_URL}/banners-v2/image/${banner.image}`,
                 }));
                 mappedData.push({
-                    url: '',
+                    url:
+                        'https://www.overtimemarkets.xyz/?sport=PlayerProps&status=OpenMarkets&lang=en-US&showActive=false&tag=CS2%2CDOTA+2%2CValorant%2CLOL',
                     image: esports,
                 });
                 mappedData.push({
-                    url: '',
+                    url: 'https://farcaster.xyz/overtimemarkets',
                     image: farcaster,
                 });
                 mappedData.push({
-                    url: '',
+                    url: 'https://www.overtimemarkets.xyz/',
                     image: useOver,
                 });
                 mappedData.push({
-                    url: ROUTES.Overdrop,
+                    url: 'https://www.overtimemarkets.xyz/overdrop',
                     image: overdropS2,
                 });
                 return mappedData;
