@@ -1,7 +1,12 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import esports from 'assets/images/banner-v2/esport.png';
+import farcaster from 'assets/images/banner-v2/farcaster.png';
+import overdropS2 from 'assets/images/banner-v2/overdrop-s2.png';
+import useOver from 'assets/images/banner-v2/use-over.png';
 import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import ROUTES from 'constants/routes';
 import { NetworkConfig } from 'types/network';
 
 export type Banner = {
@@ -23,6 +28,22 @@ export const useBannersQuery = (
                     url: banner.url,
                     image: `${generalConfig.API_URL}/banners-v2/image/${banner.image}`,
                 }));
+                mappedData.push({
+                    url: '',
+                    image: esports,
+                });
+                mappedData.push({
+                    url: '',
+                    image: farcaster,
+                });
+                mappedData.push({
+                    url: '',
+                    image: useOver,
+                });
+                mappedData.push({
+                    url: ROUTES.Overdrop,
+                    image: overdropS2,
+                });
                 return mappedData;
             } catch (e) {
                 console.log('error', e);
