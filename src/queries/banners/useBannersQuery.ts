@@ -1,4 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import affiliate from 'assets/images/banner-v2/affiliate.png';
 import esports from 'assets/images/banner-v2/esport.png';
 import farcaster from 'assets/images/banner-v2/farcaster.png';
 import overdropS2 from 'assets/images/banner-v2/overdrop-s2.png';
@@ -43,6 +44,10 @@ export const useBannersQuery = (
                 mappedData.push({
                     url: 'https://www.overtimemarkets.xyz/overdrop',
                     image: overdropS2,
+                });
+                mappedData.push({
+                    url: '',
+                    image: affiliate,
                 });
                 return mappedData;
             } catch (e) {
