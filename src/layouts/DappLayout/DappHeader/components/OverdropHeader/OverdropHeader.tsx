@@ -7,8 +7,10 @@ import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
+import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
@@ -29,6 +31,8 @@ const OverdropHeader: React.FC = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
+    const [showSocialModal, setShowSocialModal] = useState(false);
+    const { t } = useTranslation();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
@@ -148,14 +152,14 @@ const OverdropHeader: React.FC = () => {
                                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
-                            <BadgeLabel>200XP</BadgeLabel>
+                            <BadgeLabel>200 XP</BadgeLabel>
                         </DropdownHeader>
                         <ItemWrapper completed={isOTTradeCompleted}>
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--logo" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Place Overtime Bet</ItemTitle>
-                                    <ItemDescription>Make any bet on Overtime</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.ot.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.ot.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isOTTradeCompleted ? (
@@ -181,8 +185,8 @@ const OverdropHeader: React.FC = () => {
                             <ItemFirstSection gap={4}>
                                 <Icon className="sidebar-icon sidebar-icon--speed-markets" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Speed Market Trade</ItemTitle>
-                                    <ItemDescription>Complete 1 speed market position</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.speed.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.speed.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isSpeedTradeCompleted ? (
@@ -208,24 +212,41 @@ const OverdropHeader: React.FC = () => {
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--social" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Share on Social</ItemTitle>
-                                    <ItemDescription>Post URL</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.social.title')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.social.desc')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
-                            {isSocialQuestDone && <CheckmarkIcon className="icon icon--resolvedmarkets" />}
+                            {isSocialQuestDone ? (
+                                <CheckmarkIcon className="icon icon--resolvedmarkets" />
+                            ) : (
+                                <Button
+                                    padding="6px 12px"
+                                    textColor={theme.textColor.primary}
+                                    backgroundColor={theme.borderColor.senary}
+                                    borderRadius="8px"
+                                    borderColor={'transparent'}
+                                    width="54px"
+                                    fontSize="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    fontWeight="600"
+                                    onClick={() => setShowSocialModal(true)}
+                                >
+                                    Start
+                                </Button>
+                            )}
                         </ItemWrapper>
                         <ProgressBar>
                             <Completed width={(completedQuest * 100) / 3} />
                         </ProgressBar>
                         <SpinTheWheelInfo completed={completedQuest === 3}>
-                            {completedQuest === 3 ? 'Completed' : `Complete ${3 - completedQuest} more → Spin bonus`}
+                            {t('overdrop.daily-quest.complete-daily-quest')}
                         </SpinTheWheelInfo>
                         <ItemWrapper completed={isSpinTheWheelCompleted}>
                             <ItemFirstSection gap={4}>
                                 <Icon className="icon icon--wheel" />
                                 <FlexDivColumnStart>
-                                    <ItemTitle>Daily Spin the Wheel</ItemTitle>
-                                    <ItemDescription>Spin for Bonus</ItemDescription>
+                                    <ItemTitle>{t('overdrop.daily-quest.daily-spin')}</ItemTitle>
+                                    <ItemDescription>{t('overdrop.daily-quest.bonus-spin')}</ItemDescription>
                                 </FlexDivColumnStart>
                             </ItemFirstSection>
                             {isSpinTheWheelCompleted ? (
@@ -251,6 +272,7 @@ const OverdropHeader: React.FC = () => {
                 </OutsideClickHandler>
             )}
             {showSpinTheWheel && <WheelOfFortune onClose={() => setShowSpinTheWheel(false)} />}
+            {showSocialModal && <SocialShareModal onClose={() => setShowSocialModal(false)} />}
         </Wrapper>
     );
 };
@@ -303,12 +325,12 @@ const Arrow = styled.i`
 `;
 
 const DropdownWrapper = styled.div`
-    width: 100%;
+    width: 120%;
     background: ${(props) => props.theme.background.primary};
 
     position: absolute;
     top: 40px;
-    left: 0;
+    left: -10%;
     z-index: 1000;
     border-radius: 12px;
     border: 1px solid ${(props) => props.theme.overdrop.background.octonary};

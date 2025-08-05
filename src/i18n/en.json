@@ -1537,10 +1537,11 @@
         },
         "daily-quest": {
             "title": "Daily Quest",
-            "reward": "Earn 200XP + 10% XP Boost",
+            "reward": "Earn 200 XP + 10% XP Boost",
             "explainer": "Complete your Daily Quest tasks every day to earn 200 XP, 10% XP Boost for the day and to upgrade your next Daily Spin the Wheel with extra options!",
             "finished": "Finished",
             "daily-spin": "Daily Spin the Wheel",
+            "bonus-spin": "Spin for bonuses",
             "complete-daily-quest": "Complete Daily Quest to upgrade your SPIN!",
             "spin": "Spin",
             "badge": {
@@ -1548,8 +1549,8 @@
                 "xp": "OVERDROP XP"
             },
             "ot": {
-                "title": "Place Overtime Bet",
-                "desc": "Place any bet on Overtime'"
+                "title": "Bet on Overtime",
+                "desc": "Place any bet on Overtime"
             },
             "speed": {
                 "title": "Speed Market Trade",

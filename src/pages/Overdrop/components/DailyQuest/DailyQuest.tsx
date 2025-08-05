@@ -26,7 +26,7 @@ const DAILY_QUESTS = [
     {
         icon: 'sidebar-icon sidebar-icon--speed-markets',
         title: 'overdrop.daily-quest.speed.title',
-        description: 'overdrop.daily-quest.speed.title',
+        description: 'overdrop.daily-quest.speed.desc',
         buttonText: 'Start',
         completed: false,
         speed: true,
@@ -34,7 +34,7 @@ const DAILY_QUESTS = [
     {
         icon: 'icon icon--social',
         title: 'overdrop.daily-quest.social.title',
-        description: 'overdrop.daily-quest.social.title',
+        description: 'overdrop.daily-quest.social.desc',
         buttonText: 'Start',
         completed: false,
         social: true,
