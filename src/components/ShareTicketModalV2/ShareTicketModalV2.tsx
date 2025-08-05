@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
-import GenerateAIContent from 'components/GenerateAIContent';
 import Toggle from 'components/Toggle';
 import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -91,7 +90,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
-    const [aiContent, setAiContent] = useState<string>('');
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
     const [reffererID, setReffererID] = useState('');
@@ -209,12 +207,14 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     }
                     let twitterLinkWithStatusMessage = '';
 
-                    if (aiContent) {
+                    const aiResponse = await axios.get(`${generalConfig.OVERDROP_API_URL}/generate-social-content`);
+
+                    if (aiResponse.data) {
                         twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
-                            encodeURIComponent(aiContent) +
-                            LINKS.OvertimeMarkets +
+                            encodeURIComponent(aiResponse.data) +
                             ' ' +
+                            LINKS.OvertimeMarkets +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
                             (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
                     } else {
@@ -279,7 +279,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage, reffererID, aiContent]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
@@ -417,9 +417,6 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
                     <HintText>{t('markets.parlay.share-ticket.generate-content-flex')}</HintText>
-                    <div style={{ display: 'none' }}>
-                        <GenerateAIContent aiContent={aiContent} setAiContent={setAiContent} />
-                    </div>
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
