@@ -151,11 +151,11 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ onClose }) => {
             <Container>
                 {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
                 <FlexDivColumnCentered>
-                    <Title>Social share</Title>
-                    <Description>{`Share for boost let's go boi`}</Description>
+                    <Title>{t('overdrop.daily-quest.social.share.title')}</Title>
+                    <Description>{t('overdrop.daily-quest.social.share.desc')}</Description>
                 </FlexDivColumnCentered>
                 <FlexDivColumnCentered>
-                    <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
+                    <Label>{t('overdrop.daily-quest.social.share.submit')}</Label>
                     <Input
                         height="32px"
                         minHeight="32px" // fix for iOS

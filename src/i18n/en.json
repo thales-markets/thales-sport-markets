@@ -1558,7 +1558,12 @@
             "social": {
                 "title": "Post about @overtime_io on socials",
                 "desc": "Make a post that mentions @overtime_io on X.com",
-                "placeholder": "Post your tweet or cast URL here"
+                "placeholder": "Post your tweet or cast URL here",
+                "share": {
+                    "title": "Post about Overtime on X",
+                    "desc": "Mention @overtime_io in a tweet and submit the post's link below",
+                    "submit": "Submit your post url to complete task"
+                }
             }
         }
     },
