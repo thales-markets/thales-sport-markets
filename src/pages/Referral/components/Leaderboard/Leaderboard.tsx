@@ -70,12 +70,16 @@ const Leaderboard: React.FC = () => {
                             cell: (cellProps: any) => <>{truncateAddress(cellProps.cell.getValue(), 4, 4)}</>,
                             size: 110,
                         },
-                        {
-                            header: <>{t('referral.leaderboard.table-headers.total-bets')}</>,
-                            accessorKey: 'totalBets',
-                            sortable: true,
-                            size: 150,
-                        },
+                        ...(isMobile
+                            ? []
+                            : [
+                                  {
+                                      header: <>{t('referral.leaderboard.table-headers.total-bets')}</>,
+                                      accessorKey: 'totalBets',
+                                      sortable: true,
+                                      size: 150,
+                                  },
+                              ]),
                         {
                             header: <>{t('referral.leaderboard.table-headers.referrals')}</>,
                             accessorKey: 'referrals',
