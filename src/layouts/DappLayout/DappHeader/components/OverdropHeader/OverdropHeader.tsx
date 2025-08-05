@@ -153,7 +153,7 @@ const OverdropHeader: React.FC = () => {
                                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
-                            <BadgeLabel>200 XP</BadgeLabel>
+                            <BadgeLabel>10% BOOST + 200 XP</BadgeLabel>
                         </DropdownHeader>
                         <ItemWrapper completed={isOTTradeCompleted}>
                             <ItemFirstSection gap={4}>
@@ -352,8 +352,7 @@ const DropdownTitle = styled(QuestTitle)`
 
 const BadgeLabel = styled.div`
     border-radius: 20px;
-    padding: 4px;
-    width: 80px;
+    padding: 6px 12px;
     display: flex;
     align-items: center;
     justify-content: center;
