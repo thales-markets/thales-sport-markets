@@ -71,11 +71,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 <StatusWrapper isClaimable={position.isClaimable}>
                     {!isMatured ? (
                         // pending
-                        <Status isWon={isUserCurrentlyWinning}>
-                            {isUserCurrentlyWinning
-                                ? t('speed-markets.user-positions.status.winning')
-                                : t('speed-markets.user-positions.status.losing')}
-                        </Status>
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={isUserCurrentlyWinning}>
+                                {isUserCurrentlyWinning
+                                    ? t('speed-markets.user-positions.status.winning')
+                                    : t('speed-markets.user-positions.status.losing')}
+                            </Status>
+                        </>
                     ) : position.isClaimable ? (
                         <ClaimWrapper>
                             <ClaimAction
@@ -88,16 +91,22 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         </ClaimWrapper>
                     ) : hasFinalPrice ? (
                         // history
-                        <Status isWon={isUserWon}>
-                            {isUserWon
-                                ? t('speed-markets.user-positions.status.won')
-                                : t('speed-markets.user-positions.status.loss')}
-                        </Status>
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={isUserWon}>
+                                {isUserWon
+                                    ? t('speed-markets.user-positions.status.won')
+                                    : t('speed-markets.user-positions.status.loss')}
+                            </Status>
+                        </>
                     ) : (
                         // price is missing - pending
-                        <Status isWon={false} isUnknown>
-                            {t('speed-markets.user-positions.status.waiting-price')}
-                        </Status>
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={false} isUnknown>
+                                {t('speed-markets.user-positions.status.waiting-price')}
+                            </Status>
+                        </>
                     )}
                     <ShareSpeedPosition position={position} />
                 </StatusWrapper>
@@ -223,6 +232,8 @@ const Text = styled.span`
     font-weight: 400;
     line-height: 16px;
 `;
+
+const StausLabel = styled(Text)``;
 
 const Price = styled(Text)``;
 

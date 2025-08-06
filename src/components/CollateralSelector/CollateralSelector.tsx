@@ -12,7 +12,7 @@ import {
 } from 'styles/common';
 import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { isStableCurrency } from 'utils/collaterals';
+import { isOverCurrency, isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { useChainId } from 'wagmi';
 import { setPaymentSelectedCollateralIndex } from '../../redux/modules/ticket';
@@ -96,12 +96,20 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
         );
     }, [collateralBalances, hideZeroBalance, collateralArray, isDetailedView, getUSDForCollateral]);
 
+    const selectedCollateral = collateralArray[selectedItem];
+    const selectedCollateralText = `${isOverCurrency(selectedCollateral as Coins) ? '$' : ''}${selectedCollateral}`;
+
     return (
         <Container stretch={stretch} isDetailedView={isDetailedView}>
             <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
-                <SelectedCollateral stretch={stretch} disabled={!!disabled} onClick={() => !disabled && setOpen(!open)}>
+                <SelectedCollateral
+                    stretch={stretch}
+                    disabled={!!disabled}
+                    onClick={() => !disabled && setOpen(!open)}
+                    isDropDownHidden={hideDropDownIcon}
+                >
                     <TextCollateralWrapper isDetailedView={isDetailedView}>
-                        {showCollateralImg && collateralArray[selectedItem] && (
+                        {showCollateralImg && selectedCollateral && (
                             <Icon
                                 color={color}
                                 className={`currency-icon currency-icon--${collateralArray[
@@ -110,15 +118,14 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                             />
                         )}
                         <TextCollateral color={color} isDetailedView={isDetailedView} isSelectedCollateral={true}>
-                            {!hideCollateralNameOnInput && collateralArray[selectedItem]}
+                            {!hideCollateralNameOnInput && selectedCollateralText}
                             {showNetworkName && ` (${getNetworkNameByNetworkId(networkId, true)})`}
                             {!!displayTokenBalance &&
-                                (!exchangeRates?.[collateralArray[selectedItem]] &&
-                                !isStableCurrency(collateralArray[selectedItem] as Coins)
+                                (!exchangeRates?.[selectedCollateral] && !isStableCurrency(selectedCollateral as Coins)
                                     ? '...'
                                     : ` (${formatCurrencyWithSign(
                                           null,
-                                          collateralBalances ? collateralBalances[collateralArray[selectedItem]] : 0
+                                          collateralBalances ? collateralBalances[selectedCollateral] : 0
                                       )})`)}
                         </TextCollateral>
                     </TextCollateralWrapper>
@@ -190,7 +197,8 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                               })}
                           </DetailedDropdown>
                       )
-                    : open && (
+                    : open &&
+                      !hideDropDownIcon && (
                           <Dropdown
                               top={topPosition}
                               borderColor={borderColor}
@@ -198,6 +206,10 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                               onClick={() => setOpen(!open)}
                           >
                               {collateralArray.map((collateral, index) => {
+                                  const collateralText = `${
+                                      isOverCurrency(collateral as Coins) ? '$' : ''
+                                  }${collateral}`;
+
                                   return (
                                       <CollateralOption
                                           key={index}
@@ -214,7 +226,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                               }
                                           }}
                                       >
-                                          <TextCollateral fontWeight="600">{collateral}</TextCollateral>
+                                          <TextCollateral fontWeight="600">{collateralText}</TextCollateral>
                                       </CollateralOption>
                                   );
                               })}
@@ -287,8 +299,12 @@ const Arrow = styled.i<{
             : props.theme.status.win};
 `;
 
-const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stretch?: boolean }>`
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+const SelectedCollateral = styled(FlexDivRowCentered)<{
+    disabled: boolean;
+    stretch?: boolean;
+    isDropDownHidden?: boolean;
+}>`
+    cursor: ${(props) => (props.disabled || props.isDropDownHidden ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? 0.4 : 1)};
     justify-content: ${(props) => (props.stretch ? 'space-between' : '')};
     width: ${(props) => (props.stretch ? '100%' : '')}; ;

@@ -4,7 +4,9 @@ import Button from 'components/Button';
 import { TextAreaInput } from 'components/fields/common';
 import { generalConfig } from 'config/general';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Oval } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { CopyIcon } from '../../pages/FreeBets/StatsTable';
@@ -17,10 +19,12 @@ type GenerateAIContentProps = {
 const GenerateAIContent: React.FC<GenerateAIContentProps> = ({ aiContent, setAiContent }) => {
     const theme = useTheme();
     const [loadingAiContent, setLoadingAiContent] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const handleCopy = () => {
         if (aiContent) {
             navigator.clipboard.writeText(aiContent);
+            toast(t('common.text-copied'), { type: 'success' });
         }
     };
 
