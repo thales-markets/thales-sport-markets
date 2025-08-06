@@ -205,7 +205,8 @@
                 "copy-button": "Copy Referral link"
             },
             "your-referral-id": "Your Referral ID"
-        }
+        },
+        "text-copied": "Content copied to clipboard"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
@@ -1547,6 +1548,7 @@
             "daily-spin": "Daily Spin to Win XP Boost!",
             "bonus-spin": "Spin for bonuses",
             "complete-daily-quest": "Complete Daily Quest first for upgraded spin!",
+            "daily-quest-completed": "Daily quest completed - bonus spin rewards unlocked.",
             "spin": "Spin",
             "badge": {
                 "boost": "XP BOOST",
