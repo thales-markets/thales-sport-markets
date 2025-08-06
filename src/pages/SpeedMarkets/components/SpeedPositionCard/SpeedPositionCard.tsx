@@ -67,36 +67,47 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         <PositionText>{position.side}</PositionText>
                     </Position>
                 </AssetPosition>
-                {!isMatured ? (
-                    // pending
-                    <Status isWon={isUserCurrentlyWinning}>
-                        {isUserCurrentlyWinning
-                            ? t('speed-markets.user-positions.status.winning')
-                            : t('speed-markets.user-positions.status.losing')}
-                    </Status>
-                ) : position.isClaimable ? (
-                    <ClaimWrapper>
-                        <ClaimAction
-                            positions={[position]}
-                            claimCollateralIndex={claimCollateralIndex}
-                            isDisabled={isSubmittingBatch}
-                            isActionInProgress={isActionInProgress}
-                            setIsActionInProgress={setIsActionInProgress}
-                        />
-                    </ClaimWrapper>
-                ) : hasFinalPrice ? (
-                    // history
-                    <Status isWon={isUserWon}>
-                        {isUserWon
-                            ? t('speed-markets.user-positions.status.won')
-                            : t('speed-markets.user-positions.status.loss')}
-                    </Status>
-                ) : (
-                    // price is missing - pending
-                    <Status isWon={false} isUnknown>
-                        {t('speed-markets.user-positions.status.waiting-price')}
-                    </Status>
-                )}
+                <StatusWrapper isClaimable={position.isClaimable}>
+                    {!isMatured ? (
+                        // pending
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={isUserCurrentlyWinning}>
+                                {isUserCurrentlyWinning
+                                    ? t('speed-markets.user-positions.status.winning')
+                                    : t('speed-markets.user-positions.status.losing')}
+                            </Status>
+                        </>
+                    ) : position.isClaimable ? (
+                        <ClaimWrapper>
+                            <ClaimAction
+                                positions={[position]}
+                                claimCollateralIndex={claimCollateralIndex}
+                                isDisabled={isSubmittingBatch}
+                                isActionInProgress={isActionInProgress}
+                                setIsActionInProgress={setIsActionInProgress}
+                            />
+                        </ClaimWrapper>
+                    ) : hasFinalPrice ? (
+                        // history
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={isUserWon}>
+                                {isUserWon
+                                    ? t('speed-markets.user-positions.status.won')
+                                    : t('speed-markets.user-positions.status.loss')}
+                            </Status>
+                        </>
+                    ) : (
+                        // price is missing - pending
+                        <>
+                            <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
+                            <Status isWon={false} isUnknown>
+                                {t('speed-markets.user-positions.status.waiting-price')}
+                            </Status>
+                        </>
+                    )}
+                </StatusWrapper>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
                 <Price>{`${t('speed-markets.user-positions.labels.entry')}: ${formatCurrencyWithSign(
@@ -163,7 +174,7 @@ const Container = styled(FlexDivColumn)`
 `;
 
 const ClaimWrapper = styled.div`
-    width: 50%;
+    width: 100%;
 `;
 
 const AssetPosition = styled(FlexDivRow)`
@@ -195,6 +206,11 @@ const Position = styled(FlexDivCentered)<{ isUp: boolean }>`
     }
 `;
 
+const StatusWrapper = styled(FlexDivRowCentered)<{ isClaimable: boolean }>`
+    ${(props) => (props.isClaimable ? 'width: 50%;' : '')}
+    gap: 8px;
+`;
+
 const Status = styled.span<{ isWon: boolean; isUnknown?: boolean }>`
     color: ${(props) =>
         props.isUnknown
@@ -215,6 +231,8 @@ const Text = styled.span`
     line-height: 16px;
 `;
 
+const StausLabel = styled(Text)``;
+
 const Price = styled(Text)``;
 
 const Time = styled(Text)``;
@@ -222,7 +240,7 @@ const Time = styled(Text)``;
 const Paid = styled(Text)``;
 
 const Payout = styled(Text)<{ isClaimable: boolean }>`
-    ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')};
+    ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')}
 `;
 
 const PlayIcon = styled.i`
