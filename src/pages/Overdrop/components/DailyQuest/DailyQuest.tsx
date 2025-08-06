@@ -167,6 +167,8 @@ const DailyQuest: React.FC = () => {
                 </DailyQuestItem>
             ))}
 
+            <SpinTheWheelText>{t('overdrop.daily-quest.complete-daily-quest')}</SpinTheWheelText>
+
             <WheelItem completed={isSpinTheWheelCompleted}>
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />
@@ -188,8 +190,6 @@ const DailyQuest: React.FC = () => {
                     </FinishedContainer>
                 ) : (
                     <>
-                        <SpinTheWheelText>{t('overdrop.daily-quest.complete-daily-quest')}</SpinTheWheelText>
-
                         <Button
                             borderRadius="8px"
                             textColor={theme.textColor.quaternary}
@@ -233,6 +233,9 @@ const HeaderTitle = styled.h3`
     font-size: 18px;
     font-weight: 500;
     line-height: 28px;
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 16px;
+    }
 `;
 
 const Explainer = styled(FlexDiv)`
@@ -245,6 +248,9 @@ const Reward = styled.p`
     font-size: 18px;
     font-weight: 700;
     line-height: 28px;
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 16px;
+    }
 `;
 
 const DailyQuestItem = styled(FlexDivSpaceBetween)<{ completed?: boolean; social?: boolean }>`
@@ -281,9 +287,12 @@ const HeaderWrapper = styled(FlexDivColumnCentered)`
 const Title = styled.h3`
     font-size: 14px;
     font-weight: 600;
-    line-height: 20px;
+
     color: ${(props) => props.theme.textColor.primary};
     white-space: pre;
+    @media (max-width: ${ScreenSizeBreakpoint.XXS}px) {
+        font-size: 12px;
+    }
 `;
 
 const Description = styled.p`
@@ -295,15 +304,11 @@ const Description = styled.p`
 `;
 
 const SpinTheWheelText = styled.p`
-    color: #3c498a;
-    color: ${(props) => props.theme.textColor.septenary};
+    color: ${(props) => props.theme.textColor.primary};
     font-size: 12px;
     font-weight: 400;
     line-height: normal;
-    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
-        position: absolute;
-        top: 64px;
-    }
+    margin-bottom: -10px;
 `;
 
 const Badge1 = styled.div`
