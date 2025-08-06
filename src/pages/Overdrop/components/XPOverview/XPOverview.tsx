@@ -1,4 +1,6 @@
+import SPAAnchor from 'components/SPAAnchor';
 import Tooltip from 'components/Tooltip';
+import ROUTES from 'constants/routes';
 import { OverdropTab } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo } from 'react';
@@ -11,6 +13,7 @@ import { OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
+import { buildHref } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
 
@@ -102,6 +105,12 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                     </InfoWrapper>
 
                     <CurrentLevelProgressLine height={'26px'} hideLevelLabel={true} />
+                    <ReferralCTA>
+                        {t('overdrop.overdrop-home.affiliate-cta')}{' '}
+                        <SPAAnchor onClick={() => window.scrollTo(0, 0)} href={buildHref(`${ROUTES.Referral}`)}>
+                            {t('overdrop.overdrop-home.affiliate-cta-link')}
+                        </SPAAnchor>
+                    </ReferralCTA>
                 </ProgressOverviewWrapper>
             </Wrapper>
         </GradientBorder>
@@ -229,6 +238,37 @@ const Level = styled(Label)`
     white-space: pre;
     @media (max-width: 767px) {
         font-size: 20px;
+    }
+`;
+
+const ReferralCTA = styled.div`
+    cursor: pointer;
+    font-size: 12px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin-top: -12px;
+    margin-bottom: 4px;
+    padding: 2px 10px;
+    text-align: center;
+
+    a {
+        color: #3fffff;
+        text-decoration: underline;
+        font-weight: 500;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    @media (max-width: 767px) {
+        font-size: 11px;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        line-height: 1.2;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
     }
 `;
 

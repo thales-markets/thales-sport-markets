@@ -1,24 +1,15 @@
-import { hoursToMilliseconds, intervalToDuration } from 'date-fns';
 import { MultiplierType } from 'enums/overdrop';
-import { t } from 'i18next';
-import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import useUserMultipliersQuery from 'queries/overdrop/useUserMultipliersQuery';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styled from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
+import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 
-import { formattedDurationFull } from 'utils/formatters/date';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { getMultiplierValueFromQuery } from 'utils/overdrop';
 import { useAccount } from 'wagmi';
 import LevelCircles from '../LevelCircles';
-
-const dateTimeTranslationMap = {
-    'days-short': t('common.time-remaining.days-short'),
-    'hours-short': t('common.time-remaining.hours-short'),
-    'minutes-short': t('common.time-remaining.minutes-short'),
-};
 
 const DailyRecap: React.FC = () => {
     const { t } = useTranslation();
@@ -29,94 +20,74 @@ const DailyRecap: React.FC = () => {
         enabled: isConnected,
     });
 
-    const userDataQuery = useUserDataQuery(address as string, {
-        enabled: isConnected,
-    });
-
     const userMultipliers =
         userMultipliersQuery.isSuccess && userMultipliersQuery.data ? userMultipliersQuery.data : undefined;
-    const userData = userDataQuery.isSuccess && userDataQuery.data ? userDataQuery.data : undefined;
-
-    const duration = useMemo(() => {
-        if (userData && userData.lastTwitterActivity) {
-            const duration = intervalToDuration({ start: userData.lastTwitterActivity, end: Date.now() });
-
-            if (duration && duration.days) {
-                if (duration.days >= 3 || !!duration.months || !!duration.years) return 'expired';
-            }
-            const resetsIn = intervalToDuration({
-                start: Date.now(),
-                end: userData.lastTwitterActivity + hoursToMilliseconds(72),
-            });
-
-            return formattedDurationFull(resetsIn, dateTimeTranslationMap);
-        }
-        return '--:--';
-    }, [userData]);
 
     return (
-        <GradientBorder>
-            <Wrapper>
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
+        <Wrapper>
+            <ItemContainer>
+                <Label>{t('overdrop.overdrop-home.daily-streak')}</Label>
+                <ValueWrapper>
                     <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY)}%`}</Value>
                     <LevelCircles
+                        displayLevelNumberInsideCircle
                         additionalStyles={{ flexFlow: 'nowrap' }}
                         levels={[1, 2, 3, 4, 5, 6, 7]}
                         currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) / 5}
                     />
-                </ItemContainer>
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
+                </ValueWrapper>
+            </ItemContainer>
+            <ItemContainer>
+                <Label>{t('overdrop.overdrop-home.weekly-streak')}</Label>
+                <ValueWrapper>
                     <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY)}%`}</Value>
                     <LevelCircles
+                        displayLevelNumberInsideCircle
                         additionalStyles={{ flexFlow: 'nowrap' }}
                         levels={[1, 2, 3, 4]}
                         currentLevel={getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) / 5}
                     />
-                </ItemContainer>
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
-                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
-                </ItemContainer>
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.twitter-share')}</Label>
-                    <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
-                </ItemContainer>
-
-                <ItemContainer>
-                    <Label>{t('overdrop.overdrop-home.twitter-xp-boost-resets')}</Label>
-                    <Value>{duration}</Value>
-                </ItemContainer>
-            </Wrapper>
-        </GradientBorder>
+                </ValueWrapper>
+            </ItemContainer>
+            <ItemContainer>
+                <Label>{t('overdrop.overdrop-home.loyalty-boost')}</Label>
+                <Value>{`${getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)}%`}</Value>
+            </ItemContainer>
+        </Wrapper>
     );
 };
 
-const GradientBorder = styled.div`
-    border-radius: 6px;
-    background: ${(props) => props.theme.overdrop.borderColor.secondary};
-    padding: 1px;
-    height: fit-content;
-`;
-
-const Wrapper = styled(FlexDivColumn)`
-    height: fit-content;
-    padding: 11px 10px;
+const Wrapper = styled(FlexDivCentered)`
+    height: 52px;
     background: ${(props) => props.theme.overdrop.background.active};
     border-radius: 6px;
-    @media (max-width: 767px) {
-        flex-direction: row;
-        flex-wrap: wrap;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        flex-direction: column;
+        height: auto;
     }
 `;
 
 const ItemContainer = styled(FlexDivColumnCentered)`
     justify-content: center;
     text-align: center;
-    margin-bottom: 10px;
-    @media (max-width: 767px) {
+    gap: 2px;
+
+    &:nth-child(2) {
+        border-right: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+        border-left: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+    }
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         min-width: 200px;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        &:nth-child(2) {
+            border-right: none;
+            border-left: none;
+            border-top: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+            border-bottom: 2px solid ${(props) => props.theme.overdrop.borderColor.quaternary};
+        }
     }
 `;
 
@@ -129,11 +100,19 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 700;
     text-transform: uppercase;
     color: ${(props) => props.theme.overdrop.textColor.primary};
     position: relative;
+`;
+
+const ValueWrapper = styled(FlexDivCentered)`
+    gap: 8px;
+    height: 23px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        height: auto;
+    }
 `;
 
 export default DailyRecap;

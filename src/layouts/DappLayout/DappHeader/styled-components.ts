@@ -182,6 +182,13 @@ export const OverdropWrapper = styled(FlexDivCentered)`
     height: 30px;
 `;
 
+export const OverdropWrapperMobile = styled(FlexDivCentered)`
+    width: 100%;
+    & > div:first-child {
+        width: 100%;
+    }
+`;
+
 export const OverdropButtonContainer = styled(FlexDiv)`
     position: relative;
     background-image: url(${OverdropButtonBackground});

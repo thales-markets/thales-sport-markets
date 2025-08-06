@@ -5,6 +5,7 @@ import { ThemeInterface } from '../../types/ui';
 
 type ScrollProps = {
     innerRef?: LegacyRef<Scrollbars>;
+    width?: string;
     height: string;
     children: React.ReactNode;
     renderOnlyChildren?: boolean;
@@ -16,6 +17,7 @@ type ScrollProps = {
 const Scroll: React.FC<ScrollProps> = ({
     children,
     renderOnlyChildren,
+    width,
     height,
     onScrollStart,
     onScrollStop,
@@ -50,7 +52,7 @@ const Scroll: React.FC<ScrollProps> = ({
         <Scrollbars
             ref={innerRef}
             hideTracksWhenNotNeeded
-            style={{ height }}
+            style={{ width: width || '100%', height }}
             renderTrackHorizontal={renderTrack}
             renderThumbHorizontal={renderThumb}
             renderTrackVertical={renderTrack}

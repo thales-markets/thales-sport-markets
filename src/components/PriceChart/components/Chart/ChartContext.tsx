@@ -1,0 +1,100 @@
+import { ChartContext } from 'constants/chart';
+import { SpeedPositions } from 'enums/speedMarkets';
+import { ColorType, IChartApi, createChart } from 'lightweight-charts';
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { useTheme } from 'styled-components';
+import { ThemeInterface } from 'types/ui';
+import { AreaSeriesComponent } from './components/AreaSerierComponent';
+import { CandlestickComponent } from './components/CandlestickComponent';
+import { UserPositionAreaSeries } from './components/UserSeriesComponent';
+
+type ChartContextProps = {
+    children: React.ReactNode;
+    chart: IChartApi | null;
+};
+
+type ChartProps = {
+    data: any;
+    position: SpeedPositions | undefined;
+    asset: string;
+    selectedPrice?: number;
+    selectedDate?: number;
+    resolution?: string;
+};
+
+const ChartProvider: React.FC<ChartContextProps> = ({ children, chart }) => (
+    <ChartContext.Provider value={chart}>{children}</ChartContext.Provider>
+);
+
+export const ChartComponent: React.FC<ChartProps> = ({ data, asset, position, selectedPrice, selectedDate }) => {
+    const theme: ThemeInterface = useTheme();
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const [chart, setChart] = useState<IChartApi | undefined>();
+    const [displayPositions] = useState(true);
+
+    useEffect(() => {
+        const chart = createChart(chartContainerRef.current ?? '', {
+            layout: {
+                background: { type: ColorType.Solid, color: theme.speedMarkets.background.primary },
+                textColor: theme.chart.labels,
+                fontFamily: theme.fontFamily.primary,
+                attributionLogo: false,
+            },
+            height: 160,
+            grid: {
+                vertLines: {
+                    visible: false,
+                    color: theme.borderColor.primary,
+                },
+                horzLines: {
+                    visible: false,
+                    color: theme.borderColor.primary,
+                },
+            },
+            timeScale: {
+                rightOffset: 3,
+                timeVisible: true,
+                fixLeftEdge: true,
+                barSpacing: 10,
+                borderVisible: false,
+                ticksVisible: false,
+                visible: false,
+            },
+            rightPriceScale: {
+                borderVisible: false,
+            },
+        });
+        setChart(chart);
+        return () => {
+            chart.remove();
+        };
+    }, [theme]);
+
+    return (
+        <ChartContainer>
+            <Chart ref={chartContainerRef}>
+                {chart && (
+                    <ChartProvider chart={chart}>
+                        <AreaSeriesComponent
+                            asset={asset}
+                            data={data}
+                            position={position}
+                            selectedPrice={selectedPrice}
+                            selectedDate={selectedDate}
+                        />
+                        <CandlestickComponent data={data} asset={asset} />
+
+                        {displayPositions && <UserPositionAreaSeries candlestickData={data} asset={asset} />}
+                    </ChartProvider>
+                )}
+            </Chart>
+        </ChartContainer>
+    );
+};
+
+const ChartContainer = styled.div`
+    height: 200;
+    position: relative;
+`;
+
+const Chart = styled.div``;

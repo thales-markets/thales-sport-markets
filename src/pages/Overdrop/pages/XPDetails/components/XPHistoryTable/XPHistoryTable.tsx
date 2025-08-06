@@ -1,5 +1,6 @@
 import Table from 'components/Table';
 import ViewEtherscanLink from 'components/ViewEtherscanLink';
+import { XP_POINTS_TYPE } from 'constants/overdrop';
 import { t } from 'i18next';
 import useUserXPHistoryQuery from 'queries/overdrop/useUserXPHistoryQuery';
 import React, { useMemo } from 'react';
@@ -26,7 +27,7 @@ const XPHistoryTable: React.FC = () => {
             cell: (cellProps: any) => (
                 <p>{cellProps.cell.getValue() && formatTxTimestamp(cellProps.cell.getValue())}</p>
             ),
-            size: 250,
+            size: 150,
             enableSorting: true,
         },
         {
@@ -41,9 +42,30 @@ const XPHistoryTable: React.FC = () => {
             header: <>{t('overdrop.xp-details.tx-link')}</>,
             accessorKey: 'txHash',
             sortType: 'alphanumeric',
-            cell: (cellProps: any) => (
-                <ViewEtherscanLink overrideNetwork={cellProps.row.original.network} hash={cellProps.cell.getValue()} />
-            ),
+            cell: (cellProps: any) => {
+                if (cellProps.row.original.type !== 'daily' && cellProps.row.original.type !== 'wheel') {
+                    return (
+                        <ViewEtherscanLink
+                            overrideNetwork={cellProps.row.original.network}
+                            hash={
+                                cellProps.row.original.type === 'referral'
+                                    ? cellProps.row.original.refferalTxHash
+                                    : cellProps.cell.getValue()
+                            }
+                        />
+                    );
+                }
+            },
+        },
+        {
+            header: <>{t('overdrop.xp-details.type')}</>,
+            accessorKey: 'type',
+            sortType: 'alphanumeric',
+            cell: (cellProps: any) => {
+                const typeKey = cellProps.cell.getValue() as keyof typeof XP_POINTS_TYPE;
+                return <>{XP_POINTS_TYPE[typeKey]}</>;
+            },
+            size: 250,
         },
     ];
 

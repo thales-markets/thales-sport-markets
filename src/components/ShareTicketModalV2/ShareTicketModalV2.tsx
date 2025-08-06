@@ -10,6 +10,7 @@ import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
+import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactModal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -89,6 +90,15 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
     const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
+
+    const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
+    const [reffererID, setReffererID] = useState('');
+
+    useEffect(() => {
+        if (reffererIDQuery.isSuccess) {
+            setReffererID(reffererIDQuery.data);
+        }
+    }, [reffererIDQuery.isSuccess, reffererIDQuery.data]);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -195,15 +205,29 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         );
                         return;
                     }
+                    let twitterLinkWithStatusMessage = '';
 
-                    const twitterLinkWithStatusMessage =
-                        LINKS.TwitterTweetStatus +
-                        (isOver
-                            ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
-                                  Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
-                              ]
-                            : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
-                        (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    const aiResponse = await axios.get(`${generalConfig.OVERDROP_API_URL}/generate-social-content`);
+
+                    if (aiResponse.data) {
+                        twitterLinkWithStatusMessage =
+                            LINKS.TwitterTweetStatus +
+                            encodeURIComponent(aiResponse.data) +
+                            ' ' +
+                            LINKS.OvertimeMarkets +
+                            `${reffererID ? '?referrerId=' + reffererID : ''}` +
+                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    } else {
+                        twitterLinkWithStatusMessage =
+                            LINKS.TwitterTweetStatus +
+                            (isOver
+                                ? OVER_COLLATERAL_TWITTER_MESSAGES_TEXT[
+                                      Math.floor(Math.random() * OVER_COLLATERAL_TWITTER_MESSAGES_TEXT.length)
+                                  ]
+                                : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
+                            `${reffererID ? '?referrerId=' + reffererID : ''}` +
+                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                    }
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
                     isMobile
@@ -255,7 +279,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
@@ -392,6 +416,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                     </SwitchWrapper>
                 )}
                 <ShareWrapper toggleVisible={isNonStableCollateral}>
+                    <HintText>{t('markets.parlay.share-ticket.generate-content-flex')}</HintText>
                     <Label>{t('markets.parlay.share-ticket.submit-url')}</Label>
                     <Input
                         height="32px"
@@ -400,7 +425,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
                     />
-                    <Button height="32px" disabled={isLoading} margin="8px 0" onClick={onSubmit}>
+                    <Button height="32px" disabled={isLoading || !tweetUrl.trim()} margin="8px 0" onClick={onSubmit}>
                         {t('common.submit')}
                     </Button>
                 </ShareWrapper>
@@ -523,6 +548,14 @@ const Label = styled.span`
     letter-spacing: 0.025em;
     text-transform: uppercase;
     color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const HintText = styled.span`
+    font-size: 11px;
+    color: ${(props) => props.theme.textColor.secondary};
+    margin: 6px 0 12px 0; /* top, right/left, bottom */
+    display: block;
+    text-align: left;
 `;
 
 export default React.memo(ShareTicketModal);

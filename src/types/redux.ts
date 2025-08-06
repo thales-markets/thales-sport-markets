@@ -44,6 +44,7 @@ export type UISliceState = {
     favouriteLeagues: Tags;
     overdropState: OverdropUIState[];
     overdropPreventMultipliersModal: boolean;
+    speedMarketsWidgetOpen: boolean;
 };
 
 export type WalletSliceState = {

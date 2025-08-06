@@ -61,6 +61,7 @@ type TableProps = {
     mobileCards?: boolean;
     expandAll?: boolean;
     showPagination?: boolean;
+    solidBorder?: boolean;
 };
 
 const Table: React.FC<TableProps> = ({
@@ -89,6 +90,7 @@ const Table: React.FC<TableProps> = ({
     mobileCards,
     expandAll,
     showPagination,
+    solidBorder,
 }) => {
     const { t } = useTranslation();
 
@@ -210,6 +212,7 @@ const Table: React.FC<TableProps> = ({
                                             }}
                                             cursorPointer={!!onTableRowClick}
                                             onClick={onTableRowClick ? () => onTableRowClick(row) : undefined}
+                                            solidBorder={solidBorder}
                                         >
                                             {row.getAllCells().map((cell: any, cellIndex: any) => {
                                                 return isMobile && mobileCards ? (
@@ -329,6 +332,7 @@ export const TableRow = styled(FlexDiv)<{
     cursorPointer?: boolean;
     isCard?: boolean;
     customStyle?: CSSProperties;
+    solidBorder?: boolean;
 }>`
     ${(props) => (props.isCard ? 'flex-direction: column;' : '')}
     cursor: ${(props) => (props.cursorPointer ? 'pointer' : 'default')};
@@ -337,7 +341,8 @@ export const TableRow = styled(FlexDiv)<{
     font-size: 12px;
     line-height: 100%;
     letter-spacing: 0.25px;
-    border-bottom: 2px dashed ${(props) => !props.isCard && props.theme.borderColor.senary};
+    border-bottom: 2px ${(props) => (props.solidBorder ? 'solid' : 'dashed')}
+        ${(props) => !props.isCard && props.theme.borderColor.senary};
     ${(props) =>
         props.isCard &&
         `border: 1px solid #7983a9; border-radius: 8px; & > div:last-child {justify-content: flex-end;}`};

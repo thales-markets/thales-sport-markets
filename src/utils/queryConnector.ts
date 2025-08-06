@@ -92,6 +92,12 @@ export const refetchLiquidityPoolData = (walletAddress: string, networkId: Netwo
     });
 };
 
+export const refetchUserOverdrop = (walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.Overdrop.UserData(walletAddress),
+    });
+};
+
 export const refetchTicketLiquidity = (
     networkId: Network,
     isSystemBet: boolean,
@@ -141,6 +147,34 @@ export const refetchProposal = (spaceKey: SpaceKey, hash: string, walletAddress:
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.Governance.Proposal(spaceKey, hash, walletAddress),
     });
+};
+
+export const refetchSpeedMarketsLimits = (networkId: Network, walletAddress?: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.SpeedMarketsLimits(networkId, walletAddress),
+    });
+};
+
+export const refetchUserSpeedMarkets = (networkId: Network, walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.UserSpeedMarkets(networkId, walletAddress),
+    });
+};
+
+export const refetchUserResolvedSpeedMarkets = (networkId: Network, walletAddress: string) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.ResolvedSpeedMarkets(networkId, walletAddress),
+    });
+};
+
+export const refetchActiveSpeedMarkets = (networkId: Network) => {
+    queryConnector.queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SpeedMarkets.ActiveSpeedMarkets(networkId),
+    });
+};
+
+export const refetchPythPrice = (priceId: string, publishTime: number) => {
+    queryConnector.queryClient.invalidateQueries({ queryKey: QUERY_KEYS.Prices.PythPrices(priceId, publishTime) });
 };
 
 export default queryConnector;

@@ -4,12 +4,18 @@ import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { LeaderboardRow } from 'types/overdrop';
 
-const useOverdropLeaderboardQuery = (options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
+const useOverdropLeaderboardQuery = (
+    season: number,
+    miniSeason: number,
+    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+) => {
     return useQuery<LeaderboardRow[]>({
-        queryKey: QUERY_KEYS.Overdrop.Leaderboard(),
+        queryKey: QUERY_KEYS.Overdrop.Leaderboard(season, miniSeason),
         queryFn: async () => {
             try {
-                const response = await axios.get(`${generalConfig.OVERDROP_API_URL}/leaderboard`);
+                const response = await axios.get(
+                    `${generalConfig.OVERDROP_API_URL}/leaderboard?season=${season}&miniSeason=${miniSeason}`
+                );
 
                 if (response?.status === 200 && response?.data) return response.data;
             } catch (e) {
