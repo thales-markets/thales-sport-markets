@@ -941,7 +941,7 @@
                 "submit-url": "Submit your post URL for Overdrop boost",
                 "generate-content": "Need help with content? Use our AI helper below.",
                 "generate-content-flex": "*you will need to paste the image into the generated post",
-                "verifying-tweet": "Verifying tweet",
+                "verifying-tweet": "Verifying post",
                 "network-error": "Network error, check browser console for more info"
             },
             "toggle-parlay": {
