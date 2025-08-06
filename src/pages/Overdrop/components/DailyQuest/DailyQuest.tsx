@@ -6,8 +6,8 @@ import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
@@ -47,6 +47,7 @@ const DailyQuest: React.FC = () => {
 
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const [showSocialModal, setShowSocialModal] = useState(false);
+    const isSpeedMarketOpen = useSelector(getSpeedMarketsWidgetOpen);
 
     const { address, isConnected } = useAccount();
     const dispatch = useDispatch();
@@ -147,6 +148,7 @@ const DailyQuest: React.FC = () => {
                                 textColor={theme.textColor.quaternary}
                                 borderColor={theme.borderColor.quaternary}
                                 backgroundColor="transparent"
+                                disabled={quest.speed && isSpeedMarketOpen}
                                 width="62px"
                                 height="30px"
                                 fontSize="12px"

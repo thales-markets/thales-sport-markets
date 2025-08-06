@@ -11,8 +11,9 @@ import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import styled, { useTheme } from 'styled-components';
 import {
     FlexDivCentered,
@@ -29,11 +30,13 @@ const OverdropHeader: React.FC = () => {
     const { address, isConnected } = useAccount();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const theme = useTheme();
+    const isSpeedMarketOpen = useSelector(getSpeedMarketsWidgetOpen);
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const [showSocialModal, setShowSocialModal] = useState(false);
     const [isRefetching, setIsRefetching] = useState(true);
     const { t } = useTranslation();
+    const location = useLocation();
 
     const userDataQuery = useUserDataQuery(address as string, {
         enabled: isConnected,
@@ -177,6 +180,7 @@ const OverdropHeader: React.FC = () => {
                                     backgroundColor={theme.borderColor.senary}
                                     borderRadius="8px"
                                     width="54px"
+                                    disabled={location.pathname === ROUTES.Markets.Home}
                                     borderColor={theme.borderColor.senary}
                                     fontSize="12px"
                                     additionalStyles={{ textTransform: 'capitalize' }}
@@ -203,6 +207,7 @@ const OverdropHeader: React.FC = () => {
                                     textColor={theme.textColor.primary}
                                     backgroundColor={theme.borderColor.senary}
                                     borderRadius="8px"
+                                    disabled={isSpeedMarketOpen}
                                     borderColor={'transparent'}
                                     width="54px"
                                     fontSize="12px"
