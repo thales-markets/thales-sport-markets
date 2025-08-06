@@ -122,49 +122,52 @@ const DailyQuest: React.FC = () => {
                 <Reward>{t('overdrop.daily-quest.reward')}</Reward>
             </FlexDivSpaceBetween>
             <Explainer>{t('overdrop.daily-quest.explainer')}</Explainer>
-            {DAILY_QUESTS.map((quest, index) => (
-                <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
-                    <FlexDivCentered>
-                        <Icon className={quest.icon} />
-                        <HeaderWrapper>
-                            <Title>{t(quest.title)}</Title>
-                            <Description>{t(quest.description)}</Description>
-                        </HeaderWrapper>
-                    </FlexDivCentered>
-
-                    {!isConnected ? (
-                        <></>
-                    ) : quest.completed ? (
-                        <FinishedContainer gap={4}>
-                            <FinishedText>Finished</FinishedText>
-                            <FinishedIcon />
-                        </FinishedContainer>
-                    ) : (
-                        <FlexDivCentered gap={10}>
-                            <Button
-                                borderRadius="8px"
-                                textColor={theme.textColor.quaternary}
-                                borderColor={theme.borderColor.quaternary}
-                                backgroundColor="transparent"
-                                width="62px"
-                                height="30px"
-                                fontSize="12px"
-                                lineHeight="12px"
-                                additionalStyles={{ textTransform: 'capitalize' }}
-                                onClick={
-                                    quest.social
-                                        ? () => setShowSocialModal(true)
-                                        : quest.speed
-                                        ? () => dispatch(setSpeedMarketsWidgetOpen(true))
-                                        : () => navigateTo(ROUTES.Markets.Home)
-                                }
-                            >
-                                {quest.buttonText}
-                            </Button>
+            <div>
+                {DAILY_QUESTS.map((quest, index) => (
+                    <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
+                        <FlexDivCentered>
+                            <Icon className={quest.icon} />
+                            <HeaderWrapper>
+                                <Title>{t(quest.title)}</Title>
+                                <Description>{t(quest.description)}</Description>
+                            </HeaderWrapper>
                         </FlexDivCentered>
-                    )}
-                </DailyQuestItem>
-            ))}
+
+                        {!isConnected ? (
+                            <></>
+                        ) : quest.completed ? (
+                            <FinishedContainer gap={4}>
+                                <FinishedText>Finished</FinishedText>
+                                <FinishedIcon />
+                            </FinishedContainer>
+                        ) : (
+                            <FlexDivCentered gap={10}>
+                                <Button
+                                    borderRadius="8px"
+                                    textColor={theme.textColor.quaternary}
+                                    borderColor={theme.borderColor.quaternary}
+                                    backgroundColor="transparent"
+                                    width="62px"
+                                    height="30px"
+                                    fontSize="12px"
+                                    lineHeight="12px"
+                                    additionalStyles={{ textTransform: 'capitalize' }}
+                                    onClick={
+                                        quest.social
+                                            ? () => setShowSocialModal(true)
+                                            : quest.speed
+                                            ? () => dispatch(setSpeedMarketsWidgetOpen(true))
+                                            : () => navigateTo(ROUTES.Markets.Home)
+                                    }
+                                >
+                                    {quest.buttonText}
+                                </Button>
+                            </FlexDivCentered>
+                        )}
+                    </DailyQuestItem>
+                ))}
+            </div>
+
             <WheelItem completed={isSpinTheWheelCompleted}>
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />

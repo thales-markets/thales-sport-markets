@@ -70,6 +70,7 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
     position: relative;
     @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
         max-width: 120px;
+        min-width: 120px;
     }
 `;
 

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import BadgeGroup from './components/BadgeGroup';
@@ -60,6 +61,9 @@ const Wrapper = styled(FlexDivColumn)`
 const BadgeContainer = styled.div`
     width: 100%;
     padding: 0 20px;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        padding: 0 6px;
+    }
 `;
 
 const HeadingWrapper = styled(FlexDivColumnCentered)`
