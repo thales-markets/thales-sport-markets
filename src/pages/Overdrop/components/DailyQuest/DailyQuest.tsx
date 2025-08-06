@@ -347,8 +347,8 @@ const BadgeWrapper = styled(FlexDivCentered)`
 const FinishedContainer = styled(FlexDivCentered)`
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         position: absolute;
-        right: 5px;
-        bottom: 6px;
+        right: 2px;
+        bottom: 2px;
     }
 `;
 
