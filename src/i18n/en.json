@@ -1446,7 +1446,7 @@
             "current-rewards": "Current estimated rewards",
             "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
-            "disclaimer": "*Wallets suspected of gaming the system can be disqualified.",
+            "disclaimer": "*Wallets suspected of gaming the system or self referring can be disqualified.",
             "claim-rewards": "Claim {{collateral}}",
             "claim-disclaimer": "Switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
             "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
