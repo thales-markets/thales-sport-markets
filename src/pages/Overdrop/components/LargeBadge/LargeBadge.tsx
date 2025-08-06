@@ -1,5 +1,6 @@
 import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -67,6 +68,10 @@ const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>
         props.active ? props.theme.overdrop.badge.background.primary : props.theme.overdrop.badge.background.secondary};
     align-items: center;
     position: relative;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        max-width: 120px;
+        min-width: 120px;
+    }
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`

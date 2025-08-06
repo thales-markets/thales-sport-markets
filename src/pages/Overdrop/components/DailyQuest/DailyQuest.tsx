@@ -122,6 +122,7 @@ const DailyQuest: React.FC = () => {
                 <Reward>{t('overdrop.daily-quest.reward')}</Reward>
             </FlexDivSpaceBetween>
             <Explainer>{t('overdrop.daily-quest.explainer')}</Explainer>
+
             {DAILY_QUESTS.map((quest, index) => (
                 <DailyQuestItem social={quest.social} completed={quest.completed} key={index}>
                     <FlexDivCentered>
@@ -165,6 +166,7 @@ const DailyQuest: React.FC = () => {
                     )}
                 </DailyQuestItem>
             ))}
+
             <WheelItem completed={isSpinTheWheelCompleted}>
                 <FlexDivCentered>
                     <Icon className={'icon icon--wheel'} />
@@ -332,6 +334,7 @@ const Badge2 = styled(Badge1)`
 
 const BadgeWrapper = styled(FlexDivCentered)`
     gap: 4px;
+    justify-content: start;
 `;
 
 const FinishedContainer = styled(FlexDivCentered)`
