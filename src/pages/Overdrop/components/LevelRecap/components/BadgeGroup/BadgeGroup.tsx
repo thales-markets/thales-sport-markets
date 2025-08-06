@@ -57,8 +57,11 @@ const BadgeGroup: React.FC<BadgeGroupProps> = ({ startIndex, endIndex }) => {
 
 const BadgeWrapper = styled(FlexDivRowCentered)<{ fullWidth?: boolean }>`
     align-items: flex-start;
+
     @media (max-width: 767px) {
         flex-flow: wrap;
+        justify-content: center;
+        gap: 4px;
     }
 `;
 

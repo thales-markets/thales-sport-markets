@@ -258,13 +258,13 @@ const ReferralCTA = styled.div`
 
     @media (max-width: 767px) {
         font-size: 11px;
-        padding: 6px 12px;
-        margin-top: 6px; // ✅ more breathing room from progress bar
-        margin-bottom: 12px; // ✅ clean spacing above level badges
-        line-height: 1.4; // ✅ improve legibility on mobile
+        margin-top: 6px;
+        margin-bottom: 12px;
+        line-height: 1.2;
         max-width: 90%;
         margin-left: auto;
         margin-right: auto;
+        text-align: left;
     }
 `;
 

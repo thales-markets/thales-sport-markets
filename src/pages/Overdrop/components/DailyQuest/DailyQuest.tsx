@@ -332,6 +332,7 @@ const Badge2 = styled(Badge1)`
 
 const BadgeWrapper = styled(FlexDivCentered)`
     gap: 4px;
+    justify-content: start;
 `;
 
 const FinishedContainer = styled(FlexDivCentered)`
