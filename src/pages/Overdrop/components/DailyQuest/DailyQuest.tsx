@@ -135,10 +135,10 @@ const DailyQuest: React.FC = () => {
                     {!isConnected ? (
                         <></>
                     ) : quest.completed ? (
-                        <FlexDivCentered gap={4}>
+                        <FinishedContainer gap={4}>
                             <FinishedText>Finished</FinishedText>
                             <FinishedIcon />
-                        </FlexDivCentered>
+                        </FinishedContainer>
                     ) : (
                         <FlexDivCentered gap={10}>
                             <Button
@@ -180,10 +180,10 @@ const DailyQuest: React.FC = () => {
                 {!isConnected ? (
                     <></>
                 ) : isSpinTheWheelCompleted ? (
-                    <FlexDivCentered gap={4}>
+                    <FinishedContainer gap={4}>
                         <FinishedText>{spintTheWheelRewardText}</FinishedText>
                         <FinishedIcon />
-                    </FlexDivCentered>
+                    </FinishedContainer>
                 ) : (
                     <>
                         <SpinTheWheelText>{t('overdrop.daily-quest.complete-daily-quest')}</SpinTheWheelText>
@@ -332,6 +332,14 @@ const Badge2 = styled(Badge1)`
 
 const BadgeWrapper = styled(FlexDivCentered)`
     gap: 4px;
+`;
+
+const FinishedContainer = styled(FlexDivCentered)`
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        position: absolute;
+        right: 5px;
+        bottom: 6px;
+    }
 `;
 
 const FinishedText = styled.p`
