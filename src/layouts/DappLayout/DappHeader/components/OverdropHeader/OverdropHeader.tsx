@@ -250,7 +250,9 @@ const OverdropHeader: React.FC = () => {
                             <Completed width={(completedQuest * 100) / 3} />
                         </ProgressBar>
                         <SpinTheWheelInfo completed={completedQuest === 3}>
-                            {t('overdrop.daily-quest.complete-daily-quest')}
+                            {completedQuest === 3
+                                ? t('overdrop.daily-quest.daily-quest-completed')
+                                : t('overdrop.daily-quest.complete-daily-quest')}
                         </SpinTheWheelInfo>
                         <ItemWrapper completed={isSpinTheWheelCompleted}>
                             <ItemFirstSection gap={4}>
