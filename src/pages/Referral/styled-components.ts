@@ -114,6 +114,7 @@ export const AffiliateInput = styled.input`
     @media (max-width: 768px) {
         width: 100%;
         font-size: 12px;
+        margin-top: 8px;
     }
 `;
 
@@ -322,7 +323,6 @@ export const Tab = styled.div<{ active: boolean }>`
     padding-bottom: 8px;
     border-bottom: ${(props) => (props.active ? '2px solid #3FFFFF' : 'none')};
     text-align: center;
-    height: 30px;
     span {
         line-height: 22px;
     }
