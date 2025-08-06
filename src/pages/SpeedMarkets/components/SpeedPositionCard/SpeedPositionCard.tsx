@@ -1,3 +1,4 @@
+import ShareSpeedPosition from 'components/ShareSpeedPosition';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
@@ -67,36 +68,39 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         <PositionText>{position.side}</PositionText>
                     </Position>
                 </AssetPosition>
-                {!isMatured ? (
-                    // pending
-                    <Status isWon={isUserCurrentlyWinning}>
-                        {isUserCurrentlyWinning
-                            ? t('speed-markets.user-positions.status.winning')
-                            : t('speed-markets.user-positions.status.losing')}
-                    </Status>
-                ) : position.isClaimable ? (
-                    <ClaimWrapper>
-                        <ClaimAction
-                            positions={[position]}
-                            claimCollateralIndex={claimCollateralIndex}
-                            isDisabled={isSubmittingBatch}
-                            isActionInProgress={isActionInProgress}
-                            setIsActionInProgress={setIsActionInProgress}
-                        />
-                    </ClaimWrapper>
-                ) : hasFinalPrice ? (
-                    // history
-                    <Status isWon={isUserWon}>
-                        {isUserWon
-                            ? t('speed-markets.user-positions.status.won')
-                            : t('speed-markets.user-positions.status.loss')}
-                    </Status>
-                ) : (
-                    // price is missing - pending
-                    <Status isWon={false} isUnknown>
-                        {t('speed-markets.user-positions.status.waiting-price')}
-                    </Status>
-                )}
+                <StatusWrapper isClaimable={position.isClaimable}>
+                    {!isMatured ? (
+                        // pending
+                        <Status isWon={isUserCurrentlyWinning}>
+                            {isUserCurrentlyWinning
+                                ? t('speed-markets.user-positions.status.winning')
+                                : t('speed-markets.user-positions.status.losing')}
+                        </Status>
+                    ) : position.isClaimable ? (
+                        <ClaimWrapper>
+                            <ClaimAction
+                                positions={[position]}
+                                claimCollateralIndex={claimCollateralIndex}
+                                isDisabled={isSubmittingBatch}
+                                isActionInProgress={isActionInProgress}
+                                setIsActionInProgress={setIsActionInProgress}
+                            />
+                        </ClaimWrapper>
+                    ) : hasFinalPrice ? (
+                        // history
+                        <Status isWon={isUserWon}>
+                            {isUserWon
+                                ? t('speed-markets.user-positions.status.won')
+                                : t('speed-markets.user-positions.status.loss')}
+                        </Status>
+                    ) : (
+                        // price is missing - pending
+                        <Status isWon={false} isUnknown>
+                            {t('speed-markets.user-positions.status.waiting-price')}
+                        </Status>
+                    )}
+                    <ShareSpeedPosition position={position} />
+                </StatusWrapper>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
                 <Price>{`${t('speed-markets.user-positions.labels.entry')}: ${formatCurrencyWithSign(
@@ -163,7 +167,7 @@ const Container = styled(FlexDivColumn)`
 `;
 
 const ClaimWrapper = styled.div`
-    width: 50%;
+    width: 100%;
 `;
 
 const AssetPosition = styled(FlexDivRow)`
@@ -195,6 +199,11 @@ const Position = styled(FlexDivCentered)<{ isUp: boolean }>`
     }
 `;
 
+const StatusWrapper = styled(FlexDivRowCentered)<{ isClaimable: boolean }>`
+    ${(props) => (props.isClaimable ? 'width: 50%;' : '')}
+    gap: 8px;
+`;
+
 const Status = styled.span<{ isWon: boolean; isUnknown?: boolean }>`
     color: ${(props) =>
         props.isUnknown
@@ -222,7 +231,7 @@ const Time = styled(Text)``;
 const Paid = styled(Text)``;
 
 const Payout = styled(Text)<{ isClaimable: boolean }>`
-    ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')};
+    ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')}
 `;
 
 const PlayIcon = styled.i`

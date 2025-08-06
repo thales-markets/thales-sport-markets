@@ -21,7 +21,7 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { ShareTicketModalProps } from 'types/tickets';
+import { ShareTicketData, ShareTicketModalProps } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
@@ -64,20 +64,7 @@ const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
-    markets,
-    multiSingle,
-    paid,
-    payout,
-    onClose,
-    isTicketLost,
-    collateral,
-    isLive,
-    isSgp,
-    applyPayoutMultiplier,
-    isTicketOpen,
-    systemBetData,
-}) => {
+const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) => {
     const theme: ThemeInterface = useTheme();
 
     const walletAddress = useAccount()?.address || '';
@@ -102,9 +89,11 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const isOver = useMemo(() => isOverCurrency(collateral), [collateral]);
+    const ticketData = data as ShareTicketData;
 
-    const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
+    const isOver = useMemo(() => isOverCurrency(data.collateral), [data.collateral]);
+
+    const isNonStableCollateral = useMemo(() => !isStableCurrency(data.collateral), [data.collateral]);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
     const exchangeRates: Rates | null =
@@ -351,38 +340,44 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         >
             <Container ref={ref}>
                 {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                <MyTicket
-                    markets={markets}
-                    multiSingle={multiSingle}
-                    paid={
-                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? paid * exchangeRates?.[collateral]
-                            : paid
-                    }
-                    payout={
-                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? payout * exchangeRates?.[collateral]
-                            : payout
-                    }
-                    isTicketLost={isTicketLost}
-                    collateral={
-                        convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
-                    }
-                    isLive={isLive}
-                    isSgp={isSgp}
-                    applyPayoutMultiplier={applyPayoutMultiplier}
-                    systemBetData={
-                        systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
-                            ? {
-                                  ...systemBetData,
-                                  minPayout: systemBetData?.minPayout * exchangeRates[collateral],
-                                  maxPayout: systemBetData?.maxPayout * exchangeRates[collateral],
-                                  buyInPerCombination: systemBetData?.buyInPerCombination * exchangeRates[collateral],
-                              }
-                            : systemBetData
-                    }
-                    isTicketOpen={isTicketOpen}
-                />
+                {ticketData.isTicketOpen !== undefined && (
+                    <MyTicket
+                        markets={ticketData.markets}
+                        multiSingle={ticketData.multiSingle}
+                        paid={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? data.paid * exchangeRates?.[data.collateral]
+                                : data.paid
+                        }
+                        payout={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? data.payout * exchangeRates?.[data.collateral]
+                                : data.payout
+                        }
+                        isTicketLost={ticketData.isTicketLost}
+                        collateral={
+                            convertToStableValue && isNonStableCollateral
+                                ? (CRYPTO_CURRENCY_MAP.USDC as Coins)
+                                : data.collateral
+                        }
+                        isLive={ticketData.isLive}
+                        isSgp={ticketData.isSgp}
+                        applyPayoutMultiplier={ticketData.applyPayoutMultiplier}
+                        systemBetData={
+                            ticketData.systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
+                                ? {
+                                      ...ticketData.systemBetData,
+                                      minPayout: ticketData.systemBetData?.minPayout * exchangeRates[data.collateral],
+                                      maxPayout: ticketData.systemBetData?.maxPayout * exchangeRates[data.collateral],
+                                      buyInPerCombination:
+                                          ticketData.systemBetData?.buyInPerCombination *
+                                          exchangeRates[data.collateral],
+                                  }
+                                : ticketData.systemBetData
+                        }
+                        isTicketOpen={ticketData.isTicketOpen}
+                    />
+                )}
 
                 <ButtonsWrapper toggleVisible={isNonStableCollateral}>
                     <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>

@@ -1845,6 +1845,22 @@
             "out-of-liquidity": "Out of liquidity",
             "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
             "price-stale": "Can't resolve position with stale price"
+        },
+        "flex-card": {
+            "strike-price": "Strike price",
+            "market-duration": "Market duration",
+            "buy-in": "Buy-In",
+            "potential-win": "Potential win",
+            "share": "Share",
+            "won": "Won",
+            "loss": "Loss",
+            "open-twitter": "Opening Twitter...",
+            "save-image": "Saving image to clipboard. Please wait...",
+            "save-image-error": "Failed to save image! Try again",
+            "save-image-cancel": "Image saving canceled!",
+            "click-open-twitter": "Click here to open Twitter",
+            "download-image": "Downloading image. Please wait...",
+            "image-in-clipboard": "Image is in clipboard!"
         }
     }
 }

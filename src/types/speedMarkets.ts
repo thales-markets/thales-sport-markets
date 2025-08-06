@@ -45,3 +45,21 @@ export type UserPosition = {
     isResolved: boolean;
     createdAt: number;
 };
+
+export type ShareSpeedPositionType = 'speed-potential' | 'speed-won' | 'speed-loss';
+
+export type ShareSpeedPositionData = {
+    type: ShareSpeedPositionType;
+    position: SpeedPositions;
+    asset: string;
+    strikePrice: number;
+    paid: number;
+    payout: number;
+    collateral: Coins;
+    marketDuration: string;
+};
+
+export type ShareSpeedPositionModalProps = {
+    data: ShareSpeedPositionData;
+    onClose: () => void;
+};

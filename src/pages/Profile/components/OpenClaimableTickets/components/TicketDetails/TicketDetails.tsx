@@ -15,7 +15,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { formatCurrencyWithKey, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { Ticket } from 'types/markets';
 import { RootState } from 'types/redux';
-import { ShareTicketModalProps } from 'types/tickets';
+import { ShareTicketData } from 'types/tickets';
 import {
     getCollateral,
     getCollateralAddress,
@@ -95,7 +95,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
     const [showDetails, setShowDetails] = useState<boolean>(showDetailsExplicit ?? false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketData | undefined>(undefined);
 
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
@@ -198,7 +198,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         setShowShareTicketModal(true);
     };
 
-    const shareTicketData = {
+    const shareTicketData: ShareTicketData = {
         markets: ticket.sportMarkets.map((sportMarket) => {
             return {
                 ...sportMarket,
@@ -208,9 +208,6 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
         paid: ticket.buyInAmount,
         payout: ticket.payout,
         multiSingle: false,
-        onClose: () => {
-            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
-        },
         isTicketLost: ticket.isLost,
         collateral: ticket.collateral,
         isLive: ticket.isLive,
@@ -498,18 +495,10 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (
                 <ShareTicketModalV2
-                    markets={shareTicketModalData.markets}
-                    multiSingle={false}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
-                    onClose={shareTicketModalData.onClose}
-                    isTicketLost={shareTicketModalData.isTicketLost}
-                    collateral={shareTicketModalData.collateral}
-                    isLive={shareTicketModalData.isLive}
-                    isSgp={shareTicketModalData.isSgp}
-                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
-                    systemBetData={shareTicketModalData.systemBetData}
-                    isTicketOpen={shareTicketModalData.isTicketOpen}
+                    data={shareTicketModalData}
+                    onClose={() => {
+                        setShowShareTicketModal ? setShowShareTicketModal(false) : null;
+                    }}
                 />
             )}
         </Container>
