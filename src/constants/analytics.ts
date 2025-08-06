@@ -14,5 +14,5 @@ export const PLAUSIBLE_KEYS = {
     freeBetLive: 'free-bet-live',
     binanceWalletBuy: 'binance-buy',
     farcasterBuy: 'farcaster-buy',
-    speedMarketsBuy: 'speed-markets-buy',
+    speedMarketsBuy: 'overtime-speed-markets-buy',
 };
