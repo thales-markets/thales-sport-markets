@@ -114,6 +114,7 @@ export const AffiliateInput = styled.input`
     @media (max-width: 768px) {
         width: 100%;
         font-size: 12px;
+        margin-top: 8px;
     }
 `;
 
