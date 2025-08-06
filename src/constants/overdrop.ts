@@ -137,11 +137,6 @@ export const OVERDROP_REWARDS_COLLATERALS = {
 export const OVERDROP_SEASONS = [1, 2];
 export const SEASON_2: { month: number; year: number }[] = [
     {
-        // TODO: remove july
-        month: 7,
-        year: 2025,
-    },
-    {
         month: 8,
         year: 2025,
     },
