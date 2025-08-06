@@ -184,7 +184,7 @@ const DepositFromWallet: React.FC<DepositFromWalletProps> = ({ onClose, preSelec
                                     fontWeight="700"
                                     color={theme.textColor.primary}
                                     label={t('deposit.deposit-amount')}
-                                    placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                                    placeholder={t('common.enter-amount')}
                                     currencyComponent={
                                         <CollateralSelector
                                             borderColor="none"

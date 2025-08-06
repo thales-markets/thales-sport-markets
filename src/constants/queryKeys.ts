@@ -39,6 +39,17 @@ const QUERY_KEYS = {
         networkId,
         isLive,
     ],
+    Prices: {
+        PythPrices: (priceId: string, publishTime: number) => ['prices', 'pythPrices', priceId, publishTime],
+        PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [
+            'asset',
+            'dateRange',
+            'resolution',
+            asset,
+            dateRange,
+            resolution,
+        ],
+    },
     SportsAmmData: (networkId: Network) => ['sportsAmmData', networkId],
     SportsAmmRiskManager: (networkId: Network, league: League) => ['sportsAmmRiskManager', networkId, league],
     TicketLiquidity: (
@@ -173,12 +184,16 @@ const QUERY_KEYS = {
     Promotions: (branchName: string) => [branchName, 'promotions'],
     SeoArticles: (branchName: string) => ['seoArticles', branchName],
     Overdrop: {
-        Leaderboard: () => ['leaderboard'],
+        Leaderboard: (season: number, miniSeason: number) => ['leaderboard', season, miniSeason],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
+        DailyQuestOptions: () => ['dailyQuestOptions'],
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
         GameMultipliers: () => ['gameMultipliers'],
         Price: () => ['price'],
+        AffiliateLeaderboard: () => ['affiliateLeaderboard'],
+        AffiliateActivity: (walletAddress: string) => ['affiliateActivity', walletAddress],
+        AffiliateSummary: (walletAddress: string) => ['affiliateActivity', walletAddress],
         UserRewards: (networkId: Network, walletAddress: string) => ['userRewards', networkId, walletAddress],
     },
     FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
@@ -194,6 +209,15 @@ const QUERY_KEYS = {
         walletAddress,
         role,
     ],
+    ReferralTransaction: (walletAddress: string, networkId: Network) => [
+        'referralTransaction',
+        walletAddress,
+        networkId,
+    ],
+    ReferrerID: (walletAddress: string) => ['referrerId', walletAddress],
+    Referrers: (networkId: Network) => ['referrers', networkId],
+    ReferredTraders: (walletAddress: string, networkId: Network) => ['referredTraders', walletAddress, networkId],
+    ReferralOverview: (walletAddress: string, networkId: Network) => ['referralOverview', walletAddress, networkId],
     Governance: {
         Proposal: (spaceKey: SpaceKey, hash: string, walletAddress: string) => [
             'governance',
@@ -207,6 +231,21 @@ const QUERY_KEYS = {
             'votingPower',
             proposalId,
             snapshot,
+            walletAddress,
+        ],
+    },
+    SpeedMarkets: {
+        SpeedMarketsCreator: (networkId: Network) => ['speedMarketsCreator', networkId],
+        SpeedMarketsLimits: (networkId: Network, walletAddress?: string) => [
+            'speedMarketsLimits',
+            networkId,
+            walletAddress,
+        ],
+        UserSpeedMarkets: (networkId: Network, walletAddress: string) => ['userSpeedMarkets', networkId, walletAddress],
+        ActiveSpeedMarkets: (networkId: Network) => ['activeSpeedMarkets', networkId],
+        ResolvedSpeedMarkets: (networkId: Network, walletAddress: string) => [
+            'userResolvedSpeedMarkets',
+            networkId,
             walletAddress,
         ],
     },

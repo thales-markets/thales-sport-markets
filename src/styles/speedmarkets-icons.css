@@ -1,0 +1,53 @@
+.speedmarkets-icon {
+    display: inline-block;
+    font-family: SpeedMarketsIcons !important;
+    vertical-align: middle;
+    font-size: 32px;
+}
+
+.speedmarkets-logo-icon {
+    display: inline-block;
+    font-family: SpeedMarketsLogoIcons !important;
+    vertical-align: middle;
+    font-size: 32px;
+}
+
+/* speedmarkets-logo-icon */
+
+.speedmarkets-logo-icon--speed-full-logo:before {
+    content: '\003F';
+}
+
+.speedmarkets-logo-icon--btc-logo:before {
+    content: '\0046';
+}
+
+.speedmarkets-logo-icon--eth-logo:before {
+    content: '\0047';
+}
+
+.speedmarkets-logo-icon--gas:before {
+    content: '\006D';
+}
+
+/* speedmarkets-icon */
+
+.speedmarkets-icon--indicator-down:before {
+    content: '\0021';
+}
+
+.speedmarkets-icon--gear:before {
+    content: '\0033';
+}
+
+.speedmarkets-icon--clock:before {
+    content: '\003C';
+}
+
+.speedmarkets-icon--arrow:before {
+    content: '\005C';
+}
+
+.speedmarkets-icon--pyth:before {
+    content: '\002A';
+}

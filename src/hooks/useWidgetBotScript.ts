@@ -1,6 +1,14 @@
-import { useEffect } from 'react';
+import { Dispatch, useEffect } from 'react';
+import { delay } from 'utils/timer';
 
-const useWidgetBotScript = (preventWidgetLoad: boolean) => {
+const getWidgetBotCrateElement = () => {
+    const widgetBotHtml = document.getElementsByTagName('widgetbot-crate') as HTMLCollection;
+    const crateDivElement = (widgetBotHtml.item(0)?.firstChild?.firstChild as Element)?.shadowRoot?.firstChild
+        ?.firstChild as HTMLDivElement;
+    return crateDivElement;
+};
+
+const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpen: Dispatch<boolean>) => {
     useEffect(() => {
         if (preventWidgetLoad || (window as any).crate) {
             return;
@@ -17,16 +25,29 @@ const useWidgetBotScript = (preventWidgetLoad: boolean) => {
                 channel: '983394762520412160',
                 notifications: false,
                 indicator: false,
+                shard: 'https://e.widgetbot.io',
                 css: `
-                @media (max-width: 950px) {
-                    &:not(.open) .button {
-                        margin-bottom: 70px;
-                        width: 45px;
-                        height: 45px;
+                    @media (max-width: 950px) {
+                        &:not(.open) .button {
+                            margin-bottom: 70px;
+                            width: 45px;
+                            height: 45px;
+                        }
                     }
-                }
-              `,
+                `,
             });
+
+            const crateDivElement = getWidgetBotCrateElement();
+
+            if (getWidgetBotCrateElement()) {
+                crateDivElement.addEventListener('click', async () => {
+                    await delay(100);
+                    const refreshedCrateDivElement = getWidgetBotCrateElement();
+                    if (refreshedCrateDivElement && refreshedCrateDivElement.classList.contains('open')) {
+                        setSpeedMarketsWidgetOpen(false);
+                    }
+                });
+            }
         };
 
         document.body.appendChild(script);
@@ -35,7 +56,7 @@ const useWidgetBotScript = (preventWidgetLoad: boolean) => {
             // clean up the script when the component in unmounted
             document.body.removeChild(script);
         };
-    }, [preventWidgetLoad]);
+    }, [preventWidgetLoad, setSpeedMarketsWidgetOpen]);
 };
 
 export default useWidgetBotScript;

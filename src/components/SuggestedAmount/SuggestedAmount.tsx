@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import { FlexDiv } from 'styles/common';
 import {
     ceilNumberToDecimals,
+    countDecimals,
     DEFAULT_CURRENCY_DECIMALS,
+    floorNumberToDecimals,
     formatCurrencyWithKey,
     LONG_CURRENCY_DECIMALS,
 } from 'thales-utils';
@@ -13,27 +15,35 @@ import { Rates } from 'types/collateral';
 import { convertFromStableToCollateral, getCollateral, isOverCurrency, isStableCurrency } from 'utils/collaterals';
 import { useChainId } from 'wagmi';
 
-const AMOUNTS = [3, 10, 50, 100, 500];
-
 type SuggestedAmountProps = {
+    amounts: number[];
     collateralIndex: number;
     changeAmount: (value: number | string) => void;
-    exchangeRates: Rates | null;
+    exchangeRates?: Rates | null;
     insertedAmount: number | string;
     minAmount?: number;
+    buttonHeight?: string;
+    buttonColor?: string;
+    margin?: string;
+    amountSymbol?: string;
 };
 
 const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
+    amounts,
     collateralIndex,
     changeAmount,
     exchangeRates,
     insertedAmount,
     minAmount,
+    buttonHeight,
+    buttonColor,
+    margin,
+    amountSymbol,
 }) => {
     const networkId = useChainId();
 
     const [amountIndexClickedTimesMap, setAmountIndexClickedTimesMap] = useState(
-        new Map(AMOUNTS.map((_, i) => [i, 0]))
+        new Map(amounts.map((_, i) => [i, 0]))
     );
     const [isAmountClicked, setIsAmountClicked] = useState(false);
 
@@ -75,15 +85,16 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
         setAmountIndexClickedTimesMap(updatedMap);
 
         const decimals = isStableCurrency(collateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
-        const changedAmount = ceilNumberToDecimals(increasedAmountClicks * buyAmount, decimals);
+        const increasedAmount = floorNumberToDecimals(increasedAmountClicks * buyAmount, countDecimals(buyAmount));
+        const changedAmount = ceilNumberToDecimals(increasedAmount, decimals);
         changeAmount(changedAmount);
     };
 
     const isAnyAmountClicked = Array.from(amountIndexClickedTimesMap.values()).some((n) => n > 0);
 
     return (
-        <Container>
-            {AMOUNTS.map((amount, index) => {
+        <Container $margin={margin}>
+            {amounts.map((amount, index) => {
                 const convertedAmount = convertFromStable(amount);
                 const buyAmount = minAmount && index === 0 && minAmount > convertedAmount ? minAmount : convertedAmount;
 
@@ -102,8 +113,12 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
                         key={`amount-${index}`}
                         active={isActive}
                         onClick={() => onAmountClickHandler(index, buyAmount)}
+                        height={buttonHeight}
+                        buttonColor={buttonColor}
                     >
-                        {`${isCurrentAmountClicked ? '+' : ''} ${formatCurrencyWithKey(USD_SIGN, amount, 1, true)}`}
+                        {`${isCurrentAmountClicked ? '+' : ''} ${
+                            amountSymbol ? amount + amountSymbol : formatCurrencyWithKey(USD_SIGN, amount, 1, true)
+                        }`}
                     </AmountContainer>
                 );
             })}
@@ -111,15 +126,15 @@ const SuggestedAmount: React.FC<SuggestedAmountProps> = ({
     );
 };
 
-const Container = styled(FlexDiv)`
+const Container = styled(FlexDiv)<{ $margin?: string }>`
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    margin: 8px 0px;
+    ${(props) => (props.$margin ? `margin: ${props.$margin};` : '')}
     gap: 13px;
 `;
 
-const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
+const AmountContainer = styled(FlexDiv)<{ active?: boolean; height?: string; buttonColor?: string }>`
     align-items: center;
     justify-content: center;
     font-size: 13px;
@@ -128,10 +143,13 @@ const AmountContainer = styled(FlexDiv)<{ active?: boolean }>`
     border-radius: 5px;
     color: ${(props) => (props.active ? props.theme.button.textColor.quinary : props.theme.button.textColor.secondary)};
     background-color: ${(props) =>
-        props.active ? props.theme.button.background.quaternary : props.theme.button.background.senary};
+        props.active
+            ? props.theme.button.background.quaternary
+            : props.buttonColor || props.theme.button.background.senary};
     cursor: pointer;
-    height: 25px;
+    height: ${(props) => props.height || '25px'};
     width: 100%;
+    user-select: none;
 `;
 
 export default SuggestedAmount;

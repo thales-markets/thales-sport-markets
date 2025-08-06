@@ -9,6 +9,9 @@ import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient 
 // Hook for biconomy
 function useBiconomy() {
     const [smartAddress, setSmartAddress] = useState('');
+    const [signMessage, setSignMessage] = useState<
+        ((message: string | Uint8Array) => Promise<`0x${string}`>) | undefined
+    >(undefined);
     const dispatch = useDispatch();
     const networkId = useChainId();
     const { data: walletClient } = useWalletClient();
@@ -28,6 +31,7 @@ function useBiconomy() {
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
                     rpcUrl: RPC_LIST.INFURA[networkId].http,
                 });
+
                 const smartAddressNew = await smartAccount.getAccountAddress();
 
                 if (smartAddress === '') {
@@ -39,6 +43,12 @@ function useBiconomy() {
                         setSmartAddress(smartAddressNew);
                     }
                 }
+
+                if (smartAccount.signMessage) {
+                    setSignMessage(() => async (message: string | Uint8Array) => {
+                        return await smartAccount.signMessage(message);
+                    });
+                }
             };
 
             createSmartAccount();
@@ -48,7 +58,7 @@ function useBiconomy() {
         }
     }, [dispatch, switchChain, networkId, disconnect, walletClient, isConnected, smartAddress]);
 
-    return { smartAddress };
+    return { smartAddress, signMessage };
 }
 
 export default useBiconomy;

@@ -728,7 +728,7 @@ const VerifyButton = styled.button`
     box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
     width: 100%;
     margin-top: 20px;
-
+    outline: none;
     letter-spacing: 0.025em;
     font-size: 14px;
     font-weight: 600;

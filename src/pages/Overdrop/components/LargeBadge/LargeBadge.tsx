@@ -1,10 +1,10 @@
-import OverAmountImage from 'assets/images/overdrop/over_voucher.png';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, USD_SIGN } from 'constants/currency';
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { FlexDiv, FlexDivColumn } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivColumnCentered } from 'styles/common';
 import { formatCurrencyWithKey } from 'thales-utils';
 import { formatPoints } from 'utils/overdrop';
 
@@ -31,53 +31,54 @@ const LargeBadge: React.FC<LargeBadgeProps> = ({
 
     return (
         <Wrapper active={reached} highlight={highlight}>
+            <LevelName active={reached}>{levelName}</LevelName>
             <BadgeImage active={reached} src={levelItem ? levelItem.largeBadge : ''} />
             {!reached && (
                 <LockWrapper>
                     <Icon className="icon icon--lock" />
                 </LockWrapper>
             )}
+
             <XPLabel active={reached}>{formatPoints(requiredPointsForLevel)}</XPLabel>
             <LevelLabel active={reached}>{t('overdrop.overdrop-home.level')}</LevelLabel>
             <Level active={reached}>{level}</Level>
-            <LevelName active={reached}>{levelName}</LevelName>
             {!!voucherAmount && (
-                <OverAmount>
+                <Voucher>
+                    <FreeBetBadge>Free bet</FreeBetBadge>
                     <VoucherAmount>
-                        {formatCurrencyWithKey(CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
+                        {formatCurrencyWithKey(USD_SIGN + CRYPTO_CURRENCY_MAP.OVER, voucherAmount, 1, true)}
                     </VoucherAmount>
-                </OverAmount>
+                </Voucher>
             )}
         </Wrapper>
     );
 };
 
 const Wrapper = styled(FlexDivColumn)<{ active?: boolean; highlight?: boolean }>`
-    min-width: 122px;
     margin-top: 40px;
     margin-bottom: ${(props) => (props.highlight ? '50px' : '')};
-    border: 3px solid transparent;
-    border-radius: 6px;
-    background: linear-gradient(
-                ${(props) => (props.active ? props.theme.overdrop.background.active : props.theme.background.quinary)} 0
-                    0
-            )
-            padding-box,
-        linear-gradient(40deg, rgba(92, 68, 44, 1) 0%, rgba(23, 25, 42, 1) 50%, rgba(92, 68, 44, 1) 100%) border-box;
+
+    max-width: 125px;
+    height: 306px;
+    padding: 10px;
+    border-radius: 14px;
+    border: 2px solid #2c345e;
+
+    background: ${(props) =>
+        props.active ? props.theme.overdrop.badge.background.primary : props.theme.overdrop.badge.background.secondary};
     align-items: center;
     position: relative;
-    padding: 70px 0px 10px 0px;
-    flex: 1 0 18%;
-    @media (max-width: 767px) {
-        min-width: 90px;
+    @media (max-width: ${ScreenSizeBreakpoint.EXTRA_SMALL}px) {
+        max-width: 120px;
+        min-width: 120px;
     }
 `;
 
 const BadgeImage = styled.img<{ active?: boolean }>`
     position: absolute;
-    top: -40px;
-    width: 100px;
-    height: 100px;
+    top: 40px;
+    width: 140px;
+    height: 140px;
     opacity: ${(props) => (props.active ? '1' : '0.4')};
     /* @media (max-width: 767px) {
         width: 50px;
@@ -89,9 +90,9 @@ const LockWrapper = styled(FlexDivColumn)`
     position: absolute;
     align-items: center;
     justify-content: center;
-    width: 74px;
-    height: 74px;
-    top: -30px;
+    width: 100px;
+    height: 100px;
+    top: 60px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
@@ -104,7 +105,7 @@ const Icon = styled.i`
 `;
 
 const XPLabel = styled.span<{ active?: boolean }>`
-    font-size: 13.5px;
+    font-size: 16px;
     font-weight: 700;
     margin: 3px;
     text-transform: uppercase;
@@ -112,44 +113,70 @@ const XPLabel = styled.span<{ active?: boolean }>`
 `;
 
 const LevelLabel = styled(XPLabel)<{ active?: boolean }>`
+    color: ${(props) => (props.active ? '#fbce0f' : props.theme.overdrop.textColor.inactive)};
+    font-size: 16.444px;
+    font-style: normal;
     font-weight: 300;
+    line-height: normal;
+    letter-spacing: 0.576px;
     text-transform: uppercase;
-    color: ${(props) =>
-        props.active ? props.theme.overdrop.textColor.primary : props.theme.overdrop.textColor.inactive};
 `;
 
 const Level = styled(LevelLabel)`
+    color: ${(props) => (props.active ? '#fbce0f' : props.theme.overdrop.textColor.inactive)};
+    font-size: 38.489px;
+    font-style: normal;
     font-weight: 800;
-    font-size: 25.038px;
+    line-height: 80%; /* 30.791px */
+    letter-spacing: 3.464px;
+    text-transform: uppercase;
 `;
 
 const LevelName = styled(XPLabel)`
+    color: ${(props) => (props.active ? props.theme.textColor.primary : props.theme.overdrop.textColor.inactive)};
+
+    font-size: 14px;
+    font-style: normal;
     font-weight: 600;
-    font-size: 11px;
+    line-height: normal;
+
+    text-transform: uppercase;
+    margin-bottom: 165px;
 `;
 
-const OverAmount = styled(FlexDiv)`
+const Voucher = styled(FlexDivColumnCentered)`
     position: absolute;
-    bottom: -25px;
-    background-image: url(${OverAmountImage});
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 50px;
-    background-size: contain;
-    background-position: center;
-    justify-content: center;
+    bottom: -58px;
+    gap: 6px;
+`;
+
+const FreeBetBadge = styled(FlexDiv)`
     align-items: center;
-    padding-right: 10px;
+    justify-content: center;
+
+    border-radius: 20px;
+    border: 1px solid rgba(104, 124, 220, 0.3);
+    background: ${(props) => props.theme.overdrop.badge.background.primary};
+    height: 22px;
+    padding: 3px 9px 5px 13px;
+
+    white-space: nowrap;
+    color: #687cdc;
+
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 `;
 
 const VoucherAmount = styled.span`
     width: 100px;
-    margin-left: 30px;
-    padding-top: 3px;
+
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 20px;
     white-space: pre;
-    font-weight: 800;
+    font-weight: 700;
     color: ${(props) => props.theme.overdrop.badge.textColor.primary};
 `;
 

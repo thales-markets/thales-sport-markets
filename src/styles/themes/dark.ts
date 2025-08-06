@@ -198,6 +198,15 @@ export default {
     },
     chart: {
         primary: Colors.PURPLE,
+        candleUp: Colors.MILD_MENTHOL,
+        candleDown: Colors.VERMILION_CINNABAR,
+        labels: Colors.GRAY_LIGHT,
+        priceLine: Colors.WHITE,
+        multiPositions: Colors.PURPLE,
+        area: {
+            start: Colors.CHART_AREA_START,
+            end: Colors.CHART_AREA_END,
+        },
     },
     connectWalletModal: {
         secondaryText: Colors.WHITE,
@@ -223,8 +232,10 @@ export default {
             quinary: Colors.NAVY_BLUE_EXTRA_DARK,
             senary: Colors.LIGHTNING_YELLOW,
             septenary: Colors.METALIC_YELLOW,
+            octonary: Colors.OVERDROP_BLUE,
             active: Colors.NAVY_BLUE_DARK,
             progressBar: Colors.YELLOW,
+            gradient: 'linear-gradient(90deg, #DBA111 0%, #FACC15 100%)',
         },
         textColor: {
             primary: Colors.YELLOW,
@@ -234,20 +245,23 @@ export default {
             quinary: Colors.TORY_BLUE_LIGHT,
             senary: Colors.OVERDROP_GREEN,
             septenary: Colors.METALIC_YELLOW,
+            octonary: Colors.REFERALL_YELLOW,
             inactive: Colors.NAVY_BLUE_LIGHT,
         },
         borderColor: {
             primary: Colors.JONQUIL,
-            secondary: `linear-gradient(160deg, #4e5fb1, #dba111)`,
+            secondary: `linear-gradient(160deg, ${Colors.OVERDROP_BLUE_BORDER},  ${Colors.REFERALL_YELLOW})`,
             tertiary: Colors.GOLD,
+            quaternary: Colors.TORY_BLUE,
+            progressBar: `linear-gradient(90deg, ${Colors.TORY_BLUE} 0%, ${Colors.BLUE} 100%)`,
         },
         badge: {
             background: {
-                primary: Colors.JONQUIL,
-                secondary: 'rgb(21, 27, 54, 0.3)',
+                primary: Colors.OVERDROP_BLUE,
+                secondary: Colors.OVERDROP_DISABLED_BADGE,
             },
             textColor: {
-                primary: Colors.SMOKEY_TOPAZ,
+                primary: Colors.WHITE,
             },
         },
         button: {
@@ -284,5 +298,50 @@ export default {
             primary: Colors.NAVY_BLUE_EXTRA_DARK,
             secondary: Colors.WHITE,
         },
+    },
+    speedMarkets: {
+        background: { primary: Colors.DARK_KNIGHT },
+        borderColor: { primary: Colors.BLUE_ESTATE },
+        textColor: {
+            primary: Colors.WHITE,
+            secondary: Colors.FRESH_LAVENDER,
+            tertiary: Colors.YELLOW,
+            active: Colors.BLUE,
+            inactive: Colors.NAVY_BLUE_LIGHT,
+        },
+        button: {
+            background: {
+                primary: Colors.NAVY_BLUE,
+                secondary: `linear-gradient(90deg, ${Colors.HONEYCOMB} 0%, ${Colors.GOLDENROD} 100%)`,
+                active: Colors.BLUE,
+                inactive: Colors.LIBERTY_BLUE,
+            },
+            textColor: {
+                primary: Colors.WHITE,
+                active: Colors.NAVY_BLUE_DARK,
+                inactive: Colors.TORY_BLUE,
+            },
+        },
+        dropDown: {
+            background: { primary: Colors.NATO_BLUE },
+            borderColor: { primary: Colors.CORSAIR },
+            textColor: { primary: Colors.BLUE },
+            indicatorColor: { primary: Colors.BLUE },
+        },
+        price: {
+            up: Colors.MILD_MENTHOL,
+            down: Colors.VERMILION_CINNABAR,
+        },
+        position: {
+            selected: Colors.NAVY_BLUE_DARK,
+            up: Colors.BLUE,
+            down: Colors.YELLOW,
+            card: {
+                background: { primary: Colors.KONKIKYO_BLUE },
+                textColor: { primary: Colors.FRESH_LAVENDER },
+                icon: { primary: Colors.MILD_MENTHOL },
+            },
+        },
+        shadow: { primary: Colors.THE_RAINBOW_FISH },
     },
 };

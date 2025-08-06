@@ -1,6 +1,9 @@
+import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
 import { TableCell, TableRow, TableRowMobile } from 'components/Table/Table';
+import { MONTH_NAMES } from 'constants/general';
+import { OVERDROP_SEASONS, SEASON_2 } from 'constants/overdrop';
 import { t } from 'i18next';
 import SearchField from 'pages/Profile/components/SearchField';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
@@ -8,15 +11,23 @@ import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import { useTheme } from 'styled-components';
+import { FlexDivCentered } from 'styles/common';
 import { formatCurrency, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { ThemeInterface } from 'types/ui';
-import { getCurrentLevelByPoints } from 'utils/overdrop';
+import { getCurrentLevelByPoints, getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
 import { useAccount, useChainId } from 'wagmi';
 import {
     AddressContainer,
     Badge,
     Disclaimer,
+    DropDown,
+    DropdownButton,
+    DropdownContainer,
+    DropDownItem,
     HeaderContainer,
+    MonthButton,
+    MonthsContainer,
+    MonthsInnerContainer,
     SearchFieldContainer,
     StickyCell,
     StickyContainer,
@@ -35,9 +46,14 @@ const Leaderboard: React.FC = () => {
 
     const theme: ThemeInterface = useTheme();
 
-    const [searchText, setSearchText] = useState<string>('');
+    const currentSeason = getCurrentSeasonAndMiniSeason();
 
-    const leaderboardQuery = useOverdropLeaderboardQuery();
+    const [searchText, setSearchText] = useState<string>('');
+    const [selectedSeason, setSelectedSeason] = useState<number>(currentSeason.season);
+    const [selectedMiniSeason, setSelectedMiniSeason] = useState<number>(currentSeason.miniSeason - 1);
+    const [selectSeasonOpen, setSelectSeasonOpen] = useState<boolean>(false);
+
+    const leaderboardQuery = useOverdropLeaderboardQuery(selectedSeason, selectedMiniSeason + 1);
 
     const leaderboard = useMemo(
         () =>
@@ -132,13 +148,21 @@ const Leaderboard: React.FC = () => {
                     <StickyCell>{formatCurrency(data.points)}</StickyCell>
                     <StickyCell>{formatCurrency(data.volume)}</StickyCell>
                     <StickyCell>
-                        <div>{formatCurrency(data.rewards.op)} OP</div>
-                        <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                        {selectedSeason === 1 ? (
+                            <>
+                                <div>{formatCurrency(data.rewards.op)} OP</div>
+                                <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                            </>
+                        ) : (
+                            <>
+                                <div>{formatCurrency(data.rewards.eth, 4)} ETH</div>
+                            </>
+                        )}
                     </StickyCell>
                 </StickyContainer>
             </StickyRow>
         );
-    }, [isMobile, leaderboard, networkId, address]);
+    }, [isMobile, leaderboard, networkId, address, selectedSeason]);
 
     const columns = [
         {
@@ -211,11 +235,20 @@ const Leaderboard: React.FC = () => {
             accessorKey: 'rewards',
             enableSorting: true,
             cell: (cellProps: any) => {
+                const hasEth = !!cellProps.cell.getValue().eth;
                 return (
                     <>
-                        <div>{formatCurrency(cellProps.cell.getValue().op)} OP</div>
-                        {isMobile ? <div>{' + '}</div> : <></>}
-                        <div>{formatCurrency(cellProps.cell.getValue().arb)} ARB</div>
+                        {!hasEth ? (
+                            <>
+                                <div>{formatCurrency(cellProps.cell.getValue().op)} OP</div>
+                                {isMobile ? <div>{' + '}</div> : <></>}
+                                <div>{formatCurrency(cellProps.cell.getValue().arb)} ARB</div>
+                            </>
+                        ) : (
+                            <>
+                                <div>{formatCurrency(cellProps.cell.getValue().eth, 4)} ETH</div>
+                            </>
+                        )}
                     </>
                 );
             },
@@ -224,10 +257,46 @@ const Leaderboard: React.FC = () => {
         },
     ];
 
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
     return (
         <TableContainer>
+            <Disclaimer>{t('overdrop.overdrop-home.disclaimer')}</Disclaimer>
             <HeaderContainer>
-                <Disclaimer>{t('overdrop.overdrop-home.disclaimer')}</Disclaimer>
+                <DropdownButton
+                    onClick={() => {
+                        setSelectSeasonOpen(!selectSeasonOpen);
+                    }}
+                >
+                    <span>Season {selectedSeason}</span>
+                    <i className="icon icon--caret-down" />
+                </DropdownButton>
+                {selectSeasonOpen && (
+                    <OutsideClickHandler onOutsideClick={() => setSelectSeasonOpen(false)}>
+                        <DropdownContainer>
+                            <DropDown>
+                                {OVERDROP_SEASONS.map((item: number) => {
+                                    return (
+                                        <DropDownItem
+                                            key={item}
+                                            isSelected={selectedSeason === item}
+                                            onClick={() => {
+                                                setSelectedSeason(item);
+                                                setSelectSeasonOpen(false);
+                                            }}
+                                        >
+                                            <FlexDivCentered>
+                                                <span>Season {item}</span>
+                                            </FlexDivCentered>
+                                        </DropDownItem>
+                                    );
+                                })}
+                            </DropDown>
+                        </DropdownContainer>
+                    </OutsideClickHandler>
+                )}
                 <SearchFieldContainer>
                     <SearchField
                         customPlaceholder={t('profile.search-field')}
@@ -236,6 +305,32 @@ const Leaderboard: React.FC = () => {
                     />
                 </SearchFieldContainer>
             </HeaderContainer>
+
+            <MonthsContainer visible={selectedSeason === 2}>
+                {selectedSeason === 2 && (
+                    <MonthsInnerContainer>
+                        {SEASON_2.map(({ month, year }, index) => {
+                            const isFuture = year > currentYear || (year === currentYear && month > currentMonth);
+                            const monthName = MONTH_NAMES[month - 1];
+
+                            return (
+                                <MonthButton
+                                    key={index}
+                                    disabled={isFuture}
+                                    selected={selectedMiniSeason === index}
+                                    onClick={() => {
+                                        if (isFuture) return;
+                                        setSelectedMiniSeason(index);
+                                    }}
+                                >
+                                    {monthName}
+                                </MonthButton>
+                            );
+                        })}
+                    </MonthsInnerContainer>
+                )}
+            </MonthsContainer>
+
             <Table
                 mobileCards
                 tableHeight="auto"

@@ -28,6 +28,7 @@ type CollateralSelectorProps = {
     collateralBalances?: any;
     exchangeRates?: Rates | null;
     dropDownWidth?: string;
+    dropDownMaxHeight?: string;
     showCollateralImg?: boolean;
     stretch?: boolean;
     showNetworkName?: boolean;
@@ -38,6 +39,7 @@ type CollateralSelectorProps = {
     borderColor?: string;
     hideZeroBalance?: boolean;
     displayTokenBalance?: boolean;
+    hideDropDownIcon?: boolean;
 };
 
 const CollateralSelector: React.FC<CollateralSelectorProps> = ({
@@ -51,6 +53,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     collateralBalances,
     exchangeRates,
     dropDownWidth,
+    dropDownMaxHeight,
     showCollateralImg,
     stretch,
     showNetworkName,
@@ -61,6 +64,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     borderColor,
     hideZeroBalance,
     displayTokenBalance,
+    hideDropDownIcon,
 }) => {
     const dispatch = useDispatch();
 
@@ -118,11 +122,13 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                       )})`)}
                         </TextCollateral>
                     </TextCollateralWrapper>
-                    <Arrow
-                        color={color}
-                        className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
-                        isDetailedView={isDetailedView}
-                    />
+                    {!hideDropDownIcon && (
+                        <Arrow
+                            color={color}
+                            className={open ? `icon icon--caret-up` : `icon icon--caret-down`}
+                            isDetailedView={isDetailedView}
+                        />
+                    )}
                 </SelectedCollateral>
                 {isDetailedView
                     ? open && (
@@ -130,6 +136,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                               borderColor={borderColor}
                               background={background}
                               width={dropDownWidth}
+                              maxHeight={dropDownMaxHeight}
                               top={topPosition}
                               onClick={() => setOpen(!open)}
                           >
@@ -170,7 +177,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                                                   <TextCollateral color={color} fontWeight="600" isDetailedView={true}>
                                                       {!exchangeRates?.[collateral.name] &&
                                                       !isStableCurrency(collateral.name as Coins)
-                                                          ? '...'
+                                                          ? ' ($...)'
                                                           : ` (${formatCurrencyWithSign(
                                                                 USD_SIGN,
                                                                 getUSDForCollateral(collateral.name as Coins)
@@ -184,7 +191,12 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                           </DetailedDropdown>
                       )
                     : open && (
-                          <Dropdown borderColor={borderColor} width={dropDownWidth} onClick={() => setOpen(!open)}>
+                          <Dropdown
+                              top={topPosition}
+                              borderColor={borderColor}
+                              width={dropDownWidth}
+                              onClick={() => setOpen(!open)}
+                          >
                               {collateralArray.map((collateral, index) => {
                                   return (
                                       <CollateralOption
@@ -282,8 +294,9 @@ const SelectedCollateral = styled(FlexDivRowCentered)<{ disabled: boolean; stret
     width: ${(props) => (props.stretch ? '100%' : '')}; ;
 `;
 
-const Dropdown = styled(FlexDivColumnCentered)<{ width?: string; borderColor?: string }>`
+const Dropdown = styled(FlexDivColumnCentered)<{ top?: string; width?: string; borderColor?: string }>`
     position: absolute;
+    ${(props) => (props.top ? `top: ${props.top};` : '')}
     margin-top: 6px;
     margin-left: -16px;
     width: ${(props) => (props.width ? props.width : '71px')};
@@ -300,6 +313,7 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     background?: string;
     top?: string;
     borderColor?: string;
+    maxHeight?: string;
 }>`
     position: absolute;
     top: ${(props) => (props.top ? props.top : '34px')};
@@ -310,6 +324,13 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     background: ${(props) => (props.background ? props.background : props.theme.input.background.tertiary)};
     z-index: 100;
     border: 2px solid ${(props) => props.borderColor || props.theme.input.borderColor.tertiary};
+    ${(props) =>
+        props.maxHeight &&
+        `
+            justify-content: unset;
+            max-height: ${props.maxHeight};
+            overflow-y: scroll;
+        `}
 `;
 
 const CollateralOption = styled.div`

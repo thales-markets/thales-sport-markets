@@ -1,4 +1,5 @@
 import BannerCarousel from 'components/BannerCarousel';
+import { OVERDROP_SELECT_TAB } from 'constants/events';
 import { OverdropTab } from 'enums/ui';
 import UserStatsV2 from 'pages/Profile/components/UserStatsV2';
 import React, { useEffect, useState } from 'react';
@@ -27,6 +28,19 @@ const Overdrop: React.FC = () => {
         setSelectedTab(tab);
         setSelectedTabParam(tab);
     };
+
+    useEffect(() => {
+        const handleEvent = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            setSelectedTab(customEvent.detail);
+        };
+
+        window.addEventListener(OVERDROP_SELECT_TAB, handleEvent);
+
+        return () => {
+            window.removeEventListener(OVERDROP_SELECT_TAB, handleEvent);
+        };
+    }, []);
 
     return (
         <RowContainer>

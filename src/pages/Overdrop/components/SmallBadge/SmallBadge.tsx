@@ -1,4 +1,5 @@
 import { OVERDROP_LEVELS } from 'constants/overdrop';
+import { ScreenSizeBreakpoint } from 'enums/ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -17,7 +18,7 @@ const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, 
     const levelItem = OVERDROP_LEVELS.find((item) => item.level == level);
 
     return (
-        <Wrapper>
+        <Wrapper active={reached}>
             <LevelName active={reached}>{levelName}</LevelName>
             <BadgeWrapper>
                 <Badge src={levelItem ? levelItem.smallBadge : ''} active={reached} />
@@ -34,10 +35,17 @@ const SmallBadge: React.FC<SmallBadgeProps> = ({ level, requiredPointsForLevel, 
     );
 };
 
-const Wrapper = styled(FlexDivColumn)`
+const Wrapper = styled(FlexDivColumn)<{ active?: boolean }>`
+    max-width: 64px;
+    height: 170px;
+    padding: 10px;
+    border-radius: 14px;
+    border: 2px solid #2c345e;
+
+    background: ${(props) =>
+        props.active ? props.theme.overdrop.badge.background.primary : props.theme.overdrop.badge.background.secondary};
     align-items: center;
     justify-content: center;
-    height: 200px;
     margin: 0 4px;
     @media (max-width: 767px) {
         height: 180px;
@@ -45,7 +53,7 @@ const Wrapper = styled(FlexDivColumn)`
 `;
 
 const Label = styled.span<{ active?: boolean }>`
-    font-size: 13.5px;
+    font-size: 10px;
     font-weight: 300;
     margin-bottom: 3px;
     text-transform: uppercase;
@@ -56,15 +64,23 @@ const Label = styled.span<{ active?: boolean }>`
 
 const PointsLabel = styled(Label)`
     font-weight: 700;
+    color: #fff;
+
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.315px;
+    text-transform: uppercase;
 `;
 
 const Level = styled(Label)`
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 800;
 `;
 
 const LevelName = styled.span<{ active?: boolean }>`
-    font-size: 11px;
+    font-size: 8px;
     font-weight: 600;
     text-transform: uppercase;
     text-align: center;
@@ -82,7 +98,7 @@ const Badge = styled.img<{ active?: boolean }>`
     height: 80px;
     margin: 5px 0px;
     opacity: ${(props) => (props.active ? '1' : '0.2')};
-    @media (max-width: 400px) {
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
         width: 70px;
         height: 70px;
     }
@@ -90,17 +106,19 @@ const Badge = styled.img<{ active?: boolean }>`
 
 const DisabledLevelWrapper = styled(FlexDivColumnCentered)`
     position: absolute;
-    top: 20px;
-    left: 0;
-    width: 74px;
-    height: 74px;
+    top: 10px;
+    left: 8px;
+    width: 64px;
+    height: 64px;
     background-color: ${(props) => props.theme.overdrop.badge.background.secondary};
     border: 3px solid ${(props) => props.theme.overdrop.borderColor.primary};
     border-radius: 50%;
     text-align: center;
-    @media (max-width: 400px) {
-        width: 66px;
-        height: 66px;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        width: 60px;
+        height: 60px;
+        top: 20px;
+        left: 6px;
     }
 `;
 

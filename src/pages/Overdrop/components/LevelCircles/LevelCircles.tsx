@@ -62,6 +62,7 @@ const LevelWrapper = styled(FlexDivColumnCentered)`
     position: relative;
     margin: 5px 0px;
     align-items: center;
+    justify-content: center;
     max-width: 23px;
 `;
 
