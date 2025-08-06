@@ -56,7 +56,12 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ onClose }) => {
                 });
                 setIsLoading(false);
                 if (response.data.success) {
-                    toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
+                    if (response.data.status.includes('verified')) {
+                        toast.update(toastTwitter, getSuccessToastOptions(response.data.status));
+                    } else {
+                        toast.update(toastTwitter, getErrorToastOptions(response.data.status));
+                    }
+
                     refetchUserOverdrop(address);
                 } else {
                     toast.update(toastTwitter, getErrorToastOptions(response.data.error));
