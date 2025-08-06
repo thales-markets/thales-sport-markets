@@ -1,4 +1,6 @@
+import SPAAnchor from 'components/SPAAnchor';
 import Tooltip from 'components/Tooltip';
+import ROUTES from 'constants/routes';
 import { OverdropTab } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo } from 'react';
@@ -11,6 +13,7 @@ import { OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { OverdropLevel } from 'types/ui';
 import { formatPoints, getCurrentLevelByPoints, getNextLevelItemByPoints } from 'utils/overdrop';
+import { buildHref } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import CurrentLevelProgressLine from '../CurrentLevelProgressLine';
 
@@ -104,9 +107,9 @@ const XPOverview: React.FC<XPOverviewProps> = ({ setSelectedTab }) => {
                     <CurrentLevelProgressLine height={'26px'} hideLevelLabel={true} />
                     <ReferralCTA>
                         {t('overdrop.overdrop-home.affiliate-cta')}{' '}
-                        <a href="/referral" target="_blank" rel="noopener noreferrer">
+                        <SPAAnchor onClick={() => window.scrollTo(0, 0)} href={buildHref(`${ROUTES.Referral}`)}>
                             {t('overdrop.overdrop-home.affiliate-cta-link')}
-                        </a>
+                        </SPAAnchor>
                     </ReferralCTA>
                 </ProgressOverviewWrapper>
             </Wrapper>
@@ -239,6 +242,7 @@ const Level = styled(Label)`
 `;
 
 const ReferralCTA = styled.div`
+    cursor: pointer;
     font-size: 12px;
     color: ${(props) => props.theme.textColor.secondary};
     margin-top: -12px;
