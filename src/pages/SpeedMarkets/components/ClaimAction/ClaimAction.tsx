@@ -18,7 +18,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
-import { getIsBiconomy } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
 import { coinParser, formatCurrencyWithSign, roundNumberToDecimals } from 'thales-utils';
@@ -68,6 +68,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     const { t } = useTranslation();
 
     const isBiconomy = useSelector(getIsBiconomy);
+    const isParticle = useSelector(getIsConnectedViaParticle);
     const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId() as SupportedNetwork;
@@ -201,6 +202,11 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         const id = toast.loading(t('speed-markets.progress'));
         try {
             setIsAllowing(true);
+            if (isParticle) {
+                // Particle modal is behind Approval modal
+                setOpenApprovalModal(false);
+            }
+
             let hash;
             if (isBiconomy) {
                 hash = await executeBiconomyTransaction({
@@ -214,14 +220,18 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             } else {
                 hash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
             }
-            setOpenApprovalModal(false);
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash,
             });
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t('market.toast-message.approve-success')));
+                setOpenApprovalModal(false);
                 setAllowance(true);
                 setIsAllowing(false);
+            } else {
+                toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
+                setIsAllowing(false);
+                isParticle && setOpenApprovalModal(true);
             }
         } catch (e) {
             const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
@@ -234,7 +244,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 )
             );
             setIsAllowing(false);
-            setOpenApprovalModal(false);
+            isParticle && setOpenApprovalModal(true);
             if (!isErrorExcluded(e as Error)) {
                 console.log(e);
             }

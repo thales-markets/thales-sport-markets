@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import { getTicketPayment } from 'redux/modules/ticket';
-import { getIsBiconomy, setWalletConnectModalVisibility } from 'redux/modules/wallet';
+import { getIsBiconomy, getIsConnectedViaParticle, setWalletConnectModalVisibility } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import {
@@ -109,6 +109,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
     const isMobile = useSelector(getIsMobile);
     const isBiconomy = useSelector(getIsBiconomy);
+    const isParticle = useSelector(getIsConnectedViaParticle);
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
 
@@ -403,6 +404,11 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const id = toast.loading(t('speed-markets.progress'));
         try {
             setIsAllowing(true);
+            if (isParticle) {
+                // Particle modal is behind Approval modal
+                setOpenApprovalModal(false);
+            }
+
             let hash;
             if (isBiconomy) {
                 hash = await executeBiconomyTransaction({
@@ -415,23 +421,23 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             } else {
                 hash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
             }
-            setOpenApprovalModal(false);
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash,
             });
             if (txReceipt.status === 'success') {
                 toast.update(id, getSuccessToastOptions(t(`market.toast-message.approve-success`)));
+                setOpenApprovalModal(false);
                 setIsAllowing(false);
             } else {
                 toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
                 setIsAllowing(false);
-                setOpenApprovalModal(false);
+                isParticle && setOpenApprovalModal(true);
             }
         } catch (e) {
             console.log(e);
             toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
             setIsAllowing(false);
-            setOpenApprovalModal(false);
+            isParticle && setOpenApprovalModal(true);
         }
     };
 

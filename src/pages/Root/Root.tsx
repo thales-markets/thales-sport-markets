@@ -25,8 +25,6 @@ import { WagmiProvider } from 'wagmi';
 import enTranslation from '../../i18n/en.json';
 import { wagmiConfig } from './wagmiConfig';
 
-// window.Buffer = window.Buffer || buffer; // Fix for Particle Wallets
-
 type RootProps = {
     store: Store;
 };
