@@ -1,4 +1,3 @@
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { Network } from 'enums/network';
 import { OverdropLevel } from 'types/ui';
 import { default as Level1Large, default as Level1Small } from '../assets/images/overdrop/newBadges/1.webp';
@@ -18,6 +17,7 @@ import overdrop2 from '../assets/images/overdrop/wheel/2.png';
 import overdrop3 from '../assets/images/overdrop/wheel/3.png';
 import overdrop4 from '../assets/images/overdrop/wheel/4.png';
 import overdrop5 from '../assets/images/overdrop/wheel/5.png';
+import { CRYPTO_CURRENCY_MAP } from './currency';
 
 export const OVERDROP_WHEEL_IMAGES: Record<number, string> = {
     0: overdrop0,
