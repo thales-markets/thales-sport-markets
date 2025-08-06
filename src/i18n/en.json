@@ -973,7 +973,7 @@
                     "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay. The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                     "over-boost": "All bets executed with OVER as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
-                    "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
+                    "loyalty-boost": "The Loyalty XP Boost gives you up to 30% boost on all your general XP accrual, depending on what level you finished the previous three months. Each final monthly level you reach carries a certain loyalty XP boost for the next month. Starting at 1% XP boost if you finish the month at Level 1, each subsequent level increases the boost by +1%. Your current total Loyalty XP boost equals the sum of Loyalty XP Boost earned from the previous three months.",
                     "promo-boost": "Certain sports games carry additional XP boosts.",
                     "daily-quest": "Completing daily quest gives you 10% boost",
                     "spin-the-wheel-boost": "You can earn xp boost daily by spining the wheel",
@@ -1542,11 +1542,11 @@
         "daily-quest": {
             "title": "Daily Quest",
             "reward": "Earn 200 XP + 10% XP Boost",
-            "explainer": "Complete your Daily Quest tasks every day to earn 200 XP, 10% XP Boost for the day and to upgrade your next Daily Spin the Wheel with extra options!",
+            "explainer": "Complete your Daily Quest tasks every day to earn 200 XP + 10% XP Boost for the day and to upgrade your next Daily Spin the Wheel with extra rewards!",
             "finished": "Finished",
             "daily-spin": "Daily Spin the Wheel",
             "bonus-spin": "Spin for bonuses",
-            "complete-daily-quest": "Complete Daily Quest to upgrade your SPIN!",
+            "complete-daily-quest": "Complete Daily Quest first for upgraded spin!",
             "spin": "Spin",
             "badge": {
                 "boost": "XP BOOST",
