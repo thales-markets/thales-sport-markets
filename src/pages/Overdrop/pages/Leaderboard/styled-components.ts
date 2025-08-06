@@ -147,7 +147,7 @@ export const MonthsInnerContainer = styled(FlexDivRow)`
     border-radius: 12px;
     text-transform: uppercase;
     @media (max-width: 767px) {
-        padding-top: 0 !important;
+        padding-top: 10px !important;
     }
 `;
 
