@@ -33,6 +33,7 @@ import {
     getDefaultCollateral,
     getSpeedNativeCollateralsText,
     getSpeedOfframpCollaterals,
+    isOverCurrency,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
@@ -430,7 +431,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                 )}{' '}
                                 <CollateralText>
                                     {nativeCollateral
-                                        ? nativeCollateral
+                                        ? `${isOverCurrency(nativeCollateral) ? '$' : ''}${nativeCollateral}`
                                         : isClaimDefaultCollateral
                                         ? formatCurrencyWithSign(USD_SIGN, payout, 2)
                                         : claimCollateral}
