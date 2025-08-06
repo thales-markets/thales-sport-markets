@@ -1808,6 +1808,7 @@
                 "history": "History"
             },
             "labels": {
+                "status": "Status",
                 "entry": "Entry",
                 "end": "End",
                 "price": "Price",
