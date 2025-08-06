@@ -9,12 +9,12 @@ export type OverdropMultiplier = {
     tooltip?: string;
 };
 
-export enum RewardType {
+enum RewardType {
     XP_BOOST = 'XP BOOST',
     OVERDROP_XP = 'OVERDROP XP',
 }
 
-export type Reward = {
+type Reward = {
     id: number;
     boostAmount: number;
     xpAmount: number;
