@@ -111,7 +111,7 @@ const StyledAIIcon = styled(AIIcon)`
 const CopyIconWrapper = styled.div`
     position: absolute;
     right: 10px;
-    bottom: 8px;
+    top: 6px;
     cursor: pointer;
     opacity: 0.6;
 

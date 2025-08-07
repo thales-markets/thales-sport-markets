@@ -218,7 +218,7 @@ const Table: React.FC<TableProps> = ({
                                                 return isMobile && mobileCards ? (
                                                     <TableRowMobile key={`mrm${rowIndex}${cellIndex}`}>
                                                         <TableCell id={cell.column.id + 'Header'}>
-                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                            {t(`overdrop.leaderboard.table.${cell.column.id}`)}
                                                         </TableCell>
                                                         <TableCell isCard={mobileCards} id={cell.column.id}>
                                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

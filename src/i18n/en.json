@@ -1519,7 +1519,11 @@
                 "level": "Level",
                 "total-xp": "Total XP Points",
                 "total-volume": "Total volume",
-                "rewards": "Reward amount"
+                "rewards": "Reward amount",
+                "level-badge": "Level badge",
+                "points": "Total XP Points",
+                "volume": "Total volume",
+                "level_smallBadge": "Level badge"
             }
         },
         "modal": {
