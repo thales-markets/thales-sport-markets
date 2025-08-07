@@ -16,18 +16,23 @@ import {
 import { formatCurrencyWithSign } from 'thales-utils';
 import { ShareSpeedPositionData, ShareSpeedPositionType } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
+import { formatValueWithCollateral } from 'utils/collaterals';
+import { useChainId } from 'wagmi';
 
 const SpeedMarketFlexCard: React.FC<ShareSpeedPositionData> = ({
     type,
     position,
     asset,
     strikePrice,
-    paid: buyIn,
+    paid,
     payout,
+    collateral,
     marketDuration,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+
+    const networkId = useChainId();
 
     const strikePriceFormatted = formatCurrencyWithSign(USD_SIGN, strikePrice);
 
@@ -55,7 +60,9 @@ const SpeedMarketFlexCard: React.FC<ShareSpeedPositionData> = ({
                                     ? t('speed-markets.flex-card.potential-win')
                                     : t('speed-markets.flex-card.won')}
                             </StatusHeading>
-                            <Status color={textColor}>{formatCurrencyWithSign(USD_SIGN, payout ?? 0)}</Status>
+                            <Status color={textColor}>
+                                {formatValueWithCollateral(payout, collateral, networkId)}
+                            </Status>
                         </StatusContainer>
                     )}
                 </FlexDivColumn>
@@ -63,7 +70,7 @@ const SpeedMarketFlexCard: React.FC<ShareSpeedPositionData> = ({
                     <FlexDivRowCentered>
                         <CurrencyIcon
                             color={textColor}
-                            className={`currency-icon currency-icon--${asset.toLowerCase()}`}
+                            className={`speedmarkets-logo-icon speedmarkets-logo-icon--${asset.toLowerCase()}-logo`}
                         />
                         <Asset>
                             <AssetName color={textColor}>{currencyKeyToNameMap[asset]}</AssetName>
@@ -81,7 +88,7 @@ const SpeedMarketFlexCard: React.FC<ShareSpeedPositionData> = ({
                         </FlexDivRowCentered>
                         <FlexDivRowCentered>
                             <ItemName color={textColor}>{t('speed-markets.flex-card.buy-in')}</ItemName>
-                            <Value color={textColor}>{formatCurrencyWithSign(USD_SIGN, buyIn)}</Value>
+                            <Value color={textColor}>{formatValueWithCollateral(paid, collateral, networkId)}</Value>
                         </FlexDivRowCentered>
                     </MarketDetailsContainer>
                 </MarketDetailsRow>
@@ -202,6 +209,9 @@ const CurrencyIcon = styled.i<{ color: string }>`
     font-size: 40px;
     margin-right: 5px;
     color: ${(props) => props.color};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 36px;
+    }
 `;
 
 const Asset = styled(FlexDivColumn)`
@@ -214,6 +224,9 @@ const AssetName = styled.span<{ color: string }>`
     font-size: 18px;
     font-weight: 400;
     text-transform: capitalize;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 15px;
+    }
 `;
 
 const Position = styled.span<{ color: string }>`
@@ -221,6 +234,9 @@ const Position = styled.span<{ color: string }>`
     color: ${(props) => props.color};
     font-size: 18px;
     font-weight: 700;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 15px;
+    }
 `;
 
 const LossWatermark = styled(FlexDivCentered)`
