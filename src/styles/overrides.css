@@ -3,7 +3,7 @@
     --toastify-text-color-light: #3c498a;
     --toastify-spinner-color: #3c498a;
     --toastify-spinner-color-empty-area: #9fa1ba;
-    --toastify-z-index: 9999999999; /* speed markets widget has 3000000000 */
+    --toastify-z-index: 9999999999; /* speed markets widget has 2147483100 */
 }
 
 /* react-modal */
