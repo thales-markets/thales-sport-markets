@@ -161,7 +161,7 @@ const OverdropHeader: React.FC = () => {
                                     <QuestDot className="icon icon--resolvedmarkets" completed={isSocialQuestDone} />
                                 </FlexDivCentered>
                             </FlexDivStart>
-                            <BadgeLabel>10% BOOST + 200 XP</BadgeLabel>
+                            <BadgeLabel>WIN 10% BOOST + 200 XP</BadgeLabel>
                         </DropdownHeader>
                         <ItemWrapper completed={isOTTradeCompleted}>
                             <ItemFirstSection gap={4}>
@@ -370,9 +370,9 @@ const BadgeLabel = styled.div`
     justify-content: center;
     background: ${(props) => props.theme.overdrop.background.gradient};
     color: ${(props) => props.theme.background.primary};
-    font-size: 12px;
+    font-size: 10px;
 
-    font-weight: 600;
+    font-weight: 800;
     line-height: 16px;
 `;
 
