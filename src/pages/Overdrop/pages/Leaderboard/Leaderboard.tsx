@@ -119,9 +119,17 @@ const Leaderboard: React.FC = () => {
                     <TableRowMobile>
                         <TableCell id={'rewardsHeader'}>{t('overdrop.leaderboard.table.rewards')}</TableCell>
                         <TableCell isCard id={'rewards'}>
-                            <div>{formatCurrency(data.rewards.op)} OP</div>
-                            <div>{' + '}</div>
-                            <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                            {selectedSeason === 1 ? (
+                                <>
+                                    <div>{formatCurrency(data.rewards.op)} OP</div>
+                                    <div>{' + '}</div>
+                                    <div>{formatCurrency(data.rewards.arb)} ARB</div>
+                                </>
+                            ) : (
+                                <>
+                                    <div>{formatCurrency(data.rewards.eth, 4)} ETH</div>
+                                </>
+                            )}
                         </TableCell>
                     </TableRowMobile>
                 </TableRow>
