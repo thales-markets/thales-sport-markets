@@ -23,6 +23,7 @@ const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleCha
             <IconWrapper>
                 <SearchIcon />
             </IconWrapper>
+            {text !== '' && <XIcon onClick={() => handleChange('')} />}
         </Wrapper>
     );
 };
@@ -77,6 +78,19 @@ const SearchIcon = styled.i`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\00E5';
+        color: ${(props) => props.theme.textColor.secondary};
+    }
+`;
+
+const XIcon = styled.i`
+    position: absolute;
+    right: 10px;
+    top: 9px;
+    font-size: 10px;
+    cursor: pointer;
+    &:before {
+        font-family: OvertimeIconsV2 !important;
+        content: '\\0031';
         color: ${(props) => props.theme.textColor.secondary};
     }
 `;
