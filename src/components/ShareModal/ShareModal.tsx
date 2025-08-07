@@ -108,46 +108,26 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const customStyles = isTicketData
-        ? {
-              content: {
-                  top: isMobile ? '35px' : '40%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  transform: isMobile ? 'translateX(-50%)' : 'translate(-50%, -50%)',
-                  padding: '0px',
-                  background: 'transparent',
-                  border: 'none',
-                  overflow: isMobile ? 'visible scroll' : 'visible',
-                  height: isMobile ? 'calc(100vh - 84px)' : 'unset',
-              },
-              overlay: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  backdropFilter: 'blur(10px)',
-                  zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
-              },
-          }
-        : {
-              content: {
-                  top: isMobile ? '45%' : '50%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  marginRight: '-50%',
-                  transform: 'translate(-50%, -50%)',
-                  padding: '0px',
-                  background: 'transparent',
-                  border: 'none',
-                  borderRadius: '20px',
-                  overflow: 'visibile',
-              },
-              overlay: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  backdropFilter: 'blur(10px)',
-                  zIndex: SPEED_MARKETS_WIDGET_Z_INDEX,
-              },
-          };
+    const customStyles = {
+        content: {
+            top: isMobile ? '35px' : '40%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            transform: isMobile ? 'translateX(-50%)' : 'translate(-50%, -50%)',
+            padding: '0px',
+            background: 'transparent',
+            border: 'none',
+            overflow: isMobile ? 'visible scroll' : 'visible',
+            height: isMobile ? 'calc(100vh - 84px)' : 'unset',
+        },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(10px)',
+            // .rc-tooltip has 1501 and validation message pops up from background
+            zIndex: isTicketData ? '1502' : SPEED_MARKETS_WIDGET_Z_INDEX,
+        },
+    };
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {
@@ -355,21 +335,23 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
         }
     }, [walletAddress, tweetUrl, onClose]);
 
-    const speedBorderColor =
-        speedPositionData.type === 'speed-potential'
-            ? theme.speedMarkets.flexCard.background.potential
-            : speedPositionData.type === 'speed-won'
-            ? theme.speedMarkets.flexCard.background.won
-            : theme.speedMarkets.flexCard.background.loss;
+    const speedBorderColor = isTicketData
+        ? undefined
+        : speedPositionData.type === 'speed-potential'
+        ? theme.speedMarkets.flexCard.background.potential
+        : speedPositionData.type === 'speed-won'
+        ? theme.speedMarkets.flexCard.background.won
+        : theme.speedMarkets.flexCard.background.loss;
 
-    const speedTextColor =
-        speedPositionData.type === 'speed-potential'
-            ? theme.speedMarkets.flexCard.textColor.potential
-            : speedPositionData.type === 'speed-won'
-            ? theme.speedMarkets.flexCard.textColor.won
-            : theme.speedMarkets.flexCard.background.loss;
+    const speedTextColor = isTicketData
+        ? undefined
+        : speedPositionData.type === 'speed-potential'
+        ? theme.speedMarkets.flexCard.textColor.potential
+        : speedPositionData.type === 'speed-won'
+        ? theme.speedMarkets.flexCard.textColor.won
+        : theme.speedMarkets.flexCard.background.loss;
 
-    const speedButtonBackgroundColor = theme.background.primary;
+    const speedButtonBackgroundColor = isTicketData ? undefined : theme.background.primary;
 
     return (
         <ReactModal
@@ -380,24 +362,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
             contentElement={(props, children) => (
                 <>
                     <div {...props}>{children}</div>
-                    {isMobile && (
-                        <CloseIcon
-                            className={`icon icon--close`}
-                            onClick={onClose}
-                            color={isTicketData ? undefined : speedTextColor}
-                        />
-                    )}
+                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} color={speedTextColor} />}
                 </>
             )}
         >
             <Container ref={ref} isTicket={isTicketData}>
-                {!isMobile && (
-                    <CloseIcon
-                        className={`icon icon--close`}
-                        onClick={onClose}
-                        color={isTicketData ? undefined : speedTextColor}
-                    />
-                )}
+                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} color={speedTextColor} />}
                 {isTicketData ? (
                     <MyTicket
                         markets={ticketData.markets}
@@ -464,33 +434,23 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                     <ShareButton
                         disabled={isLoading}
                         onClick={() => onTwitterShareClick()}
-                        borderColor={isTicketData ? undefined : speedBorderColor}
+                        borderColor={speedBorderColor}
                     >
-                        <ShareButtonBackground color={isTicketData ? undefined : speedButtonBackgroundColor}>
-                            <TwitterIcon
-                                disabled={isLoading}
-                                fontSize={'22px'}
-                                color={isTicketData ? undefined : speedTextColor}
-                            />
-                            <ButtonLabel color={isTicketData ? undefined : speedTextColor}>
-                                {t('markets.parlay.share-ticket.share')}
-                            </ButtonLabel>
+                        <ShareButtonBackground color={speedButtonBackgroundColor}>
+                            <TwitterIcon disabled={isLoading} fontSize={'22px'} color={speedTextColor} />
+                            <ButtonLabel color={speedTextColor}>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
                         </ShareButtonBackground>
                     </ShareButton>
                     <ShareButton
                         disabled={isLoading}
                         onClick={() => onTwitterShareClick(true)}
-                        borderColor={isTicketData ? undefined : speedBorderColor}
+                        borderColor={speedBorderColor}
                     >
-                        <ShareButtonBackground color={isTicketData ? undefined : speedButtonBackgroundColor}>
+                        <ShareButtonBackground color={speedButtonBackgroundColor}>
                             {!useDownloadImage && (
-                                <CopyIcon
-                                    disabled={isLoading}
-                                    fontSize={'22px'}
-                                    color={isTicketData ? undefined : speedTextColor}
-                                />
+                                <CopyIcon disabled={isLoading} fontSize={'22px'} color={speedTextColor} />
                             )}
-                            <ButtonLabel color={isTicketData ? undefined : speedTextColor}>
+                            <ButtonLabel color={speedTextColor}>
                                 {useDownloadImage
                                     ? t('markets.parlay.share-ticket.download')
                                     : t('markets.parlay.share-ticket.copy')}
@@ -530,13 +490,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                         disabled={isLoading || !tweetUrl.trim()}
                         margin="8px 0"
                         onClick={onSubmit}
-                        textColor={isTicketData ? undefined : speedTextColor}
-                        borderColor={isTicketData ? undefined : speedButtonBackgroundColor}
-                        backgroundColor={isTicketData ? undefined : speedButtonBackgroundColor}
+                        textColor={speedTextColor}
+                        borderColor={speedButtonBackgroundColor}
+                        backgroundColor={speedButtonBackgroundColor}
                         padding={isTicketData ? undefined : '0'}
                     >
-                        <ShareButtonBackgroundWrapper color={isTicketData ? undefined : speedBorderColor}>
-                            <ShareButtonBackground color={isTicketData ? undefined : speedButtonBackgroundColor}>
+                        <ShareButtonBackgroundWrapper color={speedBorderColor}>
+                            <ShareButtonBackground color={speedButtonBackgroundColor}>
                                 {t('common.submit')}
                             </ShareButtonBackground>
                         </ShareButtonBackgroundWrapper>
@@ -616,7 +576,7 @@ const ButtonLabel = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 15px;
     line-height: 24px;
-    padding: 7px 20px;
+    padding: 0 20px;
     text-align: center;
     text-transform: uppercase;
     color: ${(props) => props.color || props.theme.button.textColor.primary};
@@ -624,7 +584,7 @@ const ButtonLabel = styled.span<{ color?: string }>`
 
 const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-weight: 500;
-    margin-right: 3px;
+    margin-bottom: 3px;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
     color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
@@ -639,7 +599,7 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
 
 const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-weight: 500;
-    margin-right: 3px;
+    margin-bottom: 2px;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
     color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
