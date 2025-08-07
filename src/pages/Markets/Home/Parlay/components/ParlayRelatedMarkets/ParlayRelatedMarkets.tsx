@@ -1,5 +1,5 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_MATURITY_DAYS, LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
@@ -557,7 +557,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                 )}
             </TicketColumn>
             {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2
+                <ShareModal
                     data={shareTicketModalData}
                     onClose={() => (setShowShareTicketModal ? setShowShareTicketModal(false) : null)}
                 />

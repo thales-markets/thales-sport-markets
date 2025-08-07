@@ -12,7 +12,7 @@ import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered } from 'styles/common';
 import { isFirefox, isIos, isMetamask } from 'thales-utils';
-import { ShareSpeedPositionModalProps } from 'types/speedMarkets';
+import { ShareSpeedPositionData } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
 import SpeedMarketFlexCard from '../SpeedMarketFlexCard';
 
@@ -20,6 +20,11 @@ const SPEED_IMAGE_NAME = 'SpeedImage.png';
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
 const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${SPEED_IMAGE_NAME}>`;
 const TWITTER_MESSAGE_CHECKOUT = `Check out my position on%0A`;
+
+type ShareSpeedPositionModalProps = {
+    data: ShareSpeedPositionData;
+    onClose: () => void;
+};
 
 const ShareSpeedPositionModal: React.FC<ShareSpeedPositionModalProps> = ({ data, onClose }) => {
     const { t } = useTranslation();

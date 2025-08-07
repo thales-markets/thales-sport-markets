@@ -1,3 +1,4 @@
+import ShareModal from 'components/ShareModal';
 import { intervalToDuration } from 'date-fns';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -6,7 +7,6 @@ import { getCollateralByAddress } from 'utils/collaterals';
 import { formattedDurationFullV2 } from 'utils/formatters/date';
 import { isUserWinner } from 'utils/speedMarkets';
 import { useChainId } from 'wagmi';
-import ShareSpeedPositionModal from './components/ShareSpeedPositionModal';
 
 const ShareSpeedPosition: React.FC<{
     position: UserPosition;
@@ -21,7 +21,7 @@ const ShareSpeedPosition: React.FC<{
         <>
             <TwitterIcon onClick={() => setOpenTwitterShareModal(true)} />
             {openTwitterShareModal && (
-                <ShareSpeedPositionModal
+                <ShareModal
                     data={{
                         type: status === undefined ? 'speed-potential' : status ? 'speed-won' : 'speed-loss',
                         position: position.side,

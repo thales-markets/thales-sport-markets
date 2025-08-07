@@ -6,6 +6,7 @@ import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
@@ -21,15 +22,19 @@ import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles
 import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { ShareTicketData, ShareTicketModalProps } from 'types/tickets';
-import { ThemeInterface } from 'types/ui';
+import { ShareSpeedPositionData } from 'types/speedMarkets';
+import { ShareTicketData } from 'types/tickets';
+import { ShareModalProps, ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
+import SpeedMarketFlexCard from './components/SpeedMarketFlexCard';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
+const SPEED_IMAGE_NAME = 'SpeedImage.png';
+
 const TWITTER_MESSAGES_TEXT = [
     `Another day, another bet locked in on @Overtime_io. Let’s ride this one out! 🌪️ ${LINKS.OvertimeMarkets}`,
     `If this bet cashes, beers on me! 💰 Come join the action on @Overtime_io: ${LINKS.OvertimeMarkets}`,
@@ -62,9 +67,11 @@ const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
-const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) => {
+const getTwitterMessageUpload = (isTicket: boolean) =>
+    `%0A<UPLOAD YOUR ${isTicket ? PARLAY_IMAGE_NAME : SPEED_IMAGE_NAME}>`;
+
+const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
     const theme: ThemeInterface = useTheme();
 
     const walletAddress = useAccount()?.address || '';
@@ -90,6 +97,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
     const ref = useRef<HTMLDivElement>(null);
 
     const ticketData = data as ShareTicketData;
+    const isTicketData = ticketData.isTicketOpen !== undefined;
+    const speedPositionData = data as ShareSpeedPositionData;
 
     const isOver = useMemo(() => isOverCurrency(data.collateral), [data.collateral]);
 
@@ -99,25 +108,46 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
     const exchangeRates: Rates | null =
         exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
 
-    const customStyles = {
-        content: {
-            top: isMobile ? '35px' : '40%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            transform: isMobile ? 'translateX(-50%)' : 'translate(-50%, -50%)',
-            padding: '0px',
-            background: 'transparent',
-            border: 'none',
-            overflow: isMobile ? 'visible scroll' : 'visible',
-            height: isMobile ? 'calc(100vh - 84px)' : 'unset',
-        },
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            backdropFilter: 'blur(10px)',
-            zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
-        },
-    };
+    const customStyles = isTicketData
+        ? {
+              content: {
+                  top: isMobile ? '35px' : '40%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  transform: isMobile ? 'translateX(-50%)' : 'translate(-50%, -50%)',
+                  padding: '0px',
+                  background: 'transparent',
+                  border: 'none',
+                  overflow: isMobile ? 'visible scroll' : 'visible',
+                  height: isMobile ? 'calc(100vh - 84px)' : 'unset',
+              },
+              overlay: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backdropFilter: 'blur(10px)',
+                  zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
+              },
+          }
+        : {
+              content: {
+                  top: isMobile ? '45%' : '50%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)',
+                  padding: '0px',
+                  background: 'transparent',
+                  border: 'none',
+                  borderRadius: '20px',
+                  overflow: 'visibile',
+              },
+              overlay: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backdropFilter: 'blur(10px)',
+                  zIndex: SPEED_MARKETS_WIDGET_Z_INDEX,
+              },
+          };
 
     useEffect(() => {
         const checkMetamaskBrowser = async () => {
@@ -153,7 +183,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                         // Download image
                         const link = document.createElement('a');
                         link.href = base64Image;
-                        link.download = PARLAY_IMAGE_NAME;
+                        link.download = isTicketData ? PARLAY_IMAGE_NAME : SPEED_IMAGE_NAME;
                         document.body.appendChild(link);
                         setTimeout(
                             () => {
@@ -205,7 +235,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                             ' ' +
                             LINKS.OvertimeMarkets +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
-                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                            (useDownloadImage ? getTwitterMessageUpload(isTicketData) : TWITTER_MESSAGE_PASTE);
                     } else {
                         twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
@@ -215,7 +245,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                                   ]
                                 : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
-                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                            (useDownloadImage ? getTwitterMessageUpload(isTicketData) : TWITTER_MESSAGE_PASTE);
                     }
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
@@ -268,7 +298,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID, isTicketData]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
@@ -338,9 +368,9 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                 </>
             )}
         >
-            <Container ref={ref}>
+            <Container ref={ref} isTicket={isTicketData}>
                 {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                {ticketData.isTicketOpen !== undefined && (
+                {isTicketData ? (
                     <MyTicket
                         markets={ticketData.markets}
                         multiSingle={ticketData.multiSingle}
@@ -376,6 +406,17 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
                                 : ticketData.systemBetData
                         }
                         isTicketOpen={ticketData.isTicketOpen}
+                    />
+                ) : (
+                    <SpeedMarketFlexCard
+                        type={speedPositionData.type}
+                        asset={speedPositionData.asset}
+                        position={speedPositionData.position}
+                        strikePrice={speedPositionData.strikePrice}
+                        paid={speedPositionData.paid}
+                        payout={speedPositionData.payout}
+                        collateral={speedPositionData.collateral}
+                        marketDuration={speedPositionData.marketDuration}
                     />
                 )}
 
@@ -430,17 +471,21 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({ data, onClose }) =>
 };
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
-const Container = styled(FlexDivColumnCentered)`
+const Container = styled(FlexDivColumnCentered)<{ isTicket: boolean }>`
     position: relative;
-    width: 386px;
-    // max-height: 600px;
-    padding: 15px;
-    flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
-    border-radius: 10px;
+    width: ${(props) => (props.isTicket ? '386px' : '383px')};
+    ${(props) => (props.isTicket ? '' : 'max-height: 510px;')}
+    ${(props) => (props.isTicket ? 'padding: 15px;' : '')}
+    ${(props) => (props.isTicket ? 'flex: none;' : '')}
+    ${(props) =>
+        props.isTicket
+            ? `background: linear-gradient(180deg, ${props.theme.flexCard.background.primary} 0%, ${props.theme.flexCard.background.secondary} 100%);`
+            : ''}    
+    ${(props) => (props.isTicket ? 'border-radius: 10px;' : '')}      
+    
     @media (max-width: 950px) {
         width: 357px;
-        // max-height: 476px;
+        ${(props) => (props.isTicket ? '' : 'max-height: 476px;')}
     }
 `;
 
@@ -553,4 +598,4 @@ const HintText = styled.span`
     text-align: left;
 `;
 
-export default React.memo(ShareTicketModal);
+export default React.memo(ShareModal);

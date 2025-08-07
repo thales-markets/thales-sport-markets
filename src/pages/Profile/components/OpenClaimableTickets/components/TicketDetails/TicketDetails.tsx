@@ -1,6 +1,6 @@
 import Button from 'components/Button/Button';
 import CollateralSelector from 'components/CollateralSelector';
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { ContractType } from 'enums/contract';
@@ -494,7 +494,7 @@ const TicketDetails: React.FC<TicketDetailsProps> = ({
                 )}
             </CollapsableContainer>
             {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2
+                <ShareModal
                     data={shareTicketModalData}
                     onClose={() => {
                         setShowShareTicketModal ? setShowShareTicketModal(false) : null;

@@ -1,4 +1,4 @@
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -511,7 +511,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 <MigrateTicketModal ticket={ticketForMigration} onClose={() => setTicketForMigration(undefined)} />
             )}
             {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2 data={shareTicketModalData} onClose={() => setShowShareTicketModal(false)} />
+                <ShareModal data={shareTicketModalData} onClose={() => setShowShareTicketModal(false)} />
             )}
         </>
     );

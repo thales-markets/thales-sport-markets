@@ -58,8 +58,3 @@ export type ShareSpeedPositionData = {
     collateral: Coins;
     marketDuration: string;
 };
-
-export type ShareSpeedPositionModalProps = {
-    data: ShareSpeedPositionData;
-    onClose: () => void;
-};

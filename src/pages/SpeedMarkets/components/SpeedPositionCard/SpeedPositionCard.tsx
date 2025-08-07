@@ -1,4 +1,3 @@
-import ShareSpeedPosition from 'components/ShareSpeedPosition';
 import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
@@ -19,6 +18,7 @@ import { refetchPythPrice } from 'utils/queryConnector';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
 import { useChainId } from 'wagmi';
 import ClaimAction from '../ClaimAction';
+import ShareSpeedPosition from '../ShareSpeedPosition';
 import SpeedTimeRemaining from '../SpeedTimeRemaining';
 
 type SpeedPositionCardProps = {

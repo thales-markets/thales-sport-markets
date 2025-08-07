@@ -299,6 +299,12 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    flexCard: {
+        background: {
+            primary: Colors.GRAY,
+            secondary: Colors.GRAY_DARK,
+        },
+    },
     speedMarkets: {
         background: { primary: Colors.DARK_KNIGHT },
         borderColor: { primary: Colors.BLUE_ESTATE },

@@ -1,7 +1,6 @@
 import { TicketErrorCode } from 'enums/markets';
 import { Coins } from 'thales-utils';
 import { SystemBetData, TicketMarket } from './markets';
-import { ShareSpeedPositionData } from './speedMarkets';
 
 export type ShareTicketData = {
     markets: TicketMarket[];
@@ -15,11 +14,6 @@ export type ShareTicketData = {
     applyPayoutMultiplier: boolean;
     isTicketOpen: boolean;
     systemBetData?: SystemBetData;
-};
-
-export type ShareTicketModalProps = {
-    data: ShareTicketData | ShareSpeedPositionData;
-    onClose: () => void;
 };
 
 export type TicketError = {

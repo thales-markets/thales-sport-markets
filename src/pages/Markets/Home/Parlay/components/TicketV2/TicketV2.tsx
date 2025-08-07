@@ -5,7 +5,7 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import OutsideClickHandler from 'components/OutsideClick';
 import SelectInput from 'components/SelectInput';
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import SimpleLoader from 'components/SimpleLoader';
 import SuggestedAmount from 'components/SuggestedAmount';
 import Toggle from 'components/Toggle';
@@ -98,8 +98,7 @@ import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/mar
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
-import { ShareTicketModalProps } from 'types/tickets';
-import { OverdropLevel, ThemeInterface } from 'types/ui';
+import { OverdropLevel, ShareModalProps, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { WalletConnections } from 'types/wallet';
 import {
@@ -296,7 +295,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalProps, setShareTicketModalProps] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [shareTicketModalProps, setShareTicketModalProps] = useState<ShareModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
@@ -3061,7 +3060,7 @@ const Ticket: React.FC<TicketProps> = ({
                 <TwitterIcon disabled={twitterShareDisabled} />
             </ShareWrapper>
             {showShareTicketModal && shareTicketModalProps && (
-                <ShareTicketModalV2 data={shareTicketModalProps.data} onClose={shareTicketModalProps.onClose} />
+                <ShareModal data={shareTicketModalProps.data} onClose={shareTicketModalProps.onClose} />
             )}
             {openApprovalModal && (
                 <ApprovalModal
