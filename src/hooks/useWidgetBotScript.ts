@@ -1,4 +1,6 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { Dispatch, useEffect } from 'react';
+import { setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
 import { delay } from 'utils/timer';
 
 const getWidgetBotCrateElement = () => {
@@ -8,7 +10,7 @@ const getWidgetBotCrateElement = () => {
     return crateDivElement;
 };
 
-const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpen: Dispatch<boolean>) => {
+const useWidgetBotScript = (preventWidgetLoad: boolean, dispatch: Dispatch<PayloadAction<boolean>>) => {
     useEffect(() => {
         if (preventWidgetLoad || (window as any).crate) {
             return;
@@ -44,7 +46,7 @@ const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpe
                     await delay(100);
                     const refreshedCrateDivElement = getWidgetBotCrateElement();
                     if (refreshedCrateDivElement && refreshedCrateDivElement.classList.contains('open')) {
-                        setSpeedMarketsWidgetOpen(false);
+                        dispatch(setSpeedMarketsWidgetOpen(false));
                     }
                 });
             }
@@ -56,7 +58,7 @@ const useWidgetBotScript = (preventWidgetLoad: boolean, setSpeedMarketsWidgetOpe
             // clean up the script when the component in unmounted
             document.body.removeChild(script);
         };
-    }, [preventWidgetLoad, setSpeedMarketsWidgetOpen]);
+    }, [preventWidgetLoad, dispatch]);
 };
 
 export default useWidgetBotScript;
