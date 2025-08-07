@@ -159,7 +159,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
         checkMetamaskBrowser();
     }, []);
 
-    useWidgetBotScript(preventDiscordWidgetLoad, setSpeedMarketsWidgetOpen);
+    useWidgetBotScript(preventDiscordWidgetLoad, dispatch);
 
     return (
         <Background>
