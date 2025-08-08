@@ -138,7 +138,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                     return;
                 }
 
-                const DEFAULT_DOWNLOAD_DELAY = secondsToMilliseconds(2);
+                const DEFAULT_DOWNLOAD_DELAY = secondsToMilliseconds(10);
                 const IOS_DOWNLOAD_DELAY = secondsToMilliseconds(10);
                 const MOBILE_TWITTER_TOAST_AUTO_CLOSE = secondsToMilliseconds(15);
                 try {
