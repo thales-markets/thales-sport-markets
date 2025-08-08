@@ -437,7 +437,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                         borderColor={speedBorderColor}
                     >
                         <ShareButtonBackground color={speedButtonBackgroundColor}>
-                            <TwitterIcon disabled={isLoading} fontSize={'22px'} color={speedTextColor} />
+                            <TwitterIcon
+                                disabled={isLoading}
+                                fontSize={'22px'}
+                                color={speedTextColor}
+                                className="icon-homepage icon--x"
+                            />
                             <ButtonLabel color={speedTextColor}>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
                         </ShareButtonBackground>
                     </ShareButton>
@@ -448,7 +453,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                     >
                         <ShareButtonBackground color={speedButtonBackgroundColor}>
                             {!useDownloadImage && (
-                                <CopyIcon disabled={isLoading} fontSize={'22px'} color={speedTextColor} />
+                                <CopyIcon
+                                    disabled={isLoading}
+                                    fontSize={'22px'}
+                                    color={speedTextColor}
+                                    className="icon icon--copy"
+                                />
                             )}
                             <ButtonLabel color={speedTextColor}>
                                 {useDownloadImage
@@ -591,10 +601,6 @@ const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: 
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
-    &:before {
-        font-family: HomepageIconsV2 !important;
-        content: '\\0021';
-    }
 `;
 
 const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
@@ -606,10 +612,6 @@ const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: str
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
-    &:before {
-        font-family: OvertimeIconsV2 !important;
-        content: '\\00F1';
-    }
 `;
 
 const SwitchWrapper = styled(FlexDivRowCentered)`

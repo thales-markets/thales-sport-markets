@@ -19,7 +19,7 @@ const ShareSpeedPosition: React.FC<{
 
     return (
         <>
-            <TwitterIcon onClick={() => setOpenTwitterShareModal(true)} />
+            <TwitterIcon onClick={() => setOpenTwitterShareModal(true)} className="icon-homepage icon--x" />
             {openTwitterShareModal && (
                 <ShareModal
                     data={{
@@ -45,10 +45,6 @@ const TwitterIcon = styled.i`
     font-size: 14px;
     color: ${(props) => props.theme.textColor.septenary};
     cursor: pointer;
-    &:before {
-        font-family: HomepageIconsV2 !important;
-        content: '\\0021';
-    }
 `;
 
 export default ShareSpeedPosition;

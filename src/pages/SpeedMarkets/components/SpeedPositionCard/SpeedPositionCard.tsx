@@ -70,14 +70,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 <StatusWrapper isClaimable={position.isClaimable}>
                     {!isMatured ? (
                         // pending
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={isUserCurrentlyWinning}>
                                 {isUserCurrentlyWinning
                                     ? t('speed-markets.user-positions.status.winning')
                                     : t('speed-markets.user-positions.status.losing')}
                             </Status>
-                        </>
+                        </div>
                     ) : position.isClaimable ? (
                         <ClaimWrapper>
                             <ClaimAction
@@ -90,22 +90,22 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         </ClaimWrapper>
                     ) : hasFinalPrice ? (
                         // history
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={isUserWon}>
                                 {isUserWon
                                     ? t('speed-markets.user-positions.status.won')
                                     : t('speed-markets.user-positions.status.loss')}
                             </Status>
-                        </>
+                        </div>
                     ) : (
                         // price is missing - pending
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={false} isUnknown>
                                 {t('speed-markets.user-positions.status.waiting-price')}
                             </Status>
-                        </>
+                        </div>
                     )}
                     <ShareSpeedPosition position={position} />
                 </StatusWrapper>
@@ -218,7 +218,6 @@ const Status = styled.span<{ isWon: boolean; isUnknown?: boolean }>`
             ? props.theme.status.win
             : props.theme.status.loss};
     font-size: 14px;
-    line-height: 20px;
     font-weight: 500;
     text-transform: uppercase;
 `;
