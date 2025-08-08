@@ -138,6 +138,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                     return;
                 }
 
+                const DEFAULT_DOWNLOAD_DELAY = secondsToMilliseconds(2);
                 const IOS_DOWNLOAD_DELAY = secondsToMilliseconds(10);
                 const MOBILE_TWITTER_TOAST_AUTO_CLOSE = secondsToMilliseconds(15);
                 try {
@@ -159,14 +160,14 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                             () => {
                                 link.click();
                             },
-                            isIos() ? IOS_DOWNLOAD_DELAY : 0 // fix for iOS
+                            isIos() ? IOS_DOWNLOAD_DELAY : DEFAULT_DOWNLOAD_DELAY // fix for iOS
                         );
                         setTimeout(
                             () => {
                                 // Cleanup the DOM
                                 document.body.removeChild(link);
                             },
-                            isIos() ? 3 * IOS_DOWNLOAD_DELAY : 0 // fix for iOS
+                            3 * (isIos() ? IOS_DOWNLOAD_DELAY : DEFAULT_DOWNLOAD_DELAY) // fix for iOS
                         );
                     } else {
                         // Save to clipboard
