@@ -1,4 +1,4 @@
-import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS } from 'constants/currency';
+import { COLLATERALS, CRYPTO_CURRENCY_MAP, FREE_BET_COLLATERALS, STABLE_COINS, USD_SIGN } from 'constants/currency';
 import { ALTCOIN_CONVERSION_BUFFER_PERCENTAGE } from 'constants/markets';
 import { t } from 'i18next';
 import _ from 'lodash';
@@ -8,6 +8,8 @@ import {
     DEFAULT_CURRENCY_DECIMALS,
     LONG_CURRENCY_DECIMALS,
     ceilNumberToDecimals,
+    formatCurrencyWithKey,
+    formatCurrencyWithSign,
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { SupportedNetwork } from 'types/network';
@@ -84,6 +86,11 @@ export const getSpeedNativeCollateralsText = (
         ? `${collaterals.slice(0, -1).join(', ')} ${t('common.and')} ${collaterals.slice(-1)}`
         : collaterals[0];
 };
+
+export const formatValueWithCollateral = (value: number, collateral: Coins | null, networkId: SupportedNetwork) =>
+    collateral && collateral !== getDefaultCollateral(networkId)
+        ? formatCurrencyWithKey(`${isOverCurrency(collateral) ? '$' : ''}${collateral}`, value)
+        : formatCurrencyWithSign(USD_SIGN, value);
 
 export const mapMultiCollateralBalances = (
     data: any,

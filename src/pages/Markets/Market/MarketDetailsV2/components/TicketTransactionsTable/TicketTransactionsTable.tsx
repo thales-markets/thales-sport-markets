@@ -1,4 +1,4 @@
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import Table from 'components/Table';
 import Tooltip from 'components/Tooltip';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
@@ -24,7 +24,7 @@ import {
 } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { SportMarket, Ticket } from 'types/markets';
-import { ShareTicketModalProps } from 'types/tickets';
+import { ShareTicketData } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { getDefaultCollateral } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
@@ -86,7 +86,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
     const walletAddress = address || '';
 
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketData | undefined>(undefined);
     const [ticketForMigration, setTicketForMigration] = useState<Ticket | undefined>(undefined);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -122,12 +122,11 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
             };
         });
 
-        const modalData: ShareTicketModalProps = {
+        const modalData: ShareTicketData = {
             markets: ticket.sportMarkets,
             multiSingle: false,
             paid: ticket.buyInAmount,
             payout: ticket.payout,
-            onClose: () => setShowShareTicketModal(false),
             isTicketLost: ticket.isLost,
             collateral: ticket.collateral,
             isLive: ticket.isLive,
@@ -512,20 +511,7 @@ const TicketTransactionsTable: React.FC<TicketTransactionsTableProps> = ({
                 <MigrateTicketModal ticket={ticketForMigration} onClose={() => setTicketForMigration(undefined)} />
             )}
             {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2
-                    markets={shareTicketModalData.markets}
-                    multiSingle={false}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
-                    onClose={shareTicketModalData.onClose}
-                    isTicketLost={shareTicketModalData.isTicketLost}
-                    collateral={shareTicketModalData.collateral}
-                    isLive={shareTicketModalData.isLive}
-                    isSgp={shareTicketModalData.isSgp}
-                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
-                    systemBetData={shareTicketModalData.systemBetData}
-                    isTicketOpen={shareTicketModalData.isTicketOpen}
-                />
+                <ShareModal data={shareTicketModalData} onClose={() => setShowShareTicketModal(false)} />
             )}
         </>
     );

@@ -118,6 +118,7 @@ const Container = styled(FlexDivColumn)<{ isHidden: boolean }>`
         bottom: 0;
         border-radius: 0;
         border: unset;
+        overflow-y: scroll;
     }
 `;
 

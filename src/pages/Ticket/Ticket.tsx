@@ -1,4 +1,4 @@
-import MyTicket from 'components/ShareTicketModalV2/components/MyTicket';
+import MyTicket from 'components/ShareModal/components/MyTicket';
 import SimpleLoader from 'components/SimpleLoader';
 import { useTicketQuery } from 'queries/markets/useTicketQuery';
 import React, { useEffect, useState } from 'react';
