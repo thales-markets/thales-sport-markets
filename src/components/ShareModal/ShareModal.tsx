@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
+import { Coins, isFirefox, isIos } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ShareSpeedPositionData } from 'types/speedMarkets';
@@ -81,7 +81,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
-    const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
     const [convertToStableValue, setConvertToStableValue] = useState(false);
 
@@ -128,14 +127,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
             zIndex: isTicketData ? '1502' : SPEED_MARKETS_WIDGET_Z_INDEX,
         },
     };
-
-    useEffect(() => {
-        const checkMetamaskBrowser = async () => {
-            const isMMBrowser = (await isMetamask()) && isMobile;
-            setIsMetamaskBrowser(isMMBrowser);
-        };
-        checkMetamaskBrowser().catch((e) => console.log(e));
-    }, [isMobile]);
 
     // Download image mobile: clipboard.write is not supported by all browsers
     // Download image desktop: clipboard.write not supported/enabled in Firefox
@@ -283,23 +274,18 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
         if (!isLoading) {
-            if (isMetamaskBrowser) {
-                // Metamask dosn't support image download neither clipboard.write
-                toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
-            } else {
-                const id = toast.loading(
-                    useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
-                );
-                setToastId(id);
-                setIsLoading(true);
+            const id = toast.loading(
+                useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+            );
+            setToastId(id);
+            setIsLoading(true);
 
-                // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
-                // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
-                setTimeout(async () => {
-                    await saveImageAndOpenTwitter(id, copyOnly);
-                    setIsLoading(false);
-                }, 300);
-            }
+            // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
+            // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
+            setTimeout(async () => {
+                await saveImageAndOpenTwitter(id, copyOnly);
+                setIsLoading(false);
+            }, 300);
         }
     };
 
