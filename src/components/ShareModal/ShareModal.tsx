@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { Coins, isFirefox, isIos } from 'thales-utils';
+import { Coins, isIos } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ShareSpeedPositionData } from 'types/speedMarkets';
@@ -129,8 +129,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
     };
 
     // Download image mobile: clipboard.write is not supported by all browsers
-    // Download image desktop: clipboard.write not supported/enabled in Firefox
-    const useDownloadImage = isMobile || isFirefox();
+    const useDownloadImage = isMobile;
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number, copyOnly?: boolean) => {
