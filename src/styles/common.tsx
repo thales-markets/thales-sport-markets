@@ -133,6 +133,15 @@ export const Colors = {
     FRESH_LAVENDER: '#8B92B8',
     THE_RAINBOW_FISH: '#101426e6',
 
+    GREEN_POTENTIAL: '#BEFFCD',
+    RED_LOSS: '#DE496D',
+    YELLOW_LIGHT: '#FEF5AB',
+    GOLD_1: '#FBD04E',
+    GOLD_2: '#B77517',
+    GOLD_3: '#EFC146',
+    GOLD_4: '#FFF8B0',
+    GOLD_5: '#804200',
+
     CHART_AREA_START: '#5ab5d966',
     CHART_AREA_END: '#5ab5d900',
 };

@@ -257,8 +257,6 @@
             "image-downloaded": "Image downloaded!",
             "open-twitter": "Opening Twitter...",
             "click-open-twitter": "Click here to open Twitter",
-            "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
-            "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
             "live-trade-requested": "Live trade requested: {{ ticket }}",
             "sgp-trade-requested": "SGP trade requested",
             "fulfilling-live-trade": "Fulfilling live trade",
@@ -1852,6 +1850,14 @@
             "out-of-liquidity": "Out of liquidity",
             "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
             "price-stale": "Can't resolve position with stale price"
+        },
+        "flex-card": {
+            "strike-price": "Strike price",
+            "market-duration": "Trade duration",
+            "buy-in": "Buy-In",
+            "potential-win": "Potential win",
+            "won": "Won",
+            "loss": "Loss"
         }
     }
 }

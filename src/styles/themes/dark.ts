@@ -299,6 +299,12 @@ export default {
             secondary: Colors.WHITE,
         },
     },
+    flexCard: {
+        background: {
+            primary: Colors.GRAY,
+            secondary: Colors.GRAY_DARK,
+        },
+    },
     speedMarkets: {
         background: { primary: Colors.DARK_KNIGHT },
         borderColor: { primary: Colors.BLUE_ESTATE },
@@ -343,5 +349,13 @@ export default {
             },
         },
         shadow: { primary: Colors.THE_RAINBOW_FISH },
+        flexCard: {
+            background: {
+                potential: Colors.GREEN_POTENTIAL,
+                won: `linear-gradient(6.97deg, ${Colors.GOLD_1} -2.18%, ${Colors.GOLD_2} 23.54%, ${Colors.GOLD_3} 44.36%, ${Colors.GOLD_4} 65.19%, ${Colors.GOLD_3} 81.11%, ${Colors.GOLD_5} 103.16%, ${Colors.GOLD_3} 120.31%)`,
+                loss: Colors.RED_LOSS,
+            },
+            textColor: { potential: Colors.GREEN_POTENTIAL, won: Colors.YELLOW_LIGHT, loss: Colors.WHITE + '80' }, // opacity 50%
+        },
     },
 };

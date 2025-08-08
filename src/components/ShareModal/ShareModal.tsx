@@ -6,6 +6,7 @@ import { generalConfig } from 'config/general';
 import { defaultToastOptions, getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { LINKS } from 'constants/links';
+import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { secondsToMilliseconds } from 'date-fns';
 import { toPng } from 'html-to-image';
 import { t } from 'i18next';
@@ -17,19 +18,23 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
-import { FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { Coins, isFirefox, isIos, isMetamask } from 'thales-utils';
+import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
+import { Coins, isIos } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { ShareTicketModalProps } from 'types/tickets';
-import { ThemeInterface } from 'types/ui';
+import { ShareSpeedPositionData } from 'types/speedMarkets';
+import { ShareTicketData } from 'types/tickets';
+import { ShareModalProps, ThemeInterface } from 'types/ui';
 import { isStableCurrency } from 'utils/collaterals';
 import { refetchOverdropMultipliers } from 'utils/queryConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import { isOverCurrency } from '../../utils/collaterals';
 import MyTicket from './components/MyTicket';
+import SpeedMarketFlexCard from './components/SpeedMarketFlexCard';
 
 const PARLAY_IMAGE_NAME = 'ParlayImage.png';
+const SPEED_IMAGE_NAME = 'SpeedImage.png';
+
 const TWITTER_MESSAGES_TEXT = [
     `Another day, another bet locked in on @Overtime_io. Let’s ride this one out! 🌪️ ${LINKS.OvertimeMarkets}`,
     `If this bet cashes, beers on me! 💰 Come join the action on @Overtime_io: ${LINKS.OvertimeMarkets}`,
@@ -62,22 +67,11 @@ const OVER_COLLATERAL_TWITTER_MESSAGES_TEXT = [
 ];
 
 const TWITTER_MESSAGE_PASTE = '%0A<PASTE YOUR IMAGE>';
-const TWITTER_MESSAGE_UPLOAD = `%0A<UPLOAD YOUR ${PARLAY_IMAGE_NAME}>`;
 
-const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
-    markets,
-    multiSingle,
-    paid,
-    payout,
-    onClose,
-    isTicketLost,
-    collateral,
-    isLive,
-    isSgp,
-    applyPayoutMultiplier,
-    isTicketOpen,
-    systemBetData,
-}) => {
+const getTwitterMessageUpload = (isTicket: boolean) =>
+    `%0A<UPLOAD YOUR ${isTicket ? PARLAY_IMAGE_NAME : SPEED_IMAGE_NAME}>`;
+
+const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
     const theme: ThemeInterface = useTheme();
 
     const walletAddress = useAccount()?.address || '';
@@ -87,9 +81,8 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const [isLoading, setIsLoading] = useState(false);
     const [toastId, setToastId] = useState<string | number>(0);
-    const [isMetamaskBrowser, setIsMetamaskBrowser] = useState(false);
     const [tweetUrl, setTweetUrl] = useState('');
-    const [convertToStableValue, setConvertToStableValue] = useState<boolean>(false);
+    const [convertToStableValue, setConvertToStableValue] = useState(false);
 
     const reffererIDQuery = useGetReffererIdQuery(walletAddress || '');
     const [reffererID, setReffererID] = useState('');
@@ -102,9 +95,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const isOver = useMemo(() => isOverCurrency(collateral), [collateral]);
+    const ticketData = data as ShareTicketData;
+    const isTicketData = ticketData.isTicketOpen !== undefined;
+    const speedPositionData = data as ShareSpeedPositionData;
 
-    const isNonStableCollateral = useMemo(() => !isStableCurrency(collateral), [collateral]);
+    const isOver = useMemo(() => isOverCurrency(data.collateral), [data.collateral]);
+
+    const isNonStableCollateral = useMemo(() => !isStableCurrency(data.collateral), [data.collateral]);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client }, { enabled: isNonStableCollateral });
     const exchangeRates: Rates | null =
@@ -126,21 +123,13 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(10px)',
-            zIndex: '1502', // .rc-tooltip has 1501 and validation message pops up from background
+            // .rc-tooltip has 1501 and validation message pops up from background
+            zIndex: isTicketData ? '1502' : SPEED_MARKETS_WIDGET_Z_INDEX,
         },
     };
 
-    useEffect(() => {
-        const checkMetamaskBrowser = async () => {
-            const isMMBrowser = (await isMetamask()) && isMobile;
-            setIsMetamaskBrowser(isMMBrowser);
-        };
-        checkMetamaskBrowser().catch((e) => console.log(e));
-    }, [isMobile]);
-
     // Download image mobile: clipboard.write is not supported by all browsers
-    // Download image desktop: clipboard.write not supported/enabled in Firefox
-    const useDownloadImage = isMobile || isFirefox();
+    const useDownloadImage = isMobile;
 
     const saveImageAndOpenTwitter = useCallback(
         async (toastIdParam: string | number, copyOnly?: boolean) => {
@@ -164,7 +153,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         // Download image
                         const link = document.createElement('a');
                         link.href = base64Image;
-                        link.download = PARLAY_IMAGE_NAME;
+                        link.download = isTicketData ? PARLAY_IMAGE_NAME : SPEED_IMAGE_NAME;
                         document.body.appendChild(link);
                         setTimeout(
                             () => {
@@ -216,7 +205,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                             ' ' +
                             LINKS.OvertimeMarkets +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
-                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                            (useDownloadImage ? getTwitterMessageUpload(isTicketData) : TWITTER_MESSAGE_PASTE);
                     } else {
                         twitterLinkWithStatusMessage =
                             LINKS.TwitterTweetStatus +
@@ -226,7 +215,7 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                                   ]
                                 : TWITTER_MESSAGES_TEXT[Math.floor(Math.random() * TWITTER_MESSAGES_TEXT.length)]) +
                             `${reffererID ? '?referrerId=' + reffererID : ''}` +
-                            (useDownloadImage ? TWITTER_MESSAGE_UPLOAD : TWITTER_MESSAGE_PASTE);
+                            (useDownloadImage ? getTwitterMessageUpload(isTicketData) : TWITTER_MESSAGE_PASTE);
                     }
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
@@ -279,28 +268,23 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                 }
             }
         },
-        [isLoading, isMobile, isOver, useDownloadImage, reffererID]
+        [isLoading, isMobile, isOver, useDownloadImage, reffererID, isTicketData]
     );
 
     const onTwitterShareClick = (copyOnly?: boolean) => {
         if (!isLoading) {
-            if (isMetamaskBrowser) {
-                // Metamask dosn't support image download neither clipboard.write
-                toast.error(t('market.toast-message.metamask-not-supported'), defaultToastOptions);
-            } else {
-                const id = toast.loading(
-                    useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
-                );
-                setToastId(id);
-                setIsLoading(true);
+            const id = toast.loading(
+                useDownloadImage ? t('market.toast-message.download-image') : t('market.toast-message.save-image')
+            );
+            setToastId(id);
+            setIsLoading(true);
 
-                // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
-                // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
-                setTimeout(async () => {
-                    await saveImageAndOpenTwitter(id, copyOnly);
-                    setIsLoading(false);
-                }, 300);
-            }
+            // If image creation is not postponed with timeout toaster is not displayed immediately, it is rendered in parallel with toPng() execution.
+            // Function toPng is causing UI to freez for couple of seconds and there is no notification message during that time, so it confuses user.
+            setTimeout(async () => {
+                await saveImageAndOpenTwitter(id, copyOnly);
+                setIsLoading(false);
+            }, 300);
         }
     };
 
@@ -336,6 +320,24 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
         }
     }, [walletAddress, tweetUrl, onClose]);
 
+    const speedBorderColor = isTicketData
+        ? undefined
+        : speedPositionData.type === 'speed-potential'
+        ? theme.speedMarkets.flexCard.background.potential
+        : speedPositionData.type === 'speed-won'
+        ? theme.speedMarkets.flexCard.background.won
+        : theme.speedMarkets.flexCard.background.loss;
+
+    const speedTextColor = isTicketData
+        ? undefined
+        : speedPositionData.type === 'speed-potential'
+        ? theme.speedMarkets.flexCard.textColor.potential
+        : speedPositionData.type === 'speed-won'
+        ? theme.speedMarkets.flexCard.textColor.won
+        : theme.speedMarkets.flexCard.background.loss;
+
+    const speedButtonBackgroundColor = isTicketData ? undefined : theme.background.primary;
+
     return (
         <ReactModal
             isOpen
@@ -345,57 +347,110 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
             contentElement={(props, children) => (
                 <>
                     <div {...props}>{children}</div>
-                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
+                    {isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} color={speedTextColor} />}
                 </>
             )}
         >
-            <Container ref={ref}>
-                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} />}
-                <MyTicket
-                    markets={markets}
-                    multiSingle={multiSingle}
-                    paid={
-                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? paid * exchangeRates?.[collateral]
-                            : paid
-                    }
-                    payout={
-                        convertToStableValue && isNonStableCollateral && exchangeRates?.[collateral]
-                            ? payout * exchangeRates?.[collateral]
-                            : payout
-                    }
-                    isTicketLost={isTicketLost}
-                    collateral={
-                        convertToStableValue && isNonStableCollateral ? (CRYPTO_CURRENCY_MAP.USDC as Coins) : collateral
-                    }
-                    isLive={isLive}
-                    isSgp={isSgp}
-                    applyPayoutMultiplier={applyPayoutMultiplier}
-                    systemBetData={
-                        systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
-                            ? {
-                                  ...systemBetData,
-                                  minPayout: systemBetData?.minPayout * exchangeRates[collateral],
-                                  maxPayout: systemBetData?.maxPayout * exchangeRates[collateral],
-                                  buyInPerCombination: systemBetData?.buyInPerCombination * exchangeRates[collateral],
-                              }
-                            : systemBetData
-                    }
-                    isTicketOpen={isTicketOpen}
-                />
+            <Container ref={ref} isTicket={isTicketData}>
+                {!isMobile && <CloseIcon className={`icon icon--close`} onClick={onClose} color={speedTextColor} />}
+                {isTicketData ? (
+                    <MyTicket
+                        markets={ticketData.markets}
+                        multiSingle={ticketData.multiSingle}
+                        paid={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? data.paid * exchangeRates?.[data.collateral]
+                                : data.paid
+                        }
+                        payout={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? data.payout * exchangeRates?.[data.collateral]
+                                : data.payout
+                        }
+                        isTicketLost={ticketData.isTicketLost}
+                        collateral={
+                            convertToStableValue && isNonStableCollateral
+                                ? (CRYPTO_CURRENCY_MAP.USDC as Coins)
+                                : data.collateral
+                        }
+                        isLive={ticketData.isLive}
+                        isSgp={ticketData.isSgp}
+                        applyPayoutMultiplier={ticketData.applyPayoutMultiplier}
+                        systemBetData={
+                            ticketData.systemBetData && convertToStableValue && isNonStableCollateral && exchangeRates
+                                ? {
+                                      ...ticketData.systemBetData,
+                                      minPayout: ticketData.systemBetData?.minPayout * exchangeRates[data.collateral],
+                                      maxPayout: ticketData.systemBetData?.maxPayout * exchangeRates[data.collateral],
+                                      buyInPerCombination:
+                                          ticketData.systemBetData?.buyInPerCombination *
+                                          exchangeRates[data.collateral],
+                                  }
+                                : ticketData.systemBetData
+                        }
+                        isTicketOpen={ticketData.isTicketOpen}
+                    />
+                ) : (
+                    <SpeedMarketFlexCard
+                        type={speedPositionData.type}
+                        asset={speedPositionData.asset}
+                        position={speedPositionData.position}
+                        strikePrice={speedPositionData.strikePrice}
+                        paid={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? speedPositionData.paid * exchangeRates[speedPositionData.collateral]
+                                : speedPositionData.paid
+                        }
+                        payout={
+                            convertToStableValue && isNonStableCollateral && exchangeRates?.[data.collateral]
+                                ? speedPositionData.payout * exchangeRates[speedPositionData.collateral]
+                                : speedPositionData.payout
+                        }
+                        collateral={
+                            convertToStableValue && isNonStableCollateral
+                                ? (CRYPTO_CURRENCY_MAP.USDC as Coins)
+                                : speedPositionData.collateral
+                        }
+                        marketDuration={speedPositionData.marketDuration}
+                    />
+                )}
 
                 <ButtonsWrapper toggleVisible={isNonStableCollateral}>
-                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick()}>
-                        <TwitterIcon disabled={isLoading} fontSize={'22px'} />
-                        <ButtonLabel>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
+                    <ShareButton
+                        disabled={isLoading}
+                        onClick={() => onTwitterShareClick()}
+                        borderColor={speedBorderColor}
+                    >
+                        <ShareButtonBackground color={speedButtonBackgroundColor}>
+                            <TwitterIcon
+                                disabled={isLoading}
+                                fontSize={'22px'}
+                                color={speedTextColor}
+                                className="icon-homepage icon--x"
+                            />
+                            <ButtonLabel color={speedTextColor}>{t('markets.parlay.share-ticket.share')}</ButtonLabel>
+                        </ShareButtonBackground>
                     </ShareButton>
-                    <ShareButton disabled={isLoading} onClick={() => onTwitterShareClick(true)}>
-                        {!useDownloadImage && <CopyIcon disabled={isLoading} fontSize={'22px'} />}
-                        <ButtonLabel>
-                            {useDownloadImage
-                                ? t('markets.parlay.share-ticket.download')
-                                : t('markets.parlay.share-ticket.copy')}
-                        </ButtonLabel>
+                    <ShareButton
+                        disabled={isLoading}
+                        onClick={() => onTwitterShareClick(true)}
+                        borderColor={speedBorderColor}
+                    >
+                        <ShareButtonBackground color={speedButtonBackgroundColor}>
+                            {!useDownloadImage && (
+                                <CopyIcon
+                                    disabled={isLoading}
+                                    fontSize={'22px'}
+                                    color={speedTextColor}
+                                    className="icon icon--copy"
+                                />
+                            )}
+                            <ButtonLabel color={speedTextColor}>
+                                {useDownloadImage
+                                    ? t('markets.parlay.share-ticket.download')
+                                    : t('markets.parlay.share-ticket.copy')}
+                            </ButtonLabel>
+                        </ShareButtonBackground>
                     </ShareButton>
                 </ButtonsWrapper>
                 {isNonStableCollateral && (
@@ -425,8 +480,21 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
                         value={tweetUrl}
                         onChange={(e) => setTweetUrl(e.target.value)}
                     />
-                    <Button height="32px" disabled={isLoading || !tweetUrl.trim()} margin="8px 0" onClick={onSubmit}>
-                        {t('common.submit')}
+                    <Button
+                        height="32px"
+                        disabled={isLoading || !tweetUrl.trim()}
+                        margin="8px 0"
+                        onClick={onSubmit}
+                        textColor={speedTextColor}
+                        borderColor={speedButtonBackgroundColor}
+                        backgroundColor={speedButtonBackgroundColor}
+                        padding={isTicketData ? undefined : '0'}
+                    >
+                        <ShareButtonBackgroundWrapper color={speedBorderColor}>
+                            <ShareButtonBackground color={speedButtonBackgroundColor}>
+                                {t('common.submit')}
+                            </ShareButtonBackground>
+                        </ShareButtonBackgroundWrapper>
                     </Button>
                 </ShareWrapper>
             </Container>
@@ -435,39 +503,55 @@ const ShareTicketModal: React.FC<ShareTicketModalProps> = ({
 };
 
 // Aspect ratio is important for Twitter: horizontal (Simple View) 2:1 and vertical min 3:4
-const Container = styled(FlexDivColumnCentered)`
+const Container = styled(FlexDivColumnCentered)<{ isTicket: boolean }>`
     position: relative;
-    width: 386px;
-    // max-height: 600px;
-    padding: 15px;
-    flex: none;
-    background: linear-gradient(180deg, #303656 0%, #1a1c2b 100%);
-    border-radius: 10px;
+    width: ${(props) => (props.isTicket ? '386px' : '383px')};
+    ${(props) => (props.isTicket ? '' : 'max-height: 510px;')}
+    ${(props) => (props.isTicket ? 'padding: 15px;' : '')}
+    ${(props) => (props.isTicket ? 'flex: none;' : '')}
+    ${(props) =>
+        props.isTicket
+            ? `background: linear-gradient(180deg, ${props.theme.flexCard.background.primary} 0%, ${props.theme.flexCard.background.secondary} 100%);`
+            : ''}    
+    ${(props) => (props.isTicket ? 'border-radius: 10px;' : '')}      
+    
     @media (max-width: 950px) {
         width: 357px;
-        // max-height: 476px;
+        ${(props) => (props.isTicket ? '' : 'max-height: 476px;')}
     }
 `;
 
-const CloseIcon = styled.i`
+const CloseIcon = styled.i<{ color?: string }>`
     position: absolute;
     top: -20px;
     right: -20px;
     font-size: 20px;
     cursor: pointer;
-    color: ${(props) => props.theme.textColor.primary};
+    color: ${(props) => props.color || props.theme.textColor.primary};
     @media (max-width: 950px) {
         top: 10px;
         right: 10px;
     }
 `;
 
-const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean }>`
+const ShareButtonBackground = styled(FlexDivCentered)<{ color?: string }>`
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    ${(props) => (props.color ? `background: ${props.color};` : '')}
+`;
+const ShareButtonBackgroundWrapper = styled(ShareButtonBackground)`
+    ${(props) => (props.color ? 'padding: 2px;' : '')}
+`;
+
+const ShareButton = styled(FlexDivRowCentered)<{ disabled?: boolean; borderColor?: string }>`
     height: 32px;
     font-size: 15px;
     align-items: center;
     border-radius: 5px;
     background: ${(props) => props.theme.button.background.primary};
+    background: ${(props) => props.borderColor || props.theme.button.background.primary};
+    ${(props) => (props.borderColor ? 'padding: 2px;' : '')}
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     justify-content: center;
@@ -483,44 +567,36 @@ const ButtonsWrapper = styled(FlexDivRowCentered)<{ toggleVisible?: boolean }>`
     gap: 10px;
 `;
 
-const ButtonLabel = styled.span`
+const ButtonLabel = styled.span<{ color?: string }>`
     font-weight: 600;
     font-size: 15px;
     line-height: 24px;
-    padding: 7px 20px;
+    padding: 0 20px;
     text-align: center;
     text-transform: uppercase;
-    color: ${(props) => props.theme.button.textColor.primary};
+    color: ${(props) => props.color || props.theme.button.textColor.primary};
 `;
 
 const TwitterIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-weight: 500;
-    margin-right: 3px;
+    margin-bottom: 3px;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
     color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
-    &:before {
-        font-family: HomepageIconsV2 !important;
-        content: '\\0021';
-    }
 `;
 
 const CopyIcon = styled.i<{ disabled?: boolean; fontSize?: string; padding?: string; color?: string }>`
     font-weight: 500;
-    margin-right: 3px;
+    margin-bottom: 2px;
     font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
     color: ${(props) => (props.color ? props.color : props.theme.textColor.tertiary)};
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
     opacity: ${(props) => (props.disabled ? '0.4' : '1')};
     ${(props) => (props.padding ? `padding: ${props.padding};` : '')}
     text-transform: lowercase;
-    &:before {
-        font-family: OvertimeIconsV2 !important;
-        content: '\\00F1';
-    }
 `;
 
 const SwitchWrapper = styled(FlexDivRowCentered)`
@@ -558,4 +634,4 @@ const HintText = styled.span`
     text-align: left;
 `;
 
-export default React.memo(ShareTicketModal);
+export default React.memo(ShareModal);

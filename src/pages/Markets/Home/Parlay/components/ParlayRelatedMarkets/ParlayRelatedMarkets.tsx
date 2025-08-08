@@ -1,5 +1,5 @@
 import ParlayEmptyIcon from 'assets/images/parlay-empty.svg?react';
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import SimpleLoader from 'components/SimpleLoader';
 import Tooltip from 'components/Tooltip';
 import { LATEST_LIVE_REQUESTS_MATURITY_DAYS, LATEST_LIVE_REQUESTS_SIZE } from 'constants/markets';
@@ -23,7 +23,7 @@ import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { Coins, formatCurrencyWithKey, formatDateWithTime } from 'thales-utils';
 import { LiveTradingRequest, Ticket, TicketMarket, TicketMarketRequestData } from 'types/markets';
-import { ShareTicketModalProps } from 'types/tickets';
+import { ShareTicketData } from 'types/tickets';
 import { ThemeInterface } from 'types/ui';
 import { formatMarketOdds } from 'utils/markets';
 import {
@@ -360,7 +360,7 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         !isTicketType && isLive && differenceInMinutes(Date.now(), timestamp) < 1
     );
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketData | undefined>(undefined);
 
     // update state status incrementaly for animation purpose
     useEffect(() => {
@@ -396,14 +396,11 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
         }
     }, [status, stateStatus, finalStatus, stateFinalStatus, t]);
 
-    const shareTicketData: ShareTicketModalProps = {
+    const shareTicketData: ShareTicketData = {
         markets: [market],
         paid: buyInAmount,
         payout: payout,
         multiSingle: false,
-        onClose: () => {
-            setShowShareTicketModal ? setShowShareTicketModal(false) : null;
-        },
         isTicketLost: false,
         collateral: collateral as Coins,
         isLive: isLive,
@@ -560,19 +557,9 @@ const ExpandableRow: React.FC<{ data: Ticket | LiveTradingRequest | TicketMarket
                 )}
             </TicketColumn>
             {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2
-                    markets={shareTicketModalData.markets}
-                    multiSingle={false}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
-                    onClose={shareTicketModalData.onClose}
-                    isTicketLost={shareTicketModalData.isTicketLost}
-                    collateral={shareTicketModalData.collateral}
-                    isLive={shareTicketModalData.isLive}
-                    isSgp={shareTicketModalData.isSgp}
-                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
-                    systemBetData={shareTicketModalData.systemBetData}
-                    isTicketOpen={shareTicketModalData.isTicketOpen}
+                <ShareModal
+                    data={shareTicketModalData}
+                    onClose={() => (setShowShareTicketModal ? setShowShareTicketModal(false) : null)}
                 />
             )}
         </>

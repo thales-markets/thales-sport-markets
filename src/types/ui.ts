@@ -1,8 +1,15 @@
 import { Network } from 'enums/network';
 import { RouteComponentProps } from 'react-router-dom';
 import theme from 'styles/themes/dark';
+import { ShareSpeedPositionData } from './speedMarkets';
+import { ShareTicketData } from './tickets';
 
 export type ThemeInterface = typeof theme;
+
+export type ShareModalProps = {
+    data: ShareTicketData | ShareSpeedPositionData;
+    onClose: () => void;
+};
 
 export type NavMenuItem = {
     i18label: string;

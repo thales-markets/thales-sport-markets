@@ -8,16 +8,17 @@ import { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { formatCurrencyWithKey, formatCurrencyWithSign } from 'thales-utils';
+import { formatCurrencyWithSign } from 'thales-utils';
 import { UserPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
-import { getCollateralByAddress, isOverCurrency } from 'utils/collaterals';
+import { formatValueWithCollateral, getCollateralByAddress } from 'utils/collaterals';
 import { formatShortDateWithFullTime } from 'utils/formatters/date';
 import { getPriceId } from 'utils/pyth';
 import { refetchPythPrice } from 'utils/queryConnector';
 import { isUserWinner, isUserWinning } from 'utils/speedMarkets';
 import { useChainId } from 'wagmi';
 import ClaimAction from '../ClaimAction';
+import ShareSpeedPosition from '../ShareSpeedPosition';
 import SpeedTimeRemaining from '../SpeedTimeRemaining';
 
 type SpeedPositionCardProps = {
@@ -44,8 +45,7 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
     const hasFinalPrice = position.finalPrice > 0;
     const isUserWon = !!isUserWinner(position.side, position.strikePrice, position.finalPrice);
     const isUserCurrentlyWinning = isUserWinning(position.side, position.strikePrice, position.currentPrice);
-    const collateralByAddress = getCollateralByAddress(position.collateralAddress, networkId);
-    const collateral = `${isOverCurrency(collateralByAddress) ? '$' : ''}${collateralByAddress}`;
+    const collateral = getCollateralByAddress(position.collateralAddress, networkId);
 
     // refetch Pyth price when position becomes matured and final price is missing
     useInterval(() => {
@@ -70,14 +70,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 <StatusWrapper isClaimable={position.isClaimable}>
                     {!isMatured ? (
                         // pending
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={isUserCurrentlyWinning}>
                                 {isUserCurrentlyWinning
                                     ? t('speed-markets.user-positions.status.winning')
                                     : t('speed-markets.user-positions.status.losing')}
                             </Status>
-                        </>
+                        </div>
                     ) : position.isClaimable ? (
                         <ClaimWrapper>
                             <ClaimAction
@@ -90,23 +90,24 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                         </ClaimWrapper>
                     ) : hasFinalPrice ? (
                         // history
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={isUserWon}>
                                 {isUserWon
                                     ? t('speed-markets.user-positions.status.won')
                                     : t('speed-markets.user-positions.status.loss')}
                             </Status>
-                        </>
+                        </div>
                     ) : (
                         // price is missing - pending
-                        <>
+                        <div>
                             <StausLabel>{`${t('speed-markets.user-positions.labels.status')}: `}</StausLabel>
                             <Status isWon={false} isUnknown>
                                 {t('speed-markets.user-positions.status.waiting-price')}
                             </Status>
-                        </>
+                        </div>
                     )}
+                    <ShareSpeedPosition position={position} />
                 </StatusWrapper>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
@@ -149,16 +150,14 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 </Time>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
-                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${
-                    position.isDefaultCollateral
-                        ? formatCurrencyWithSign(USD_SIGN, position.paid)
-                        : formatCurrencyWithKey(collateral, position.paid)
-                }`}</Paid>
-                <Payout isClaimable={position.isClaimable}>{`${t('speed-markets.user-positions.labels.payout')}: ${
-                    position.isDefaultCollateral
-                        ? formatCurrencyWithSign(USD_SIGN, position.payout)
-                        : formatCurrencyWithKey(collateral, position.payout)
-                }`}</Payout>
+                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${formatValueWithCollateral(
+                    position.paid,
+                    collateral,
+                    networkId
+                )}`}</Paid>
+                <Payout isClaimable={position.isClaimable}>{`${t(
+                    'speed-markets.user-positions.labels.payout'
+                )}: ${formatValueWithCollateral(position.payout, collateral, networkId)}`}</Payout>
             </FlexDivRowCentered>
         </Container>
     );
@@ -219,7 +218,6 @@ const Status = styled.span<{ isWon: boolean; isUnknown?: boolean }>`
             ? props.theme.status.win
             : props.theme.status.loss};
     font-size: 14px;
-    line-height: 20px;
     font-weight: 500;
     text-transform: uppercase;
 `;
