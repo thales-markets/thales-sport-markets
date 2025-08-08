@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { getIsMobile } from 'redux/modules/app';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRowCentered } from 'styles/common';
-import { Coins, isIos } from 'thales-utils';
+import { Coins } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { ShareSpeedPositionData } from 'types/speedMarkets';
@@ -138,8 +138,6 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                     return;
                 }
 
-                const DEFAULT_DOWNLOAD_DELAY = secondsToMilliseconds(10);
-                const IOS_DOWNLOAD_DELAY = secondsToMilliseconds(10);
                 const MOBILE_TWITTER_TOAST_AUTO_CLOSE = secondsToMilliseconds(15);
                 try {
                     // In order to improve image quality enlarge image by 2.
@@ -156,19 +154,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
                         link.href = base64Image;
                         link.download = isTicketData ? PARLAY_IMAGE_NAME : SPEED_IMAGE_NAME;
                         document.body.appendChild(link);
-                        setTimeout(
-                            () => {
-                                link.click();
-                            },
-                            isIos() ? IOS_DOWNLOAD_DELAY : DEFAULT_DOWNLOAD_DELAY // fix for iOS
-                        );
-                        setTimeout(
-                            () => {
-                                // Cleanup the DOM
-                                document.body.removeChild(link);
-                            },
-                            3 * (isIos() ? IOS_DOWNLOAD_DELAY : DEFAULT_DOWNLOAD_DELAY) // fix for iOS
-                        );
+                        link.click();
+
+                        setTimeout(() => {
+                            // Cleanup the DOM
+                            document.body.removeChild(link);
+                        }, 3000);
                     } else {
                         // Save to clipboard
                         const b64Blob = (await fetch(base64Image)).blob();
@@ -221,27 +212,15 @@ const ShareModal: React.FC<ShareModalProps> = ({ data, onClose }) => {
 
                     // Mobile requires user action in order to open new window, it can't open in async call, so adding <a>
                     isMobile
-                        ? isIos()
-                            ? setTimeout(() => {
-                                  toast.update(
-                                      toastIdParam,
-                                      getSuccessToastOptions(
-                                          <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                              {t('market.toast-message.click-open-twitter')}
-                                          </a>,
-                                          { autoClose: MOBILE_TWITTER_TOAST_AUTO_CLOSE }
-                                      )
-                                  );
-                              }, IOS_DOWNLOAD_DELAY)
-                            : toast.update(
-                                  toastIdParam,
-                                  getSuccessToastOptions(
-                                      <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
-                                          {t('market.toast-message.click-open-twitter')}
-                                      </a>,
-                                      { autoClose: MOBILE_TWITTER_TOAST_AUTO_CLOSE }
-                                  )
+                        ? toast.update(
+                              toastIdParam,
+                              getSuccessToastOptions(
+                                  <a onClick={() => window.open(twitterLinkWithStatusMessage)}>
+                                      {t('market.toast-message.click-open-twitter')}
+                                  </a>,
+                                  { autoClose: MOBILE_TWITTER_TOAST_AUTO_CLOSE }
                               )
+                          )
                         : toast.update(
                               toastIdParam,
                               getSuccessToastOptions(
