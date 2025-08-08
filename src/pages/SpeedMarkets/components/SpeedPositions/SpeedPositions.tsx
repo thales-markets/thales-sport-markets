@@ -21,7 +21,6 @@ import { getCollateralByAddress, getSpeedNativeCollateralsText, getSpeedOfframpC
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { getPriceId } from 'utils/pyth';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { isUserWinner } from 'utils/speedMarkets';
 import { useAccount, useChainId, useClient } from 'wagmi';
 import ClaimAction from '../ClaimAction';
@@ -48,7 +47,7 @@ const SpeedPositions: React.FC = () => {
     const isMultiCollateralSupported = getIsMultiCollateralSupported(networkId);
 
     const userResolvedSpeedMarketsDataQuery = useUserResolvedSpeedMarketsQuery({ networkId, client }, walletAddress, {
-        enabled: isConnected,
+        enabled: isConnected && !!walletAddress,
     });
 
     const userResolvedSpeedMarketsData = useMemo(
@@ -59,11 +58,9 @@ const SpeedPositions: React.FC = () => {
         [userResolvedSpeedMarketsDataQuery]
     );
 
-    const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery(
-        { networkId, client },
-        isBiconomy ? smartAccountConnector.biconomyAddress : walletAddress || '',
-        { enabled: isConnected }
-    );
+    const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery({ networkId, client }, walletAddress, {
+        enabled: isConnected && !!walletAddress,
+    });
 
     const userActiveSpeedMarketsData = useMemo(
         () =>

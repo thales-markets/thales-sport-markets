@@ -9,7 +9,7 @@ import { getIsBiconomy } from 'redux/modules/wallet';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
 import { timeToLocal } from 'utils/formatters/date';
-import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
+import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
 
 const LIMIT_FOR_POSITIONS_IN_MINUTES = 10; // 10 minutes
@@ -23,18 +23,17 @@ export const UserPositionAreaSeries: React.FC<{
     const [series, setSeries] = useState<ISeriesApi<'Area'> | undefined>();
     const networkId = useChainId();
     const client = useClient();
-    const { isConnected, address: walletAddress } = useAccount();
+    const { isConnected, address } = useAccount();
+    const { smartAddress } = useBiconomy();
     const isBiconomy = useSelector(getIsBiconomy);
     const [userData, setUserData] = useState<any>([]);
 
-    const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery(
-        { networkId, client },
-        (isBiconomy ? smartAccountConnector.biconomyAddress : walletAddress) as string,
-        {
-            enabled: isConnected,
-            refetchInterval: 30 * 1000,
-        }
-    );
+    const walletAddress = (isBiconomy ? smartAddress : address) || '';
+
+    const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery({ networkId, client }, walletAddress, {
+        enabled: isConnected && !!walletAddress,
+        refetchInterval: 30 * 1000,
+    });
 
     useEffect(() => {
         if (userActiveSpeedMarketsDataQuery.isSuccess && candlestickData && candlestickData.length) {
