@@ -21,16 +21,6 @@ const Explainer: React.FC = () => {
 
             {showMore && (
                 <>
-                    <Content>
-                        <Trans
-                            i18nKey="overdrop.leveling-tree.explainer.xp-explained-content"
-                            components={{
-                                br: <br />,
-                                bold: <Bold />,
-                                highlight: <HighlightedText />,
-                            }}
-                        />
-                    </Content>
                     <Label>{t('overdrop.leveling-tree.explainer.base-xp-accrual')}</Label>
                     <Content>
                         <Trans
@@ -146,6 +136,14 @@ const Explainer: React.FC = () => {
                                 highlight: <HighlightedText />,
                             }}
                         />
+                    </Content>
+                    <Label>{t('overdrop.leveling-tree.explainer.daily-quest')}</Label>
+                    <Content>
+                        <Trans i18nKey="overdrop.leveling-tree.explainer.daily-quest-content" />
+                    </Content>
+                    <Label>{t('overdrop.leveling-tree.explainer.spin-the-wheel')}</Label>
+                    <Content>
+                        <Trans i18nKey="overdrop.leveling-tree.explainer.spin-the-wheel-content" />
                     </Content>
                 </>
             )}

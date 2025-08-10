@@ -31,4 +31,10 @@ export const getMetaRouteItem = (pathName: string) => {
     return MetaRoutes.Home;
 };
 
+export const buildReffererLink = (reffererID: string) => {
+    return `${window.location.origin}${ifIpfsDeployment ? '/#' : ''}${
+        ROUTES.Markets.Home
+    }?referrerId=${encodeURIComponent(reffererID)}`;
+};
+
 export { history, ifIpfsDeployment };

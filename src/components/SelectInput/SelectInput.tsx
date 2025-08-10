@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
-import Select, { CSSObjectWithLabel } from 'react-select';
+import Select, { CSSObjectWithLabel, GroupBase, SelectComponentsConfig } from 'react-select';
 import { getIsMobile } from 'redux/modules/app';
 import { useTheme } from 'styled-components';
 import { ThemeInterface } from 'types/ui';
@@ -12,18 +12,29 @@ type SelectOptions = SelectOption[];
 type SelectInputProps = {
     options: SelectOptions;
     handleChange: (value: number | undefined | null) => void;
+    components?: SelectComponentsConfig<SelectOption, boolean, GroupBase<SelectOption>>;
     defaultValue?: number;
     value?: SelectOption;
     placeholder?: string;
     width?: number;
     isDisabled?: boolean;
-    style?: any;
+    style?: {
+        containerStyle?: CSSProperties;
+        menuStyle?: CSSProperties;
+        optionStyle?: CSSProperties;
+        controlStyle?: CSSProperties;
+        placeholderStyle?: CSSProperties;
+        singleValueStyle?: CSSProperties;
+        dropdownIndicatorStyle?: CSSProperties;
+        indicatorSeparatorStyle?: CSSProperties;
+    };
     isPaginationStyle?: boolean;
 };
 
 const SelectInput: React.FC<SelectInputProps> = ({
     options,
     handleChange,
+    components,
     defaultValue,
     value,
     placeholder,
@@ -40,6 +51,10 @@ const SelectInput: React.FC<SelectInputProps> = ({
     const optionsIndex = options.findIndex((option) => option.value === selectedValue.value);
 
     const customStyled = {
+        container: (provided: any) => ({
+            ...provided,
+            ...style?.containerStyle,
+        }),
         menu: (provided: any, state: any) => ({
             ...provided,
             width: '100%',
@@ -91,8 +106,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
             ...provided,
             color: theme.textColor.primary,
             fontFamily: theme.fontFamily.primary,
-            ...style?.singleValueStyle,
             lineHeight: '120%',
+            ...style?.singleValueStyle,
         }),
         dropdownIndicator: (provided: CSSObjectWithLabel) => ({
             ...provided,
@@ -179,6 +194,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
     return (
         <Select
+            components={components}
             value={selectedValue}
             placeholder={placeholder}
             options={options}

@@ -32,7 +32,8 @@ const XPCalculation: React.FC = () => {
         return (
             getMultiplierValueFromQuery(userMultipliers, MultiplierType.WEEKLY) +
             getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY) +
-            getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER) +
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY_QUEST) +
+            getMultiplierValueFromQuery(userMultipliers, MultiplierType.WHEEL) +
             getMultiplierValueFromQuery(userMultipliers, MultiplierType.LOYALTY)
         );
     }, [userMultipliers]);
@@ -60,11 +61,6 @@ const XPCalculation: React.FC = () => {
                         </Box>
                     </GradientBorder>
                 </BoxWrapper>
-            </MobileWrapper>
-
-            <Signs>{'+'}</Signs>
-
-            <MobileWrapper>
                 <BoxWrapper>
                     <BoxLabel>{t('overdrop.xp-details.loyalty-boost')}</BoxLabel>
                     <GradientBorder>
@@ -75,20 +71,37 @@ const XPCalculation: React.FC = () => {
                         </Box>
                     </GradientBorder>
                 </BoxWrapper>
+            </MobileWrapper>
+
+            <Signs>{'+'}</Signs>
+
+            <MobileWrapper>
                 <BoxWrapper>
-                    <BoxLabel>{t('overdrop.xp-details.shared-flex')}</BoxLabel>
+                    <BoxLabel>{t('overdrop.xp-details.daily-quest')}</BoxLabel>
                     <GradientBorder>
                         <Box>
                             <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
-                            <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
-                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                            <MainLabel>{t('overdrop.xp-details.daily-quest-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(
+                                userMultipliers,
+                                MultiplierType.DAILY_QUEST
+                            )}%`}</Value>
+                        </Box>
+                    </GradientBorder>
+                </BoxWrapper>
+
+                <BoxWrapper>
+                    <BoxLabel>{t('overdrop.xp-details.wheel-quest')}</BoxLabel>
+                    <GradientBorder>
+                        <Box>
+                            <Badge>{<Icon className="icon icon--wheel" />}</Badge>
+                            <MainLabel>{t('overdrop.xp-details.wheel-multiplier')}</MainLabel>
+                            <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WHEEL)}%`}</Value>
                         </Box>
                     </GradientBorder>
                 </BoxWrapper>
             </MobileWrapper>
-
             <Signs>{'='}</Signs>
-
             <BoxWrapper>
                 <MainLabel>{t('overdrop.xp-details.total-bonus')}</MainLabel>
                 <HighlightedValue>{`+${sumOfMultipliers}%`}</HighlightedValue>
@@ -130,12 +143,23 @@ const XPCalculation: React.FC = () => {
             </BoxWrapper>
             <Signs>{'+'}</Signs>
             <BoxWrapper>
-                <BoxLabel>{t('overdrop.xp-details.shared-flex')}</BoxLabel>
+                <BoxLabel>{t('overdrop.xp-details.daily-quest')}</BoxLabel>
                 <GradientBorder>
                     <Box>
                         <Badge>{<Icon className="icon icon--x-twitter" />}</Badge>
-                        <MainLabel>{t('overdrop.xp-details.twitter-multiplier')}</MainLabel>
-                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.TWITTER)}%`}</Value>
+                        <MainLabel>{t('overdrop.xp-details.daily-quest-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.DAILY_QUEST)}%`}</Value>
+                    </Box>
+                </GradientBorder>
+            </BoxWrapper>
+            <Signs>{'+'}</Signs>
+            <BoxWrapper>
+                <BoxLabel>{t('overdrop.xp-details.wheel-quest')}</BoxLabel>
+                <GradientBorder>
+                    <Box>
+                        <Badge>{<Icon className="icon icon--wheel" />}</Badge>
+                        <MainLabel>{t('overdrop.xp-details.wheel-multiplier')}</MainLabel>
+                        <Value>{`+${getMultiplierValueFromQuery(userMultipliers, MultiplierType.WHEEL)}%`}</Value>
                     </Box>
                 </GradientBorder>
             </BoxWrapper>
@@ -218,7 +242,7 @@ const Badge = styled(FlexDivCentered)`
     font-weight: 900;
     font-size: 13px;
     border-radius: 50%;
-    background-color: ${(props) => props.theme.overdrop.badge.background.primary};
+    background-color: ${(props) => props.theme.overdrop.borderColor.primary};
 `;
 
 const Icon = styled.i`

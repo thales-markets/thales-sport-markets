@@ -7,6 +7,8 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as Addr
 export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const TBD_ADDRESS = '0xTBD' as Address;
 
+export const TEST_NETWORKS = [NetworkId.OptimismSepolia];
+
 export const SUPPORTED_NETWORKS: Record<SupportedNetwork, string> = {
     [Network.OptimismMainnet]: 'OPTIMISTIC',
     [Network.Arbitrum]: 'ARBITRUM-ONE',

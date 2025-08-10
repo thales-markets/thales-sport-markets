@@ -103,7 +103,7 @@ const MobileWrapper = styled(FlexDivRow)`
     justify-content: space-around;
     width: calc(100% - 10px);
     padding: 8px;
-    z-index: 10;
+    z-index: 11;
 `;
 
 const NavItem = styled(FlexDiv)<{ active?: boolean }>`

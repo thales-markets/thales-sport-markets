@@ -31,7 +31,7 @@ import {
     TradeData,
 } from 'types/markets';
 import { NetworkConfig, SupportedNetwork } from 'types/network';
-import { ShareTicketModalProps } from 'types/tickets';
+import { ShareTicketData } from 'types/tickets';
 import positionNamesMap from '../assets/json/positionNamesMap.json';
 import { CRYPTO_CURRENCY_MAP } from '../constants/currency';
 import { BATCH_SIZE, OVER_ADDED_PAYOUT_PERCENTAGE } from '../constants/markets';
@@ -482,7 +482,6 @@ export const getShareTicketModalData = async (
     collateral: Coins,
     paid: number,
     payout: number,
-    onClose: () => void,
     isModalForLive: boolean, // not the same as isLive indicator
     isSgp: boolean,
     isFreeBet: boolean,
@@ -490,7 +489,7 @@ export const getShareTicketModalData = async (
     networkConfig?: NetworkConfig,
     walletAddress?: string
 ) => {
-    let modalData: ShareTicketModalProps | undefined = undefined;
+    let modalData: ShareTicketData | undefined = undefined;
     const isLive = !!markets[0].live;
 
     if (isModalForLive && networkConfig) {
@@ -530,7 +529,6 @@ export const getShareTicketModalData = async (
                 multiSingle: false,
                 paid: lastTicketPaid,
                 payout: lastTicketPayout,
-                onClose,
                 isTicketLost: false,
                 collateral,
                 isLive,
@@ -546,7 +544,6 @@ export const getShareTicketModalData = async (
             multiSingle: false,
             paid,
             payout: payout,
-            onClose,
             isTicketLost: false,
             collateral,
             isLive,

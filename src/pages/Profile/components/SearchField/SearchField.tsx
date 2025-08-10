@@ -23,6 +23,7 @@ const SearchField: React.FC<SearchProps> = ({ text, customPlaceholder, handleCha
             <IconWrapper>
                 <SearchIcon />
             </IconWrapper>
+            {text !== '' && <XIcon className="icon icon--wrong" onClick={() => handleChange('')} />}
         </Wrapper>
     );
 };
@@ -79,6 +80,15 @@ const SearchIcon = styled.i`
         content: '\\00E5';
         color: ${(props) => props.theme.textColor.secondary};
     }
+`;
+
+const XIcon = styled.i`
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 10px;
+    color: ${(props) => props.theme.textColor.secondary};
+    cursor: pointer;
 `;
 
 export default SearchField;

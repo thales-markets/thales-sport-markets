@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexDivEnd, FlexDivRow } from 'styles/common';
+import { FlexDiv, FlexDivColumn, FlexDivEnd, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 
 export const tableHeaderStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -90,9 +90,16 @@ export const TableContainer = styled.div`
 
 export const SearchFieldContainer = styled(FlexDivEnd)`
     padding-right: 10px;
-    margin-bottom: 10px;
+    border-radius: 30px;
+    padding: 4px 0;
+    background: ${(props) => props.theme.overdrop.background.quinary};
+    flex: 1;
+    & > div {
+        width: 100%;
+    }
     input {
-        border: 1px solid rgb(78, 95, 177);
+        width: 100%;
+        border: none;
         color: rgb(78, 95, 177);
         border-radius: 20px;
     }
@@ -100,12 +107,13 @@ export const SearchFieldContainer = styled(FlexDivEnd)`
         color: rgb(78, 95, 177);
     }
     input:focus {
-        border: 1px solid rgb(78, 95, 177) !important;
+        border: none !important;
     }
     i::before {
         color: rgb(78, 95, 177);
     }
     @media (max-width: 767px) {
+        padding-top: 0 !important;
         & > div {
             padding-top: 0 !important;
         }
@@ -113,10 +121,89 @@ export const SearchFieldContainer = styled(FlexDivEnd)`
 `;
 
 export const HeaderContainer = styled(FlexDivRow)`
+    position: relative;
     align-items: center;
+    padding: 10px;
+    background: ${(props) => props.theme.overdrop.background.active};
+    gap: 10px;
+`;
+
+export const MonthsContainer = styled(FlexDivRow)<{ visible?: boolean }>`
+    position: relative;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: ${(props) => (props.visible ? '10px' : '0')};
+    background: ${(props) => props.theme.overdrop.background.active};
+    gap: 10px;
+    @media (max-width: 767px) {
+        overflow: auto;
+    }
+`;
+
+export const MonthsInnerContainer = styled(FlexDivRow)`
+    background: ${(props) => props.theme.overdrop.background.quinary};
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    @media (max-width: 767px) {
+        padding-top: 10px !important;
+    }
+`;
+
+export const MonthButton = styled.span<{ disabled?: boolean; selected?: boolean }>`
+    font-weight: 500;
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+    padding: 5px 15px;
+    border-radius: 5px;
+    background: ${(props) =>
+        props.selected ? props.theme.button.background.quaternary : props.theme.overdrop.background.quinary};
+    color: ${(props) => (props.selected ? props.theme.background.quinary : props.theme.textColor.primary)};
 `;
 
 export const Disclaimer = styled.span`
+    margin: 10px;
     font-size: 12px;
     font-style: italic;
+`;
+
+export const DropdownButton = styled(FlexDivSpaceBetween)`
+    background: ${(props) => props.theme.overdrop.background.octonary};
+    padding: 8px;
+    border-radius: 5px;
+    width: 250px;
+    cursor: pointer;
+    @media (max-width: 767px) {
+        width: 49%;
+        padding-top: 0 !important;
+    }
+`;
+
+export const DropdownContainer = styled.div`
+    position: absolute;
+    width: 250px;
+    top: 50px;
+    left: 10px;
+    z-index: 1000;
+`;
+
+export const DropDown = styled(FlexDivColumn)`
+    background: ${(props) => props.theme.background.secondary};
+    color: white;
+    border-radius: 5px;
+    position: absolute;
+    padding: 4px;
+    width: 100%;
+    gap: 2px;
+`;
+
+export const DropDownItem = styled(FlexDiv)<{ isSelected: boolean }>`
+    padding: 7px 10px;
+    cursor: ${(props) => (props.isSelected ? 'default' : 'pointer')};
+    ${(props) => (props.isSelected ? `background: ${props.theme.dropDown.menuItem.selectedColor.primary};` : '')}
+    border-radius: 5px;
+    &:hover {
+        ${(props) => (props.isSelected ? '' : `background: ${props.theme.dropDown.menuItem.hoverColor.primary};`)}
+    }
 `;

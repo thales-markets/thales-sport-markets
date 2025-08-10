@@ -3,6 +3,8 @@ export enum MultiplierType {
     WEEKLY = 'weeklyMultiplier',
     TWITTER = 'twitterMultiplier',
     LOYALTY = 'loyaltyMultiplier',
+    DAILY_QUEST = 'dailyQuestMultiplier',
+    WHEEL = 'wheelMultiplier',
     GAME = 'gameMultiplier',
 }
 

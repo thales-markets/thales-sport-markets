@@ -12,6 +12,10 @@
         "wrap-eth-tooltip": "Your ETH is first wrapped into WETH and then passed to the contract",
         "sell-side": "SELL",
         "submit": "Submit",
+        "enter-amount": "Enter amount",
+        "buy-in": "Buy-in",
+        "liquidity": "Liquidity",
+        "trade": "Trade",
         "days-of-week": {
             "mon": "mon",
             "tue": "tue",
@@ -51,6 +55,7 @@
             "connect-wallet-modal-subtitle": "Choose how you want to sign in",
             "or-connect-with": "or connect via wallet",
             "connect-your-wallet": "Connect wallet",
+            "sign-in": "Sign in",
             "connect-with-wallet": "Connect with wallet",
             "view-all-wallets": "View all wallets",
             "please-connect": "please, connect wallet to start using overtime.xyz",
@@ -93,7 +98,7 @@
             "approve-progress-label": "Approving <currency>{{currencyKey}}</currency>...",
             "approve-all-label": "Approve all",
             "custom-amount-label": "Approve amount of",
-            "approve-swap": "Approve swap to {{currencyKey}}"
+            "approve-swap": "Approve swap"
         },
         "unsupported-network": {
             "title": "Oops! You are on the wrong network!",
@@ -140,12 +145,17 @@
             "minute": "minute",
             "seconds": "seconds",
             "second": "second",
+            "months-short": "mo",
             "days-short": "d",
             "hours-short": "h",
             "minutes-short": "m",
             "seconds-short": "s"
         },
         "or": "or",
+        "and": "and",
+        "above": "above",
+        "below": "below",
+        "current-price": "current price",
         "dapp": "dapp",
         "launch-dapp": "launch dapp",
         "cancel": "Cancel",
@@ -177,7 +187,26 @@
         "yes": "YES",
         "no": "NO",
         "tennis-tooltip": "In case of a walkover, match will be treated as canceled. In case of retirement / disqualification during the match, it will be treated as a win for the player advancing to the next round",
-        "new": "new"
+        "new": "new",
+        "referral": {
+            "header-label": "Refer & earn",
+            "link-copied": "Referral link copied!",
+            "button": {
+                "label": "Refer and earn",
+                "disbled-tooltip": "Connect wallet to generate a referral link.",
+                "enabled-tooltip": "Invite people to trade on overtime to earn fees from each trade they make."
+            },
+            "id-exists": "Referral ID already exists",
+            "id-create-success": "Successfully set referral ID",
+            "modal": {
+                "title": "Referral ID",
+                "description": "Choose your Referral ID",
+                "submit-button": "Submit",
+                "copy-button": "Copy Referral link"
+            },
+            "your-referral-id": "Your Referral ID"
+        },
+        "text-copied": "Content copied to clipboard"
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
@@ -228,8 +257,6 @@
             "image-downloaded": "Image downloaded!",
             "open-twitter": "Opening Twitter...",
             "click-open-twitter": "Click here to open Twitter",
-            "metamask-not-supported": "Metamask browser doesn't support image download! Please use another browser to share image",
-            "ios-not-supported": "Sharing images not supported on iOS devices. If you want to share the image please use desktop version",
             "live-trade-requested": "Live trade requested: {{ ticket }}",
             "sgp-trade-requested": "SGP trade requested",
             "fulfilling-live-trade": "Fulfilling live trade",
@@ -488,7 +515,6 @@
             "title": "Send free bet",
             "enter-wallet-address": "Enter wallet address",
             "enter-wallet-addresses": "Enter wallet addresses",
-            "enter-amount": "Enter amount",
             "enter-amount-per-user": "Enter amount per user",
             "approve-success": "Successfully approved",
             "transaction-pending": "Transaction pending",
@@ -795,7 +821,9 @@
                 "promotions": "Promotions",
                 "speed-markets": "Speed markets",
                 "digital-options": "Digital options",
-                "resources": "Resources"
+                "resources": "Resources",
+                "referral": "Affiliate",
+                "migrate": "Migrate"
             },
             "buttons": {
                 "switch": "Switch",
@@ -897,8 +925,8 @@
                 "potential-payout": "Potential payout",
                 "total-quote": "Total quote",
                 "positions": "Number of Positions",
-                "share": "Share",
-                "copy": "Copy",
+                "share": "Post",
+                "copy": "Copy image",
                 "download": "Download",
                 "winner": "Winner",
                 "loser": "Loser",
@@ -909,8 +937,10 @@
                     "usd-amount": "USD amount"
                 },
                 "display-as-usdc": "Display amount as USDC",
-                "submit-url": "Submit your tweet URL for Overdrop boost",
-                "verifying-tweet": "Verifying tweet",
+                "submit-url": "Submit your post URL for Overdrop boost",
+                "generate-content": "Need help with content? Use our AI helper below.",
+                "generate-content-flex": "*you will need to paste the image into the generated post",
+                "verifying-tweet": "Verifying post",
                 "network-error": "Network error, check browser console for more info"
             },
             "toggle-parlay": {
@@ -935,14 +965,20 @@
                 "bonus-applied": "Boost applied",
                 "total-xp-boost": "Total XP Boost",
                 "total-xp-earned": "Total XP Earned",
+                "how-it-works": "How Overdrop season 2 works",
                 "tooltip": {
                     "daily-boost": "The more days in a row you bet, the higher your XP boost. Increase +5% for each day up to maximum of +35%. If you miss one day, this boost resets to 0%",
                     "weekly-boost": "The more weeks in a row you bet, the higher your XP boost. Increase +5% for each week up to maximum of +20%. If you miss one week, this boost resets to 0%",
                     "parlay-boost": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay. Maximum is +700% XP boost on 15 games in parlay. The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
                     "over-boost": "All bets executed with OVER as collateral will have +10% bonus on baseline XP accrual for that specific bet!",
                     "twitter-boost": "If you share your Overtime bet on Twitter in the form of a Flex Card, you will activate a 3 day long Twitter Flex Boost of +10%.",
-                    "loyalty-boost": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP earning, depending on your XP level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level.",
+                    "loyalty-boost": "The Loyalty XP Boost gives you up to 30% boost on all your general XP accrual, depending on what level you finished the previous three months. Each final monthly level you reach carries a certain loyalty XP boost for the next month. Starting at 1% XP boost if you finish the month at Level 1, each subsequent level increases the boost by +1%. Your current total Loyalty XP boost equals the sum of Loyalty XP Boost earned from the previous three months.",
                     "promo-boost": "Certain sports games carry additional XP boosts.",
+                    "daily-quest": "Completing daily quest gives you 10% boost",
+                    "spin-the-wheel-boost": "You can earn xp boost daily by spining the wheel",
+                    "how-it-works-1": "Overdrop League Season 2 allows users to earn XP on Overtime by placing bets, which earns you monthly pro-rata ETH rewards and Free Bets on XP Level Ups. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also gain significant XP boosts through various achievements and selected bet types that can speed up their XP progress.",
+                    "how-it-works-2": "Season 2 of Overdrop will run as a series of monthly episodes until June 2026. After the monthly episode of Overdrop ends, all users with XP for that month will be rewarded their share of 4 ETH proportionally. You can take a look at your estimated rewards of the current month at any point on the leaderboard page. Your XP balance resets to 0 after the end of each month.",
+                    "how-it-works-3": "Additionally, users will be able to reach XP levels that carry special Free Bet rewards and loyalty XP boost for the next months! You can read more about XP levels <anchor>here</anchor>.",
                     "base-xp": "The base XP is calculated via the following formula:\n\nBase XP = Buy In Amount * (2 - Normalized Odds). \n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are."
                 }
             },
@@ -1243,7 +1279,6 @@
         "full-withdrawal-request-label": "Withdrawal request: {{amount}}<tooltip />",
         "partial-withdrawal-request-label": "Withdrawal request: {{percentage}} of the balance ({{amount}}<tooltip />)",
         "estimated-amount-tooltip": "This is an estimated amount. The actual amount will be calculated upon closing the current round based on the round PnL.",
-        "deposit-amount-placeholder": "Enter amount",
         "available-to-withdraw-label": "Available to withdraw: <bold>{{amount}}</bold>",
         "nothing-to-withdraw-label": "Nothing to withdraw.",
         "withdrawal-message": "You can request a full/partial withdrawal and your funds will be sent to you automatically at the end of the round when the round closes.",
@@ -1390,7 +1425,7 @@
         "new-season": " starts soon • Stay tuned for new rewards!",
         "navigation-menu": {
             "home": "Overdrop home",
-            "xp-calculation": "XP Details",
+            "xp-calculation": "Overdrop Details",
             "leveling-tree": "Leveling tree",
             "leaderboard": "Leaderboard"
         },
@@ -1410,7 +1445,7 @@
             "current-rewards": "Current estimated rewards",
             "next-over-rewards-at": "Next OVER free bet rewards at",
             "rank": "Rank",
-            "disclaimer": "*Wallets suspected of gaming the system can be disqualified.",
+            "disclaimer": "*Wallets suspected of gaming the system or self referring can be disqualified.",
             "claim-rewards": "Claim {{collateral}}",
             "claim-disclaimer": "Switch to the Optimism/Arbitrum network to claim OP/ARB rewards.",
             "claim-confirmation-message": "{{collateral}} rewards successfully claimed",
@@ -1418,12 +1453,14 @@
             "your-rewards": "Your rewards",
             "switch-to-eoa": "Switch to EOA to claim",
             "claim-rewards-tooltip": "You can claim your rewards only with an EOA wallet. Please switch to EOA to claim your rewards.",
-            "total-value": "Total value"
+            "total-value": "Total value",
+            "affiliate-cta": "Get even more XP by referring users to Overtime.",
+            "affiliate-cta-link": "Check Affiliate page for more details."
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",
             "explainer": {
-                "xp-explained": "XP Explained",
+                "xp-explained": "XP Breakdown",
                 "xp-explained-content": "<bold>Overdrop</bold> is a season-long league where users accrue XP on Overtime by placing bets. The higher the buy-in and odds of the bet, the more XP the bet earns. Users can also <bold>gain additional XP boosts</bold> through various achievements that can speed up their XP progress. \n\nThe league will run <bold>until June 2025</bold> and it will have rewards for all participants <bold>in the form of airdrops, free bets and many more!</bold> \n\nAfter the Overdrop League ends in June 2025, all users with accrued XP will be rewarded their share of <highlight>100,000 OP</highlight> and <highlight>200,000 ARB</highlight> tokens proportionally. You can take a look at your estimated rewards at any point on the leaderboard page. \n\nAdditionally, users will be able to reach <bold>XP levels</bold> that carry special rewards! You can read more about <bold>XP levels</bold> here.",
                 "base-xp-accrual": "Base XP",
                 "base-xp-content": "The base calculation for how much XP your bet gains you is calculated via the following formula: \n\n <highlight>Base XP = Buy In Amount * (2 - Normalized Odds )</highlight> \n\n - <bold>Buy In Amount:</bold> the amount of $ that you placed as a Buy In on the respective bet.\n\n - <bold>Normalized Odds:</bold> Odds of your bet shown in the format of Normalized Probability between 0 and 1. For example, Decimal Odds of 1.60 is 0.625 in  Normalized Odds format.\n\nThis means that your bet accrues more base XP the higher your buy-in and the higher your bet odds are.",
@@ -1431,18 +1468,22 @@
                 "xp-boost-content": "There are several ways to further boost the amount of your XP accrual per bet by having boosts from <bold>daily bet streaks, weekly bet streaks, amount of games in parlay, using OVER token as collateral,  flexing your bets on twitter and reaching XP levels for loyalty boosts!</bold>",
                 "daily-bonus": "Daily streak boost",
                 "weekly-boost": "Weekly streak boost",
-                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.",
+                "weekly-boost-content": "The conditions for the weekly streak boost to be activated for the ongoing week is to have any betting volume between Monday 00:00UTC and Sunday 23:59UTC for the ongoing week. The more weeks in a row this condition is met, the higher the <bold>Weekly Streak Boost</bold> on your baseline XP accrual!\n\n<bold>Weekly Streak Boost</bold> is applied to all bets made while the boost is active.\n\nIf you break your streak and miss out to drive volume one day, your <bold>Weekly Streak Boost</bold> is reset to +0%.\n\nWeekly Streak Boost does not reset with the monthly episode, but is <bold> rolled over to the next month.</bold>",
                 "parlay-xp": "PARLAY BOOST",
-                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay! The number of games on a parlay for system bets equals the minimal number of games that need to hit.",
+                "parlay-content": "Depending on how many individual games are within your parlay, you will get an additional boost on your XP accrual for that parlay!",
                 "positions-over": "OVER BOOST",
                 "days": "days",
-                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold>",
+                "days-content": "The conditions for the daily streak boost to be activated for the ongoing day is to have any betting volume between 00:00UTC and 23:59UTC for the ongoing day. The more days in a row this condition is met, the higher the <bold>Daily Streak Boost</bold> on your baseline XP accrual ! \n\n<bold>Daily Streak Boost</bold> is applied to all bets made while the boost is active. \n\nIf you break your streak and miss out to drive volume one day, <bold>your Daily Streak Boost is reset to +0%.</bold> \n\nDaily Streak Boost does not reset with the monthly episode, but is <bold> rolled over to the next month.</bold>",
                 "games-in-parlay": "games in parlay",
                 "position-over-content": "All bets executed with  <bold>OVER</bold> as collateral will have <bold>+10% boost</bold> on baseline XP accrual for that specific bet!",
                 "twitter-share-bonus": "twitter share boost",
                 "twitter-content": "If you share your Overtime bet on Twitter in the form of a <bold>Flex Card</bold>, you will activate a <bold>3 day long Twitter Flex Boost of +10%.</bold>  This specific boost is valid for all trades executed within those 72 hours. <bold>After the 72 hours</bold> have elapsed, the boost expires and you can activate it again by sharing a new flex card on Twitter under the same conditions.",
-                "loyalty-boost": "Loyalty boost",
-                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 25% permanent boost on all your general XP accrual, depending on your level. Starting at 5% boost on Level 1, you gain another +5% increase on reaching every fifth level. You reach max Loyalty XP boost of 25% when you reach Level 20 (GOAT) with having accrued 5,000,000 XP points. You can see the XP levels breakdown on the LEVELING TREE page."
+                "loyalty-boost": "Loyalty XP Boost",
+                "loyalty-boost-content": "The Loyalty XP Boost gives you up to 30% boost on all your general XP accrual, depending on what level you finished the previous three months. Each final monthly level you reach carries a certain loyalty XP boost for the next month. Starting at 1% XP boost if you finish the month at Level 1, each subsequent level increases the boost by +1%. Your current total Loyalty XP boost equals the sum of Loyalty XP Boost earned from the previous three months.",
+                "daily-quest": "Daily quest",
+                "daily-quest-content": "Completing the Daily Quest tasks each day, awards you +10% XP boost and a fixed reward of +200 XP. Tasks of the Daily Quest are: \n\n - Make a bet on Overtime \n - Place one Speed Markets trade \n - Post a tweet on X.com mentioning @overtime_io and submit its link in the Daily Quest input field",
+                "spin-the-wheel": "Spin the Wheel",
+                "spin-the-wheel-content": "Each day you will be able to Spin The Wheel for a chance to win a Daily XP Boost of +20%, +30% or as high as +50%. If you completed the Daily Quest before spinning the wheel, your Spin The Wheel rewards get upgraded to: +20% XP Boost +100 XP; +30% XP Boost +200 XP or 50% XP Boost + 500 XP."
             },
             "payout-disclaimer": "*won Free Bets are airdropped each Friday."
         },
@@ -1455,6 +1496,10 @@
             "loyalty-boost": "Loyalty boost",
             "shared-flex": "Shared ticket",
             "twitter-multiplier": "Twitter multiplier",
+            "wheel-quest": "Spin the wheel",
+            "daily-quest": "Daily Quest boost",
+            "daily-quest-multiplier": "Quest multiplier",
+            "wheel-multiplier": "Wheel multiplier",
             "total-bonus": "Total boost",
             "active-xp-bonus": "Active xp boost",
             "xp-history": "XP History",
@@ -1462,7 +1507,8 @@
             "no-results": "No results",
             "date-time": "Date | Time",
             "received": "Received",
-            "tx-link": "TX link"
+            "tx-link": "TX link",
+            "type": "Type"
         },
         "leaderboard": {
             "table": {
@@ -1471,7 +1517,11 @@
                 "level": "Level",
                 "total-xp": "Total XP Points",
                 "total-volume": "Total volume",
-                "rewards": "Reward amount"
+                "rewards": "Reward amount",
+                "level-badge": "Level badge",
+                "points": "Total XP Points",
+                "volume": "Total volume",
+                "level_smallBadge": "Level badge"
             }
         },
         "modal": {
@@ -1482,6 +1532,48 @@
             "day-streak": "<bold>{{ days }}</bold><br/>day streak!",
             "active-daily-streak": "Active daily streak xp boost",
             "dont-show-this": "Don't show this again"
+        },
+        "wheel": {
+            "congratulations": "CONGRATULATIONS!",
+            "epic-rewards": "Epic rewards unlocked",
+            "xp-boost": "XP BOOST",
+            "daily-spin": "Daily Spin the Wheel",
+            "spin-info": "One spin per day • Complete Daily Quest before spinning for extra Spin rewards",
+            "spin-now": "Spin now",
+            "reward-info": "You just won {{ boostAmount }}% XP boost for the next 24h{{ xpReward }}! Come back again tomorrow for another spin. Don't forget to complete the Daily Quest before spinning the wheel to get upgraded rewards!"
+        },
+        "daily-quest": {
+            "title": "Daily Quest",
+            "reward": "Earn 200 XP + 10% XP Boost",
+            "explainer": "Complete your Daily Quest tasks every day to earn 200 XP + 10% XP Boost for the day and to upgrade your next Daily Spin the Wheel with extra rewards!",
+            "finished": "Finished",
+            "daily-spin": "Daily Spin to Win XP Boost!",
+            "bonus-spin": "Spin for bonuses",
+            "complete-daily-quest": "Complete Daily Quest first for upgraded spin!",
+            "daily-quest-completed": "Daily quest completed - bonus spin rewards unlocked.",
+            "spin": "Spin",
+            "badge": {
+                "boost": "XP BOOST",
+                "xp": "OVERDROP XP"
+            },
+            "ot": {
+                "title": "Bet on Overtime",
+                "desc": "Place any bet on Overtime"
+            },
+            "speed": {
+                "title": "Speed Market Trade",
+                "desc": "Place a Speed Markets trade"
+            },
+            "social": {
+                "title": "Post about @overtime_io on X.com",
+                "desc": "Mention @overtime_io on X.com",
+                "placeholder": "Post your post or cast URL here",
+                "share": {
+                    "title": "Post about Overtime on X",
+                    "desc": "Mention @overtime_io in a post and submit the post's link below",
+                    "submit": "Submit your post url to complete task"
+                }
+            }
         }
     },
     "resolve-blocker": {
@@ -1504,6 +1596,153 @@
         "tab": {
             "blocked-games": "Blocked games",
             "unblocked-games": "Unblocked games"
+        }
+    },
+    "referral": {
+        "generate-link": "Generate link",
+        "copy-link": "Copy link",
+        "trades": "Trades",
+        "total-volume": "Total volume",
+        "total-earned": "Total earned",
+        "total-trading-fees": "Total trading fees",
+        "affiliate-leaderboard-table": {
+            "address": "Referral ID",
+            "number-of-trades": "Trades",
+            "total-volume": "Total volume",
+            "first-transaction": "First transaction",
+            "total-earned": "Total earned",
+            "amount": "Amount",
+            "volume": "Volume",
+            "type": "Type",
+            "timestamp": "Date/Time"
+        },
+        "no-result": "There are no results for this table",
+        "earned": "Earned",
+        "paragraph": "<bold>Overtime Referrals Program is an on-chain incentivized user acquisition and onboarding tool.</bold>The program allows anyone to <bold>generate a Referral Link</bold> and share it with users they are trying to onboard.<br /><br /> When sharing your personal Referral Link, you earn <bold>0.5% of all {{ collateralKey }} volume your referred users produce!</bold> There are no manual claims needed, the {{ collateralKey }} is auto-accruing in your wallet in form of simple {{ collateralKey }} transfers.",
+        "nav-items": {
+            "all-transactions": "All transactions",
+            "see-result-by-trader": "See result by trader",
+            "affiliate-leaderboard": "Affiliate Leaderboard"
+        },
+        "header": {
+            "title": "Create Your Affiliate Link",
+            "subtitle": "Refer users to Overtime to earn 12.5% of protocol fees and 20% of the XP they generate on bets.",
+            "subtitle-2": "Spread your unique affiliate link, onboard new users to Overtime, track your ETH, Free Bet and Protocol Fee rewards, and climb the leaderboard!",
+            "subtitle-3": "By Overtime's discretion, successful affiliates can be upgraded to earn 50% of Protocol Fees.",
+            "affiliate-id-label": "Your Affiliate ID",
+            "affiliate-id-placeholder": "Enter affiliate ID",
+            "create": "Create",
+            "update": "Update",
+            "copy": "Copy",
+            "stats-title": "Your Stats",
+            "stats": {
+                "referrals": "Referred users",
+                "xp-earned": "XP Earned",
+                "rank": "Affiliate Rank",
+                "next-reward": "Next Reward",
+                "next-level-progress": "Next Level Progress"
+            }
+        },
+        "how-it-works": {
+            "title": "How the Affiliate Program Works",
+            "step1": {
+                "title": "Create Your Affiliate ID",
+                "description": "Generate your unique affiliate link to share with potential new Overtime users."
+            },
+            "step2": {
+                "title": "Share Your Link",
+                "description": "Each new user that signs up using your link becomes connected to your account."
+            },
+            "step3": {
+                "title": "Earn Fees and XP Rewards",
+                "description": "Receive 12.5% protocol fees and 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!"
+            }
+        },
+        "tabs": {
+            "affiliate": "Affiliate Leaderboard",
+            "summary": "Your Referred Users",
+            "activity": "Your Referred Bets"
+        },
+        "leaderboard": {
+            "time-filter": "This Month",
+            "your-position": "Your rank",
+            "overdrop-league": "Earned XP makes you eligible for monthly ETH and $OVER Free Bet rewards.",
+            "overdrop-league-link": "Check Overdrop pages for more details.",
+            "progress-to-next": "Progress to next rank",
+            "table-headers": {
+                "rank": "Rank",
+                "user": "Affiliate ID",
+                "total-bets": "Referred bets",
+                "referrals": "Referred Users",
+                "betVolume": "Referred Volume",
+                "earnedFees": "Earned Fees",
+                "xp": "Affiliate XP Earned",
+                "level": "Overdrop XP Level"
+            },
+            "updated": "Updated 3 minutes ago"
+        },
+        "activity": {
+            "table-headers": {
+                "user": "Referred User",
+                "date-joined": "Date Joined",
+                "total-bets": "Total Bets",
+                "bet-volume": "Bet Volume",
+                "xp-generated": "User XP",
+                "xp-earned": "Affiliate XP"
+            }
+        },
+        "bets": {
+            "table-headers": {
+                "user": "Referred User",
+                "timestamp": "Timestamp",
+                "scan-link": "Tx Link",
+                "value": "Bet Value",
+                "xp-generated": "User XP",
+                "xp-earned": "Affiliate XP"
+            }
+        },
+        "rewards": {
+            "title": "Referral Rewards",
+            "silver": {
+                "name": "Silver Affiliate",
+                "requirement": "Refer 10 active users",
+                "progress": "8/10"
+            },
+            "gold": {
+                "name": "Gold Affiliate",
+                "requirement": "Earn 5,000 XP from referrals",
+                "progress": "920/5,000"
+            }
+        },
+        "missions": {
+            "title": "Affiliate Missions",
+            "weekend-warrior": {
+                "name": "Weekend Warrior",
+                "reward": "+100 XP",
+                "requirement": "Refer 3 users who place bets this weekend",
+                "progress": "1/3"
+            },
+            "big-spender": {
+                "name": "Big Spender",
+                "reward": "+250 XP",
+                "requirement": "Refer a user who places a bet of $500 or more"
+            }
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "subtitle": "Everything you need to know about the Overtime Affiliate Program. If you cant find the answer to your question, please contact our support team.",
+            "questions": [
+                "How does the Overtime Affiliate Program work?",
+                "What do I get from earning XP from my referrers?",
+                "Are there any limitations when sharing my ref link?",
+                "How can I track the performance of my unique affiliate link and its referrers?"
+            ],
+            "answers": [
+                "Overtime Affiliate Program is an onchain incentivized user acquisition and onboarding tool. This program allows you to generate your own unique Referral Link and share it with potential new users that you’d like to introduce to Overtime. If someone starts using Overtime from your unique Referral Link, then you get 12.5% of their trading fees paid directly in your wallet and 20% of XP they generate for Overdrop League Season 2, allowing you to passively earn ETH rewards and Free Bets.",
+                "These XP rewards are a part of Overdrop League Season 2, which has monthly ETH rewards based on your total XP and occasional Free Bet reward on specific XP level ups! Learn more about Overdrop and XP system here.",
+                "There are absolutely no limitations on your unique ref link or the rewards you get from them. You can share it to as many people as you can, and get as much rewards as you can from their respective volume.",
+                "You can track all your referrers and their respective activity on “Referred Users Leaderboard” and “Referred Bets” sections of this page."
+            ]
         }
     },
     "governance": {
@@ -1532,6 +1771,93 @@
                 "single-choice": "Single choice voting",
                 "weighted": "Weighted voting"
             }
+        }
+    },
+    "speed-markets": {
+        "progress": "Please wait...",
+        "menu-items-label": {
+            "trade": "Trade",
+            "positions": "Positions",
+            "settings": "Settings"
+        },
+        "buy": {
+            "label": "Execute trade",
+            "progress-label": "Execution in progress...",
+            "wrap-eth": "Wrap ETH and execute trade",
+            "wrap-eth-progress": "Wrap and execute in progress...",
+            "confirmation-message": "Successfully executed - position created"
+        },
+        "amm-trading": {
+            "choose-direction": "choose direction",
+            "choose-time": "choose duration",
+            "trading-details-default": "Build your position above to see your win.",
+            "trading-details": "If {{asset}} price is {{position}} {{strikePrice}} ({{slippage}}%<slippageTooltip />) in {{duration}}, you win {{payout}}<payotuTooltip />."
+        },
+        "user-positions": {
+            "claim": "Claim",
+            "claim-progress": "Claiming",
+            "claim-in": "Claim in",
+            "claim-in-progress": "Claiming in",
+            "claim-all": "Claim all",
+            "claim-all-progress": "Claiming all",
+            "claim-all-in": "Claim all in",
+            "claim-all-in-progress": "Claiming all in",
+            "confirmation-message": "Position(s) successfully claimed",
+            "no-resolve-positions": "No positions for this section with price",
+            "no-positions": "No positions",
+            "history-limit": "* Showing only markets with expiry date not older than {{days}} days.",
+            "filters": {
+                "pending": "Pending",
+                "claimable": "Claimable",
+                "history": "History"
+            },
+            "labels": {
+                "status": "Status",
+                "entry": "Entry",
+                "end": "End",
+                "price": "Price",
+                "paid": "Paid",
+                "payout": "Payout"
+            },
+            "status": {
+                "won": "Won",
+                "loss": "Loss",
+                "winning": "Winning...",
+                "losing": "Losing...",
+                "waiting-price": "Waiting for price..."
+            }
+        },
+        "settings": {
+            "slippage-tolerance": "Slippage tolerance",
+            "slippage-tolerance-description": "Maximum price difference you're willing to accept"
+        },
+        "tooltips": {
+            "approve-swap-tooltip": "To get payout in {{currencyKey}}, you need to approve swap from {{defaultCurrency}} to {{currencyKey}}.",
+            "current-price": "Current price as reported by Pyth oracles.",
+            "liquidity": "Current available liquidity for this Asset: {{liquidityPerAsset}}<br><br>Total available for Buy-In per direction<br>Available for UP: {{liquidityPerUp}}<br>Available for DOWN: {{liquidityPerDown}}",
+            "payout-conversion": "Win amount can be slightly different due to conversion rate at execution time.",
+            "final-price-missing": "Oracle price snapshot for this position timestamp is still being processed. Even if contract input is delayed by the Pyth oracles, the price snapshot will be true to the moment of position expiration",
+            "slippage": "Your trade will revert if the live price changes more than this percentage from your chosen Strike Price during trade execution.",
+            "eth-to-weth": "Your ETH will be wrapped to WETH before executing the trade.",
+            "pending-positions": "Pending positions",
+            "claimable-positions": "Claimable positions",
+            "claim-all-except-native": "Claim all positions except those with {{collaterals}} collateral(s)."
+        },
+        "errors": {
+            "min-buyin": "Minimal buy-in is {{minAmount}}",
+            "max-buyin": "Maximal buy-in is {{maxAmount}}",
+            "out-of-liquidity-direction": "Out of liquidity for direction",
+            "out-of-liquidity": "Out of liquidity",
+            "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
+            "price-stale": "Can't resolve position with stale price"
+        },
+        "flex-card": {
+            "strike-price": "Strike price",
+            "market-duration": "Trade duration",
+            "buy-in": "Buy-In",
+            "potential-win": "Potential win",
+            "won": "Won",
+            "loss": "Loss"
         }
     }
 }

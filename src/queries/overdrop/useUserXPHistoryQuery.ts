@@ -3,6 +3,7 @@ import axios from 'axios';
 import { generalConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { OverdropXPHistory } from 'types/overdrop';
+import { getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
 
 const useUserXPHistoryQuery = (walletAddress: string, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
     return useQuery<OverdropXPHistory[]>({
@@ -10,7 +11,12 @@ const useUserXPHistoryQuery = (walletAddress: string, options?: Omit<UseQueryOpt
         queryFn: async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.OVERDROP_API_URL}/user-points-history/${walletAddress}`
+                    `${generalConfig.OVERDROP_API_URL}/user-points-history/${walletAddress}`,
+                    {
+                        params: {
+                            ...getCurrentSeasonAndMiniSeason(),
+                        },
+                    }
                 );
 
                 if (response?.status === 200 && response?.data) return response.data;

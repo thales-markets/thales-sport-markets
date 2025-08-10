@@ -5,8 +5,9 @@ import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import OutsideClickHandler from 'components/OutsideClick';
 import SelectInput from 'components/SelectInput';
-import ShareTicketModalV2 from 'components/ShareTicketModalV2';
+import ShareModal from 'components/ShareModal';
 import SimpleLoader from 'components/SimpleLoader';
+import SuggestedAmount from 'components/SuggestedAmount';
 import Toggle from 'components/Toggle';
 import Tooltip from 'components/Tooltip';
 import Checkbox from 'components/fields/Checkbox';
@@ -97,8 +98,7 @@ import { SportsAmmData, TicketMarket, TicketRequest, TradeData } from 'types/mar
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { RootState } from 'types/redux';
 import { SportsbookData } from 'types/sgp';
-import { ShareTicketModalProps } from 'types/tickets';
-import { OverdropLevel, ThemeInterface } from 'types/ui';
+import { OverdropLevel, ShareModalProps, ThemeInterface } from 'types/ui';
 import { ViemContract } from 'types/viem';
 import { WalletConnections } from 'types/wallet';
 import {
@@ -176,7 +176,6 @@ import { Address, Client, maxUint256, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 import BuyStepsModal from '../BuyStepsModal';
-import SuggestedAmount from '../SuggestedAmount';
 import {
     AmountToBuyContainer,
     Arrow,
@@ -234,6 +233,8 @@ const TicketErrorMessage = {
     SAME_TEAM_IN_PARLAY: 'SameTeamOnParlay',
     PROOF_IS_NOT_VALID: 'Proof is not valid',
 };
+
+const BUYIN_AMOUNTS = [3, 10, 50, 100, 500];
 
 const Ticket: React.FC<TicketProps> = ({
     markets,
@@ -294,7 +295,7 @@ const Ticket: React.FC<TicketProps> = ({
 
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [showShareTicketModal, setShowShareTicketModal] = useState(false);
-    const [shareTicketModalData, setShareTicketModalData] = useState<ShareTicketModalProps | undefined>(undefined);
+    const [shareTicketModalProps, setShareTicketModalProps] = useState<ShareModalProps | undefined>(undefined);
     const [keepSelection, setKeepSelection] = useState<boolean>(getKeepSelectionFromStorage() || false);
 
     const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
@@ -412,11 +413,22 @@ const Ticket: React.FC<TicketProps> = ({
                           tooltip: 'weekly-boost',
                       },
                       {
-                          name: 'twitterMultiplier',
-                          label: 'Twitter share',
+                          name: 'loyaltyMultiplier',
+                          label: 'Loyalty boost',
                           multiplier: 0,
-                          icon: <OverdropIcon className="icon icon--x-twitter" />,
-                          tooltip: 'twitter-boost',
+                          icon: <>0</>,
+                      },
+                      {
+                          name: 'dailyQuestMultiplier',
+                          label: 'Daily quest',
+                          multiplier: 0,
+                          icon: <>0</>,
+                      },
+                      {
+                          name: 'wheelMultiplier',
+                          label: 'Spin the Wheel',
+                          multiplier: 0,
+                          icon: <>0</>,
                       },
                   ]),
             parlayMultiplier,
@@ -1824,7 +1836,6 @@ const Ticket: React.FC<TicketProps> = ({
                                         collateralHasLp ? usedCollateralForBuy : defaultCollateral,
                                         shareTicketPaid,
                                         0,
-                                        shareTicketOnClose,
                                         true, // isModalForLive
                                         isSgp,
                                         isFreeBetActive,
@@ -1834,7 +1845,7 @@ const Ticket: React.FC<TicketProps> = ({
                                     );
 
                                     if (modalData) {
-                                        setShareTicketModalData(modalData);
+                                        setShareTicketModalProps({ data: modalData, onClose: shareTicketOnClose });
                                         setShowShareTicketModal(true);
                                     }
                                 }
@@ -1888,15 +1899,16 @@ const Ticket: React.FC<TicketProps> = ({
                             collateralHasLp ? usedCollateralForBuy : defaultCollateral,
                             shareTicketPaid,
                             payout,
-                            shareTicketOnClose,
                             false, // isModalForLive
                             isSgp,
                             isFreeBetActive,
                             systemBetData
                         );
 
-                        setShareTicketModalData(modalData);
-                        setShowShareTicketModal(true);
+                        if (modalData) {
+                            setShareTicketModalProps({ data: modalData, onClose: shareTicketOnClose });
+                            setShowShareTicketModal(true);
+                        }
 
                         setBuyStep(BuyTicketStep.COMPLETED);
                         setOpenBuyStepsModal(false);
@@ -2453,15 +2465,16 @@ const Ticket: React.FC<TicketProps> = ({
             collateralHasLp ? usedCollateralForBuy : defaultCollateral,
             shareTicketPaid,
             payout,
-            onModalClose,
             false, // isModalForLive
             isSgp,
             isFreeBetActive,
             systemBetData
         );
 
-        setShareTicketModalData(modalData);
-        setShowShareTicketModal(!twitterShareDisabled);
+        if (modalData) {
+            setShareTicketModalProps({ data: modalData, onClose: onModalClose });
+            setShowShareTicketModal(!twitterShareDisabled);
+        }
     };
 
     const overdropTotalBoost = useMemo(
@@ -2619,6 +2632,7 @@ const Ticket: React.FC<TicketProps> = ({
                 )}
             </RowSummary>
             <SuggestedAmount
+                amounts={BUYIN_AMOUNTS}
                 insertedAmount={buyInAmount}
                 exchangeRates={exchangeRates}
                 collateralIndex={selectedCollateralIndex}
@@ -2628,6 +2642,7 @@ const Ticket: React.FC<TicketProps> = ({
                         ? ceilNumberToDecimals(minBuyInAmount / swapQuote, getPrecision(minBuyInAmount / swapQuote))
                         : undefined
                 }
+                margin="8px 0px"
             />
             {freeBetBalanceExists && (
                 <RowSummary>
@@ -2677,7 +2692,7 @@ const Ticket: React.FC<TicketProps> = ({
                         inputPadding="5px 10px"
                         borderColor={theme.input.borderColor.tertiary}
                         disabled={isAllowing || isBuying}
-                        placeholder={t('liquidity-pool.deposit-amount-placeholder')}
+                        placeholder={t('common.enter-amount')}
                         currencyComponent={
                             <CollateralSelector
                                 collateralArray={getCollaterals(networkId)}
@@ -3044,21 +3059,8 @@ const Ticket: React.FC<TicketProps> = ({
                 <SummaryLabel disabled={twitterShareDisabled}>{t('markets.parlay.share-ticket.label')}</SummaryLabel>
                 <TwitterIcon disabled={twitterShareDisabled} />
             </ShareWrapper>
-            {showShareTicketModal && shareTicketModalData && (
-                <ShareTicketModalV2
-                    markets={shareTicketModalData.markets}
-                    multiSingle={false}
-                    paid={shareTicketModalData.paid}
-                    payout={shareTicketModalData.payout}
-                    onClose={shareTicketModalData.onClose}
-                    isTicketLost={shareTicketModalData.isTicketLost}
-                    collateral={shareTicketModalData.collateral}
-                    isLive={shareTicketModalData.isLive}
-                    isSgp={shareTicketModalData.isSgp}
-                    applyPayoutMultiplier={shareTicketModalData.applyPayoutMultiplier}
-                    systemBetData={shareTicketModalData.systemBetData}
-                    isTicketOpen={shareTicketModalData.isTicketOpen}
-                />
+            {showShareTicketModal && shareTicketModalProps && (
+                <ShareModal data={shareTicketModalProps.data} onClose={shareTicketModalProps.onClose} />
             )}
             {openApprovalModal && (
                 <ApprovalModal

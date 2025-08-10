@@ -861,7 +861,7 @@ const multipleCollateral: Record<Coins, ContractData> = {
             [Network.OptimismMainnet]: '0xedf38688b27036816a50185caa430d5479e1c63e',
             [Network.Arbitrum]: '0x5829d6fe7528bc8e92c4e81cc8f20a528820b51a',
             [Network.Base]: '0x7750c092e284e2c7366f50c8306f43c7eb2e82a2',
-            [Network.OptimismSepolia]: TBD_ADDRESS,
+            [Network.OptimismSepolia]: '0xeC60249ee888FFdE5Ee09920C9644A904D4f49de',
         },
         abi,
     },

@@ -1,10 +1,11 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
-import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS } from 'constants/overdrop';
+import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS, SEASON_2 } from 'constants/overdrop';
+import { getDayOfYear } from 'date-fns';
 import { Network } from 'enums/network';
 import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
-import { OverdropMultiplier } from 'types/overdrop';
+import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 
 export const formatPoints = (amount: number) => {
@@ -27,6 +28,12 @@ export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
     if (multiplier.name === 'loyaltyMultiplier') {
         return 'Loyalty';
     }
+    if (multiplier.name === 'dailyQuestMultiplier') {
+        return 'Daily quest';
+    }
+    if (multiplier.name === 'wheelMultiplier') {
+        return 'Spin the wheel';
+    }
     return '';
 };
 
@@ -42,6 +49,13 @@ export const getTooltipKey = (multiplier: OverdropMultiplier) => {
     }
     if (multiplier.name === 'loyaltyMultiplier') {
         return 'loyalty-boost';
+    }
+
+    if (multiplier.name === 'dailyQuestMultiplier') {
+        return 'daily-quest';
+    }
+    if (multiplier.name === 'wheelMultiplier') {
+        return 'spin-the-wheel-boost';
     }
     return '';
 };
@@ -116,3 +130,28 @@ export const getNextOverRewardLevel = (points?: number) => {
 };
 
 export const areOverdropRewardsAvailableForNetwork = (network: Network) => OVERDROP_REWARDS_NETWORKS.includes(network);
+
+export const hasUserDoneDailyQuests = (userData: OverdropUserData | undefined) => {
+    if (!userData) return false;
+
+    if (!userData.lastTradeOvertime || !userData.lastTradeSpeed || !userData.lastTwitterActivity) {
+        return false;
+    }
+
+    const today = getDayOfYear(new Date());
+    const lastTradeOvertimeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
+    const lastTradeSpeedDay = getDayOfYear(new Date(userData.lastTradeSpeed));
+    const lastTwitterActivityDay = getDayOfYear(new Date(userData.lastTwitterActivity));
+
+    return today === lastTradeOvertimeDay && today === lastTradeSpeedDay && today === lastTwitterActivityDay;
+};
+
+export const getCurrentSeasonAndMiniSeason = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1; // getMonth() returns 0-11
+
+    const current = SEASON_2.find((episode) => episode.month === month && episode.year === year);
+
+    return { season: 2, miniSeason: current ? SEASON_2.indexOf(current) + 1 : 1 };
+};

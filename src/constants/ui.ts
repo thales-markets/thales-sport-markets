@@ -58,6 +58,13 @@ export const NAV_MENU_THIRD_SECTION: NavMenuItem[] = [
         route: ROUTES.Promotions.Home,
         supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
     },
+    {
+        i18label: 'markets.nav-menu.items.referral',
+        iconClass: 'icon icon--referral',
+        name: 'promotions',
+        route: ROUTES.Referral,
+        supportedNetworks: [Network.OptimismMainnet, Network.Arbitrum, Network.Base, Network.OptimismSepolia],
+    },
 ];
 
 export const NAV_MENU_FOURTH_SECTION: NavMenuItem[] = [
@@ -110,3 +117,8 @@ export const PROMOTION_SANITIZE_PROPS = {
 
 export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE = '360px';
 export const MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM = '320px';
+
+export const NAV_MENU_WIDTH = 255;
+export const DISCORD_WIDGET_DEFAULT_RIGHT = 20;
+export const SPEED_MARKETS_WIDGET_DEFAULT_RIGHT = 86;
+export const SPEED_MARKETS_WIDGET_Z_INDEX = 2147483100; // discord has 2147483000

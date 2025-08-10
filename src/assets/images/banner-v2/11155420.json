@@ -1,6 +1,21 @@
 [
     {
-        "image": "banner_futures_new.png",
-        "url": "https://www.overtimemarkets.xyz/markets?status=OpenMarkets&sport=Futures"
+        "image": "overdrop-s2.png",
+        "url": "https://www.overtimemarkets.xyz/overdrop"
+    },
+    {
+        "image": "esport.png",
+        "url": "https://www.overtimemarkets.xyz/?sport=PlayerProps&status=OpenMarkets&lang=en-US&showActive=false&tag=CS2%2CDOTA+2%2CValorant%2CLOL"
+    },
+    {
+        "image": "farcaster.png",
+        "url": "https://farcaster.xyz/overtimemarkets"
+    },
+    {
+        "image": "affiliate.png",
+        "url": "https://www.overtimemarkets.xyz/referral"
+    },
+    {
+        "image": "use-over.png"
     }
 ]

@@ -341,6 +341,10 @@
     content: '\00C2';
 }
 
+.icon--referral:before {
+    content: '\00D2';
+}
+
 .icon--lacrosse:before {
     content: '\00C4';
 }
@@ -553,6 +557,26 @@
     content: '\0125';
 }
 
+.icon--wheel:before {
+    content: '\0126';
+}
+
+.icon--social:before {
+    content: '\0127';
+}
+
 .icon--sol::before {
     content: '\00B9';
+}
+
+.icon--referral-activity::before {
+    content: '\00BB';
+}
+
+.icon--your-summary::before {
+    content: '\00BA';
+}
+
+.icon--affiliate-leaderboard::before {
+    content: '\00AD';
 }
