@@ -187,6 +187,7 @@ const QUERY_KEYS = {
         Leaderboard: (season: number, miniSeason: number) => ['leaderboard', season, miniSeason],
         UserMultipliers: (walletAddress: string) => ['userMultipliers', walletAddress],
         UserData: (walletAddress: string) => ['userData', walletAddress],
+        UserDailyQuestInfo: (walletAddress: string) => ['userDailyQuestInfo', walletAddress],
         DailyQuestOptions: () => ['dailyQuestOptions'],
         UserXPHistory: (walletAddress: string) => ['userXPHistory', walletAddress],
         GameMultipliers: () => ['gameMultipliers'],

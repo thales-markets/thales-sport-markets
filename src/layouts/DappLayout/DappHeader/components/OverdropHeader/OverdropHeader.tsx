@@ -8,8 +8,8 @@ import ROUTES from 'constants/routes';
 import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
-import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useMemo, useState } from 'react';
+import useUserDailyQuestInfo from 'queries/overdrop/useUserDailyQuestInfo';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -34,11 +34,13 @@ const OverdropHeader: React.FC = () => {
     const dispatch = useDispatch();
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const [showSocialModal, setShowSocialModal] = useState(false);
+    const [isRefetching, setIsRefetching] = useState(true);
     const { t } = useTranslation();
     const location = useLocation();
 
-    const userDataQuery = useUserDataQuery(address as string, {
+    const userDataQuery = useUserDailyQuestInfo(address as string, {
         enabled: isConnected,
+        refetchInterval: isRefetching ? 5000 : false,
     });
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
@@ -108,6 +110,10 @@ const OverdropHeader: React.FC = () => {
         }
         return false;
     }, [isSpinTheWheelCompleted, userData]);
+
+    useEffect(() => {
+        setIsRefetching(!isOTTradeCompleted || !isSpeedTradeCompleted);
+    }, [isOTTradeCompleted, isSpeedTradeCompleted]);
 
     return (
         <Wrapper>
