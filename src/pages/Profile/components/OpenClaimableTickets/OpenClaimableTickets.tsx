@@ -90,7 +90,11 @@ const OpenClaimableTickets: React.FC<OpenClaimableTicketsProps> = ({ searchText 
         claimCollateralIndex,
     ]);
 
-    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+    const positionsCountQuery = usePositionCountV2Query(
+        walletAddress,
+        { networkId, client },
+        { enabled: isConnected && !!walletAddress }
+    );
 
     const claimablePositionCount = useMemo(
         () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
