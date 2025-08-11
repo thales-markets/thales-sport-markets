@@ -5,7 +5,6 @@ import OutsideClickHandler from 'components/OutsideClick';
 import SPAAnchor from 'components/SPAAnchor';
 import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
-import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import SocialShareModal from 'pages/Overdrop/components/SocialShareModal';
 import useUserDailyQuestInfo from 'queries/overdrop/useUserDailyQuestInfo';
@@ -23,6 +22,7 @@ import {
     FlexDivStart,
 } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
+import { getDayOfYearUTC } from 'utils/date';
 import { buildHref, navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 
@@ -47,9 +47,9 @@ const OverdropHeader: React.FC = () => {
 
     const isOTTradeCompleted = useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
             if (userData.lastTradeOvertime) {
-                const lastTradeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
+                const lastTradeDay = getDayOfYearUTC(new Date(userData.lastTradeOvertime));
                 return today === lastTradeDay;
             } else {
                 return false;
@@ -59,9 +59,9 @@ const OverdropHeader: React.FC = () => {
 
     const isSpeedTradeCompleted = useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
             if (userData.lastTradeSpeed) {
-                const lastTradeDay = getDayOfYear(new Date(userData.lastTradeSpeed));
+                const lastTradeDay = getDayOfYearUTC(new Date(userData.lastTradeSpeed));
                 return today === lastTradeDay;
             } else {
                 return false;
@@ -71,9 +71,9 @@ const OverdropHeader: React.FC = () => {
 
     const isSocialQuestDone = useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
             if (userData.lastTwitterActivity) {
-                const lastSocialActivity = getDayOfYear(new Date(userData.lastTwitterActivity));
+                const lastSocialActivity = getDayOfYearUTC(new Date(userData.lastTwitterActivity));
                 return today === lastSocialActivity;
             } else {
                 return false;
@@ -83,10 +83,10 @@ const OverdropHeader: React.FC = () => {
 
     const isSpinTheWheelCompleted = useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
 
             if (userData.wheel && userData.wheel.lastSpinTime) {
-                return getDayOfYear(new Date(userData.wheel.lastSpinTime)) === today;
+                return getDayOfYearUTC(new Date(userData.wheel.lastSpinTime)) === today;
             }
         }
         return false;
