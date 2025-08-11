@@ -1,12 +1,12 @@
 import { ONE_HUNDRED_K, ONE_MILLION } from 'constants/defaults';
 import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS, SEASON_2 } from 'constants/overdrop';
-import { getDayOfYear } from 'date-fns';
 import { Network } from 'enums/network';
 import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
 import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
+import { getDayOfYearUTC } from './date';
 
 export const formatPoints = (amount: number) => {
     if (amount > 9 * ONE_HUNDRED_K) {
@@ -138,10 +138,10 @@ export const hasUserDoneDailyQuests = (userData: OverdropUserData | undefined) =
         return false;
     }
 
-    const today = getDayOfYear(new Date());
-    const lastTradeOvertimeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
-    const lastTradeSpeedDay = getDayOfYear(new Date(userData.lastTradeSpeed));
-    const lastTwitterActivityDay = getDayOfYear(new Date(userData.lastTwitterActivity));
+    const today = getDayOfYearUTC(new Date());
+    const lastTradeOvertimeDay = getDayOfYearUTC(new Date(userData.lastTradeOvertime));
+    const lastTradeSpeedDay = getDayOfYearUTC(new Date(userData.lastTradeSpeed));
+    const lastTwitterActivityDay = getDayOfYearUTC(new Date(userData.lastTwitterActivity));
 
     return today === lastTradeOvertimeDay && today === lastTradeSpeedDay && today === lastTwitterActivityDay;
 };

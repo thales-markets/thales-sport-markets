@@ -1,7 +1,6 @@
 import Button from 'components/Button';
 import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
-import { getDayOfYear } from 'date-fns';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
 import React, { useMemo, useState } from 'react';
@@ -11,6 +10,7 @@ import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen } from 'redux/modu
 import styled, { useTheme } from 'styled-components';
 import { FlexDiv, FlexDivCentered, FlexDivColumnCentered, FlexDivSpaceBetween } from 'styles/common';
 import { OverdropUserData } from 'types/overdrop';
+import { getDayOfYearUTC } from 'utils/date';
 import { navigateTo } from 'utils/routes';
 import { useAccount } from 'wagmi';
 import SocialShareModal from '../SocialShareModal';
@@ -60,9 +60,9 @@ const DailyQuest: React.FC = () => {
 
     useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
             if (userData.lastTradeOvertime) {
-                const lastTradeDay = getDayOfYear(new Date(userData.lastTradeOvertime));
+                const lastTradeDay = getDayOfYearUTC(new Date(userData.lastTradeOvertime));
                 if (today === lastTradeDay) {
                     DAILY_QUESTS[0].completed = true;
                 } else {
@@ -72,7 +72,7 @@ const DailyQuest: React.FC = () => {
                 DAILY_QUESTS[0].completed = false;
             }
             if (userData.lastTradeSpeed) {
-                const lastSpeedTradeDay = getDayOfYear(new Date(userData.lastTradeSpeed));
+                const lastSpeedTradeDay = getDayOfYearUTC(new Date(userData.lastTradeSpeed));
                 if (today === lastSpeedTradeDay) {
                     DAILY_QUESTS[1].completed = true;
                 } else {
@@ -82,7 +82,7 @@ const DailyQuest: React.FC = () => {
                 DAILY_QUESTS[1].completed = false;
             }
             if (userData.lastTwitterActivity) {
-                const lastTwitterDay = getDayOfYear(new Date(userData.lastTwitterActivity));
+                const lastTwitterDay = getDayOfYearUTC(new Date(userData.lastTwitterActivity));
                 if (today === lastTwitterDay) {
                     DAILY_QUESTS[2].completed = true;
                 } else {
@@ -96,10 +96,10 @@ const DailyQuest: React.FC = () => {
 
     const isSpinTheWheelCompleted = useMemo(() => {
         if (userData) {
-            const today = getDayOfYear(new Date());
+            const today = getDayOfYearUTC(new Date());
 
             if (userData.wheel && userData.wheel.lastSpinTime) {
-                return getDayOfYear(new Date(userData.wheel.lastSpinTime)) === today;
+                return getDayOfYearUTC(new Date(userData.wheel.lastSpinTime)) === today;
             }
         }
         return false;
