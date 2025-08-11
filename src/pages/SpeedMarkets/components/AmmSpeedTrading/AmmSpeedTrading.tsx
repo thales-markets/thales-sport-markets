@@ -571,7 +571,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
                 PLAUSIBLE.trackEvent(PLAUSIBLE_KEYS.speedMarketsBuy, {
                     props: {
+                        address: walletAddress,
                         value: paidAmount,
+                        usdAmount: convertToStable(paidAmount),
                         collateral: getCollateral(networkId, selectedCollateralIndex),
                         networkId,
                     },
