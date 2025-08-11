@@ -138,6 +138,7 @@ export const isUserWinning = (position: SpeedPositions, strikePrice: number, fin
 export const resolveAllSpeedPositions = async (
     positions: UserPosition[],
     isAdmin: boolean,
+    walletAddress: string,
     networkConfig: NetworkConfig,
     isBiconomy?: boolean,
     collateralAddress?: string
@@ -250,13 +251,8 @@ export const resolveAllSpeedPositions = async (
                 toast.update(id, getSuccessToastOptions(i18n.t('speed-markets.user-positions.confirmation-message')));
                 await delay(2000);
 
-                const walletAddress = isBiconomy
-                    ? smartAccountConnector.biconomyAddress
-                    : (networkConfig.client as Client)?.account?.address;
-                if (walletAddress) {
-                    refetchUserSpeedMarkets(networkConfig.networkId, walletAddress);
-                    refetchBalances(walletAddress, networkConfig.networkId);
-                }
+                refetchUserSpeedMarkets(networkConfig.networkId, walletAddress);
+                refetchBalances(walletAddress, networkConfig.networkId);
                 refetchActiveSpeedMarkets(networkConfig.networkId);
             } else {
                 await delay(800);
