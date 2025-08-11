@@ -67,7 +67,7 @@ import {
     refetchUserSpeedMarkets,
 } from 'utils/queryConnector';
 import { getReferralId } from 'utils/referral';
-import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
+import { activateOvertimeAccount } from 'utils/smartAccount/biconomy/session';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getFeeByTimeThreshold, getTransactionForSpeedAMM } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
@@ -338,30 +338,26 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const addressToApprove = speedMarketsAMMContract.addresses[networkId];
 
         const getAllowance = async () => {
-            if (isBiconomy) {
-                setAllowance(true);
-            } else {
-                try {
-                    const parsedAmount: bigint = coinParser(
-                        roundNumberToDecimals(
-                            paidAmount * (1 + APPROVAL_BUFFER),
-                            isStableCurrency(selectedCollateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS
-                        ).toString(),
-                        networkId,
-                        selectedCollateral
-                    );
+            try {
+                const parsedAmount: bigint = coinParser(
+                    roundNumberToDecimals(
+                        paidAmount * (1 + APPROVAL_BUFFER),
+                        isStableCurrency(selectedCollateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS
+                    ).toString(),
+                    networkId,
+                    selectedCollateral
+                );
 
-                    const allowance: boolean = await checkAllowance(
-                        parsedAmount,
-                        collateralContract,
-                        walletAddress,
-                        addressToApprove
-                    );
+                const allowance: boolean = await checkAllowance(
+                    parsedAmount,
+                    collateralContract,
+                    walletAddress,
+                    addressToApprove
+                );
 
-                    setAllowance(allowance);
-                } catch (e) {
-                    console.log(e);
-                }
+                setAllowance(allowance);
+            } catch (e) {
+                console.log(e);
             }
         };
 
@@ -409,18 +405,8 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 setOpenApprovalModal(false);
             }
 
-            let hash;
-            if (isBiconomy) {
-                hash = await executeBiconomyTransaction({
-                    collateralAddress,
-                    networkId,
-                    contract: collateralContractWithSigner,
-                    methodName: 'approve',
-                    data: [addressToApprove, approveAmount],
-                });
-            } else {
-                hash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
-            }
+            const hash = await collateralContractWithSigner?.write.approve([addressToApprove, approveAmount]);
+
             const txReceipt = await waitForTransactionReceipt(client as Client, {
                 hash,
             });
@@ -663,38 +649,80 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             );
         }
         if (!hasAllowance) {
-            return (
-                <>
-                    {isEth && isMobile && <ConversionInfo>{t('speed-markets.tooltips.eth-to-weth')}</ConversionInfo>}
+            if (isBiconomy) {
+                return (
                     <Button
                         disabled={isAllowing}
-                        onClick={() => setOpenApprovalModal(true)}
+                        onClick={async () => {
+                            const id = toast.loading(t('speed-markets.progress'));
+                            try {
+                                const hash = await activateOvertimeAccount({ networkId, collateralAddress });
+                                const txReceipt = await waitForTransactionReceipt(client as Client, {
+                                    hash: hash as any,
+                                });
+                                if (txReceipt.status === 'success') {
+                                    toast.update(id, getSuccessToastOptions(t(`market.toast-message.approve-success`)));
+                                    setIsAllowing(false);
+                                    setAllowance(true);
+                                } else {
+                                    toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
+                                    setIsAllowing(false);
+                                }
+                            } catch (e) {
+                                console.log('error: ', e);
+                                const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
+                                    ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
+                                );
+                                toast.update(
+                                    id,
+                                    getErrorToastOptions(
+                                        isUserRejected
+                                            ? t('common.errors.tx-canceled')
+                                            : t('common.errors.unknown-error-try-again')
+                                    )
+                                );
+                            }
+                        }}
                         {...getDefaultButtonProps(theme)}
                     >
-                        {isAllowing ? (
-                            <Trans
-                                i18nKey="common.enable-wallet-access.approve-progress-label"
-                                values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
-                                components={{ currency: <CollateralText /> }}
-                            />
-                        ) : (
-                            <Trans
-                                i18nKey="common.enable-wallet-access.approve-label"
-                                values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
-                                components={{ currency: <CollateralText /> }}
-                            />
-                        )}
-                        {isEth && !isMobile && (
-                            <Tooltip
-                                overlay={t('speed-markets.tooltips.eth-to-weth')}
-                                customIconStyling={{ color: theme.speedMarkets.button.textColor.active }}
-                                marginLeft={4}
-                                zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
-                            />
-                        )}
+                        {t('get-started.activate-account.action')}
                     </Button>
-                </>
-            );
+                );
+            } else
+                return (
+                    <>
+                        {isEth && isMobile && (
+                            <ConversionInfo>{t('speed-markets.tooltips.eth-to-weth')}</ConversionInfo>
+                        )}
+                        <Button
+                            disabled={isAllowing}
+                            onClick={() => setOpenApprovalModal(true)}
+                            {...getDefaultButtonProps(theme)}
+                        >
+                            {isAllowing ? (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-progress-label"
+                                    values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                                    components={{ currency: <CollateralText /> }}
+                                />
+                            ) : (
+                                <Trans
+                                    i18nKey="common.enable-wallet-access.approve-label"
+                                    values={{ currencyKey: isEth ? CRYPTO_CURRENCY_MAP.WETH : selectedCollateral }}
+                                    components={{ currency: <CollateralText /> }}
+                                />
+                            )}
+                            {isEth && !isMobile && (
+                                <Tooltip
+                                    overlay={t('speed-markets.tooltips.eth-to-weth')}
+                                    customIconStyling={{ color: theme.speedMarkets.button.textColor.active }}
+                                    marginLeft={4}
+                                    zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                                />
+                            )}
+                        </Button>
+                    </>
+                );
         }
 
         return (
