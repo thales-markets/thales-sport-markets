@@ -138,6 +138,30 @@ const App = () => {
         isParticleConnected,
     ]);
 
+    // Signal ready to the Warpcast frame environment (with retry)
+    useEffect(() => {
+        const attemptReady = async () => {
+            try {
+                // Check if running in a frame context where sdk might exist
+                if (sdk?.actions?.ready) {
+                    await sdk.actions.ready();
+                    const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
+                    if (await sdk.isInMiniApp()) {
+                        dispatch(setIsSmartAccountDisabled(true));
+                        dispatch(setIsBiconomy(false));
+                        localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                        if (!lastSelectedNetwork) switchChain?.({ chainId: Network.Base as SupportedNetwork });
+                    }
+                }
+            } catch (error) {
+                console.log('Error signaling ready:', error);
+                await delay(1000); // Retry after 1 second
+                attemptReady(); // Retry signaling ready
+            }
+        };
+        attemptReady(); // Initial attempt
+    }, [connect, switchChain, networkId, connector, dispatch]);
+
     useEffect(() => {
         const handlePageResized = () => {
             dispatch(setMobileState(isMobile()));
@@ -161,27 +185,6 @@ const App = () => {
             }
         };
     }, [dispatch]);
-
-    // Signal ready to the Warpcast frame environment (with retry)
-    useEffect(() => {
-        const attemptReady = async () => {
-            try {
-                // Check if running in a frame context where sdk might exist
-                if (sdk?.actions?.ready) {
-                    await sdk.actions.ready();
-                    const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
-                    if ((await sdk.isInMiniApp()) && !lastSelectedNetwork) {
-                        switchChain?.({ chainId: Network.Base as SupportedNetwork });
-                    }
-                }
-            } catch (error) {
-                console.log('Error signaling ready:', error);
-                await delay(1000); // Retry after 1 second
-                attemptReady(); // Retry signaling ready
-            }
-        };
-        attemptReady(); // Initial attempt
-    }, [connect, switchChain, networkId]);
 
     return (
         <Theme>
