@@ -54,7 +54,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const { t } = useTranslation();
 
     const { universalAddress } = useUniversalAccount(); // added this hook here so we reduce the amount for loading universal data when users opens universal deposit
-    console.log(universalAddress);
+    universalAddress;
 
     const client = useClient();
     const { address, isConnected } = useAccount();
@@ -72,9 +72,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const multipleCollateralBalances = useMultipleCollateralBalanceQuery(
         address as string,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
@@ -462,7 +460,7 @@ const SubTitle = styled.h1`
     margin-bottom: 20px;
 `;
 
-const FieldHeader = styled.p`
+const FieldHeader = styled.div`
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;

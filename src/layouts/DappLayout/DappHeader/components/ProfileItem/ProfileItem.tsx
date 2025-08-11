@@ -58,7 +58,11 @@ export const ProfileIconWidget: React.FC<ProfileItemProperties> = ({
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const positionsCountQuery = usePositionCountV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+    const positionsCountQuery = usePositionCountV2Query(
+        walletAddress,
+        { networkId, client },
+        { enabled: isConnected && !!walletAddress }
+    );
 
     const claimablePositionCount = useMemo(
         () => (positionsCountQuery.isSuccess && positionsCountQuery.data ? positionsCountQuery.data.claimable : 0),
