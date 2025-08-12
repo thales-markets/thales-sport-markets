@@ -84,15 +84,15 @@ const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
 export const RPC_LIST = {
     INFURA: {
         [NetworkId.OptimismMainnet]: {
-            http: `https://optimism-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            http: `https://opt-mainnet.g.alchemy.com/v2/2cMN-JJmt42PgrzLoI-c1LZLrRGE5-Qu`,
             wss: `wss://optimism-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
         },
         [NetworkId.Arbitrum]: {
-            http: `https://arbitrum-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            http: `https://arb-mainnet.g.alchemy.com/v2/2cMN-JJmt42PgrzLoI-c1LZLrRGE5-Qu`,
             wss: `wss://arbitrum-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
         },
         [NetworkId.Base]: {
-            http: `https://base-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
+            http: `https://base-mainnet.g.alchemy.com/v2/2cMN-JJmt42PgrzLoI-c1LZLrRGE5-Qu`,
             wss: `wss://base-mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
         },
         [NetworkId.PolygonMainnet]: {
