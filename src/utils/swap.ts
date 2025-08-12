@@ -37,7 +37,7 @@ export const getSwapParams = (
     };
 };
 
-export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams) => {
+export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams, toToken?: Coins) => {
     try {
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
@@ -53,7 +53,7 @@ export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapPara
             },
         });
         return quote.priceRoute.destAmount
-            ? coinFormatter(quote.priceRoute.destAmount, networkId, CRYPTO_CURRENCY_MAP.OVER as Coins)
+            ? coinFormatter(quote.priceRoute.destAmount, networkId, toToken ?? (CRYPTO_CURRENCY_MAP.OVER as Coins))
             : 0;
     } catch (e) {
         console.log(e);

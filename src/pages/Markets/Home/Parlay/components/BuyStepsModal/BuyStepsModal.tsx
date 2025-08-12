@@ -26,6 +26,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
     step,
     isFailed,
     currencyKey,
+    dstToken,
     onSubmit,
     onClose,
     onlySwap,
@@ -79,7 +80,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                     <Text>
                         {t('markets.parlay.buy-steps.swap', {
                             src: currencyKey,
-                            dst: CRYPTO_CURRENCY_MAP.OVER,
+                            dst: dstToken,
                             fromAmount: formatCurrency(fromAmount, 4),
                             toAmount: formatCurrency(toAmount, 2),
                         })}

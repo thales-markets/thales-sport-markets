@@ -60,7 +60,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     );
     const [fromAmount, setFromAmount] = useState<string | number>('');
 
-    const [toToken] = useState<Coins>('OVER');
+    const [toToken, setToToken] = useState<Coins>('OVER');
     const [toAmount, setToAmount] = useState<string | number>('');
 
     const [isBuying, setIsBuying] = useState(false);
@@ -120,8 +120,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         if (fromAmount) {
             const getSwapQuote = async () => {
                 setIsFetching(true);
-                const quote = await getQuote(networkId, swapParams);
-
+                const quote = await getQuote(networkId, swapParams, toToken);
                 setToAmount(quote);
                 setSwapQuote(Number(fromAmount) > 0 ? quote / Number(fromAmount) : 0);
                 setIsFetching(false);
@@ -331,7 +330,7 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
     const inputRef = useRef<HTMLDivElement>(null);
     const inputRefVisible = !!inputRef?.current?.getBoundingClientRect().width;
 
-    const fromCollaterals = getCollaterals(networkId).filter((coin) => coin !== 'OVER');
+    const fromCollaterals = getCollaterals(networkId);
 
     useEffect(() => {
         setIsAmountValid(
@@ -411,6 +410,40 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                         onMaxButton={() => setFromAmount(tokenBalance.fromTokenBalance)}
                     />
                 </InputContainer>
+                <InputContainer>
+                    <NumericInput
+                        value={toAmount}
+                        onChange={() => {}}
+                        label="to"
+                        inputFontWeight="700"
+                        height="44px"
+                        inputFontSize="16px"
+                        background={theme.background.quinary}
+                        borderColor={theme.background.quinary}
+                        fontWeight="700"
+                        color={theme.textColor.primary}
+                        width="100%"
+                        currencyComponent={
+                            <CollateralSelector
+                                borderColor="none"
+                                collateralArray={fromCollaterals}
+                                selectedItem={fromCollaterals.indexOf(toToken as any)}
+                                onChangeCollateral={(index: number) => {
+                                    setToToken(fromCollaterals[index]);
+                                }}
+                                collateralBalances={multiCollateralBalances}
+                                isDetailedView
+                                exchangeRates={exchangeRates}
+                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
+                                background={theme.background.quinary}
+                                color={theme.textColor.primary}
+                                topPosition="50px"
+                            />
+                        }
+                        balance={formatCurrencyWithKey(toToken, tokenBalance.toTokenBalance)}
+                    />
+                </InputContainer>
+
                 <InfoBox>
                     <Section>
                         <SubLabel>{t('profile.swap.token-price', { token: toToken })}:</SubLabel>
