@@ -38,6 +38,12 @@ const DappFooter: React.FC = () => {
                             <LinkText>{t('footer.twitter')}</LinkText>
                         </LinkContent>
                     </Link>
+                    <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Farcaster}>
+                        <LinkContent>
+                            <FarcasterIcon />
+                            <LinkText>{t('footer.farcaster')}</LinkText>
+                        </LinkContent>
+                    </Link>
                     <Link target="_blank" rel="noreferrer" href={LINKS.Footer.Discord}>
                         <LinkContent>
                             <DiscordIcon />
@@ -185,6 +191,14 @@ const TwitterIcon = styled.i`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0021';
+    }
+`;
+
+const FarcasterIcon = styled.i`
+    color: ${(props) => props.theme.textColor.secondary};
+    &:before {
+        font-family: HomepageIconsV2 !important;
+        content: '\\006E';
     }
 `;
 

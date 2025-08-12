@@ -6,6 +6,7 @@ export const LINKS = {
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
         Twitter: 'https://x.com/overtime_io',
+        Farcaster: 'https://farcaster.xyz/overtimemarkets',
         Discord: 'http://discord.gg/overtime-io',
         Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
