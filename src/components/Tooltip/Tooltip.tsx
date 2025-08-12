@@ -58,6 +58,9 @@ const Tooltip: React.FC<TooltipProps> = ({
         }
     }, [validationPositionTop, validationChildRefPositionTop, isValidationOrWarn]);
 
+    const isChildrenInputField = (children?.type as any)?.target === 'input';
+    const bottomValidationOffset = isChildrenInputField ? [0, 2] : [-2, -2];
+
     return open === false || !overlay ? (
         <>{children}</>
     ) : isValidationOrWarn ? (
@@ -71,7 +74,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             overlayInnerStyle={{ ...overlayInnerStyle, ...getValidationStyle(theme, !!isWarning) }}
             showArrow={showArrow}
             arrowContent={<ValidationArrow isWarning={!!isWarning} placement={placement || 'top'} />}
-            align={placement === 'bottom' ? { offset: [-2, -2] } : undefined}
+            align={placement === 'bottom' ? { offset: bottomValidationOffset } : undefined}
             zIndex={zIndex}
         >
             <div ref={validationChildRef}>{children}</div>

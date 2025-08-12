@@ -1,6 +1,8 @@
 import CollateralSelector from 'components/CollateralSelector';
+import Checkbox from 'components/fields/Checkbox';
 import NumericInput from 'components/fields/NumericInput';
 import SuggestedAmount from 'components/SuggestedAmount';
+import Tooltip from 'components/Tooltip';
 import { USD_SIGN } from 'constants/currency';
 import { OVER_CONTRACT_RATE_KEY } from 'constants/markets';
 import { BICONOMY_MAX_FEE_PERCENTAGE } from 'constants/speedMarkets';
@@ -12,11 +14,16 @@ import useFreeBetCollateralBalanceQuery from 'queries/wallet/useFreeBetCollatera
 import useMultipleCollateralBalanceQuery from 'queries/wallet/useMultipleCollateralBalanceQuery';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { getTicketPayment } from 'redux/modules/ticket';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    getIsFreeBetDisabledByUser,
+    getTicketPayment,
+    setIsFreeBetDisabledByUser,
+    setPaymentSelectedCollateralIndex,
+} from 'redux/modules/ticket';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
-import { FlexDiv } from 'styles/common';
+import { FlexDiv, FlexDivStart } from 'styles/common';
 import {
     DEFAULT_CURRENCY_DECIMALS,
     formatCurrencyWithKey,
@@ -31,9 +38,12 @@ import {
     convertFromStableToCollateral,
     getCollateral,
     getCollaterals,
+    getCollateralText,
     getDefaultCollateral,
+    getMaxCollateralDollarValue,
     isOverCurrency,
     isStableCurrency,
+    mapMultiCollateralBalances,
 } from 'utils/collaterals';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { useAccount, useChainId, useClient } from 'wagmi';
@@ -46,6 +56,8 @@ type SelectBuyinProps = {
     setBuyinAmount: Dispatch<SetStateAction<string | number>>;
     ammSpeedMarketsLimits: AmmSpeedMarketsLimits | null;
     setHasError: Dispatch<boolean>;
+    isFreeBetActive: boolean;
+    setIsFreeBetActive: Dispatch<boolean>;
 };
 
 const SelectBuyin: React.FC<SelectBuyinProps> = ({
@@ -54,13 +66,17 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     setBuyinAmount,
     ammSpeedMarketsLimits,
     setHasError,
+    isFreeBetActive,
+    setIsFreeBetActive,
 }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
+    const dispatch = useDispatch();
 
     const isBiconomy = useSelector(getIsBiconomy);
     const ticketPayment = useSelector(getTicketPayment);
     const selectedCollateralIndex = ticketPayment.selectedCollateralIndex;
+    const isFreeBetDisabledByUser = useSelector(getIsFreeBetDisabledByUser);
 
     const networkId = useChainId();
     const client = useClient();
@@ -68,7 +84,8 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const [isFreeBetActive, setIsFreeBetActive] = useState(false);
+    const [isFreeBetInitialized, setIsFreeBetInitialized] = useState(false);
+    const [checkFreeBetBalance, setCheckFreeBetBalance] = useState(false);
     const [errorMessageKey, setErrorMessageKey] = useState('');
 
     const selectedCollateral = useMemo(() => getCollateral(networkId, selectedCollateralIndex), [
@@ -94,8 +111,12 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     );
 
     const freeBetCollateralBalances =
-        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery.data
+        freeBetCollateralBalancesQuery.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data.balances
+            : undefined;
+    const freeBetCollateralValidity =
+        freeBetCollateralBalancesQuery.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data.validity
             : undefined;
 
     const freeBetBalanceExists = freeBetCollateralBalances
@@ -103,16 +124,111 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
         : false;
 
     // Set free bet if user has free bet balance
-    // TODO:
     useEffect(() => {
         if (freeBetBalanceExists) {
-            // setIsFreeBetActive(true);
-            setIsFreeBetActive(false);
+            setIsFreeBetActive(true);
         }
-    }, [freeBetBalanceExists]);
+    }, [freeBetBalanceExists, setIsFreeBetActive]);
+
+    const resetFreeBet = useCallback(() => {
+        setIsFreeBetInitialized(false);
+        setIsFreeBetActive(false);
+        setCheckFreeBetBalance(false);
+    }, [setIsFreeBetActive]);
+
+    // Reset free bet
+    useEffect(() => {
+        resetFreeBet();
+    }, [walletAddress, resetFreeBet]);
+
+    // Select initially Free Bet if exists at least min for buy
+    useEffect(() => {
+        if (!freeBetBalanceExists) {
+            resetFreeBet();
+        } else if (!isFreeBetDisabledByUser && !isFreeBetInitialized && Math.min(...BUYIN_AMOUNTS)) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
+
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < Math.min(...BUYIN_AMOUNTS);
+
+            if (isSelectedCollateralBalanceLowerThanMin) {
+                setIsFreeBetActive(false);
+            } else if (!isFreeBetActive) {
+                setIsFreeBetActive(true);
+            }
+            setCheckFreeBetBalance(true);
+            setIsFreeBetInitialized(true);
+        }
+    }, [
+        resetFreeBet,
+        freeBetCollateralBalances,
+        exchangeRates,
+        networkId,
+        selectedCollateral,
+        freeBetBalanceExists,
+        isFreeBetActive,
+        isFreeBetInitialized,
+        isFreeBetDisabledByUser,
+        setIsFreeBetActive,
+    ]);
+
+    // Select max balance collateral for Free Bet
+    useEffect(() => {
+        if (checkFreeBetBalance && Math.min(...BUYIN_AMOUNTS)) {
+            const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);
+            if (!balanceList) return;
+
+            const selectedCollateralItem = balanceList?.find((item) => item.collateralKey == selectedCollateral);
+
+            const isSelectedCollateralBalanceLowerThanMin =
+                selectedCollateralItem && selectedCollateralItem.balanceDollarValue < Math.min(...BUYIN_AMOUNTS);
+
+            const maxBalanceItem = getMaxCollateralDollarValue(balanceList);
+            const isMaxBalanceLowerThanMin =
+                maxBalanceItem && maxBalanceItem.balanceDollarValue < Math.min(...BUYIN_AMOUNTS);
+
+            if (
+                maxBalanceItem &&
+                !isMaxBalanceLowerThanMin &&
+                selectedCollateral !== maxBalanceItem.collateralKey &&
+                (!ticketPayment.forceChangeCollateral || isSelectedCollateralBalanceLowerThanMin)
+            ) {
+                dispatch(
+                    setPaymentSelectedCollateralIndex({
+                        selectedCollateralIndex: maxBalanceItem.index,
+                        networkId,
+                    })
+                );
+                if (!isFreeBetDisabledByUser) {
+                    setIsFreeBetActive(true);
+                }
+            }
+            setCheckFreeBetBalance(false);
+        }
+    }, [
+        dispatch,
+        exchangeRates,
+        isFreeBetActive,
+        freeBetCollateralBalances,
+        freeBetBalanceExists,
+        selectedCollateral,
+        networkId,
+        ticketPayment.forceChangeCollateral,
+        checkFreeBetBalance,
+        isFreeBetDisabledByUser,
+        setIsFreeBetActive,
+    ]);
 
     const paymentTokenBalance: number = useMemo(() => {
-        if (isFreeBetActive && freeBetBalanceExists && freeBetCollateralBalances) {
+        if (
+            isFreeBetActive &&
+            freeBetBalanceExists &&
+            freeBetCollateralBalances &&
+            freeBetCollateralBalances[selectedCollateral]
+        ) {
             return freeBetCollateralBalances[selectedCollateral];
         }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
@@ -155,17 +271,23 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     useDebouncedEffect(() => {
         let errorMessageKey = '';
 
-        if (buyinAmount !== '') {
-            const buyinAmountWithGas = isBiconomy ? Number(buyinAmount) : Number(buyinAmount);
-            if ((isConnected && buyinAmountWithGas > paymentTokenBalance) || paymentTokenBalance === 0) {
-                errorMessageKey = 'common.errors.insufficient-balance-wallet';
+        if (isFreeBetActive && freeBetCollateralValidity) {
+            const isFreeBetCollateralValid = freeBetCollateralValidity[selectedCollateral];
+            if (!isFreeBetCollateralValid) {
+                errorMessageKey = 'common.errors.free-bet-invalid';
             }
         }
-        if (buyinAmount !== '') {
+
+        if (!errorMessageKey && buyinAmount !== '') {
             if (Number(buyinAmount) < convertFromStable(minBuyinAmount)) {
                 errorMessageKey = 'speed-markets.errors.min-buyin';
             } else if (Number(buyinAmount) > convertFromStable(maxBuyinAmount)) {
                 errorMessageKey = 'speed-markets.errors.max-buyin';
+            }
+        }
+        if (!errorMessageKey && buyinAmount !== '') {
+            if ((isConnected && Number(buyinAmount) > paymentTokenBalance) || paymentTokenBalance === 0) {
+                errorMessageKey = 'common.errors.insufficient-balance-wallet';
             }
         }
 
@@ -232,10 +354,43 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
             />
             <InputContainer ref={inputRef}>
                 <AmountToBuyContainer>
+                    {freeBetBalanceExists && (
+                        <FreeBetRow>
+                            <FreeBetIcon className="icon icon--gift" />
+                            <FreeBetLabel>
+                                {t('markets.parlay.use-free-bet')}
+                                <Tooltip
+                                    overlay={<>{t('profile.free-bet.claim-btn')}</>}
+                                    mouseEnterDelay={0.3}
+                                    iconFontSize={14}
+                                    iconColor={theme.textColor.septenary}
+                                    marginLeft={3}
+                                    zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                                />
+                                :
+                            </FreeBetLabel>
+                            <CheckboxContainer>
+                                <Checkbox
+                                    disabled={false}
+                                    checked={isFreeBetActive}
+                                    value={isFreeBetActive.toString()}
+                                    onChange={(e: any) => {
+                                        const isChecked = e.target.checked || false;
+                                        setIsFreeBetActive(isChecked);
+                                        dispatch(setIsFreeBetDisabledByUser(!isChecked));
+                                        if (isChecked) {
+                                            setCheckFreeBetBalance(true);
+                                        }
+                                    }}
+                                />
+                            </CheckboxContainer>
+                        </FreeBetRow>
+                    )}
                     <NumericInput
                         value={buyinAmount}
                         onChange={(e) => setBuyinAmount(e.target.value)}
                         showValidation={inputRefVisible && !!errorMessageKey}
+                        validationPlacement={freeBetBalanceExists ? 'bottom' : undefined}
                         validationMessage={t(errorMessageKey, {
                             currencyKey: selectedCollateral,
                             minAmount: `${formatCurrencyWithKey(
@@ -268,8 +423,8 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                                 dropDownMaxHeight={getCollaterals(networkId).length > 4 ? '160px' : undefined}
                             />
                         }
-                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
-                        label={t('common.buy-in')}
+                        balance={formatCurrencyWithKey(getCollateralText(selectedCollateral), paymentTokenBalance)}
+                        label={freeBetBalanceExists ? undefined : t('common.buy-in')}
                         labelColor={theme.input.textColor.secondary}
                         onMaxButton={onMaxClick}
                         inputFontWeight="600"
@@ -290,6 +445,57 @@ const InputContainer = styled(FlexDiv)``;
 const AmountToBuyContainer = styled.div`
     position: relative;
     width: 100%;
+`;
+
+const FreeBetRow = styled(FlexDivStart)`
+    align-items: center;
+    height: 15px;
+    margin-bottom: 6px;
+`;
+
+const FreeBetLabel = styled.span`
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.textColor.quaternary};
+`;
+
+const CheckboxContainer = styled.div`
+    margin-left: 8px;
+    label {
+        color: ${(props) => props.theme.textColor.secondary};
+        font-size: 12px;
+        line-height: 13px;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+        text-transform: uppercase;
+        padding-top: 16px;
+        padding-left: 16px;
+        input:checked ~ .checkmark {
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        }
+    }
+    .checkmark {
+        height: 15px;
+        width: 15px;
+        border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+        :after {
+            left: 3px;
+            width: 3px;
+            height: 8px;
+            border: 2px solid ${(props) => props.theme.borderColor.quaternary};
+            border-width: 0 2px 2px 0;
+        }
+    }
+`;
+
+const FreeBetIcon = styled.i`
+    font-size: 13px;
+    text-transform: none;
+    margin-right: 3px;
+    color: ${(props) => props.theme.textColor.quaternary};
 `;
 
 export default SelectBuyin;

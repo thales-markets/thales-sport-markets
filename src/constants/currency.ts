@@ -1,6 +1,7 @@
 import { Network } from 'enums/network';
 import { keyBy } from 'lodash';
 import { Coins } from 'thales-utils';
+import { CollateralsBalance, FreeBetBalance } from 'types/collateral';
 import { SupportedNetwork } from 'types/network';
 
 export const USD_SIGN = '$';
@@ -133,7 +134,7 @@ export const COLLATERAL_ICONS_CLASS_NAMES: Record<string, string> = {
     SOL: 'currency-icon currency-icon--sol',
 };
 
-export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
+export const DEFAULT_MULTI_COLLATERAL_BALANCE: CollateralsBalance = {
     DAI: 0,
     USDCe: 0,
     USDbC: 0,
@@ -148,4 +149,29 @@ export const DEFAULT_MULTI_COLLATERAL_BALANCE = {
     OVER: 0,
     cbBTC: 0,
     wBTC: 0,
+};
+
+export const DEFAULT_FREE_BET_COLLATERAL_BALANCE: FreeBetBalance = {
+    balances: {
+        DAI: 0,
+        USDCe: 0,
+        USDbC: 0,
+        USDT: 0,
+        OP: 0,
+        WETH: 0,
+        ARB: 0,
+        USDC: 0,
+        OVER: 0,
+    },
+    validity: {
+        DAI: false,
+        USDCe: false,
+        USDbC: false,
+        USDT: false,
+        OP: false,
+        WETH: false,
+        ARB: false,
+        USDC: false,
+        OVER: false,
+    },
 };

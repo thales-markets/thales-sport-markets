@@ -29,6 +29,7 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
         skew: { [SpeedPositions.UP]: 0, [SpeedPositions.DOWN]: 0 },
     });
     const [hasError, setHasError] = useState(false);
+    const [isFreeBetActive, setIsFreeBetActive] = useState(false);
 
     const ammSpeedMarketsLimitsQuery = useAmmSpeedMarketsLimitsQuery({ networkId, client }, undefined);
 
@@ -73,6 +74,8 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 setBuyinAmount={setBuyinAmount}
                 ammSpeedMarketsLimits={ammSpeedMarketsLimitsData}
                 setHasError={setHasError}
+                isFreeBetActive={isFreeBetActive}
+                setIsFreeBetActive={setIsFreeBetActive}
             />
             <AmmSpeedTrading
                 selectedAsset={selectedAsset}
@@ -84,6 +87,7 @@ const SpeedTrading: React.FC<SpeedTradingProps> = ({ deltaTimeSec, priceSlippage
                 setProfitAndSkewPerPosition={setProfitAndSkewPerPosition}
                 resetData={resetData}
                 hasError={hasError}
+                isFreeBetActive={isFreeBetActive}
             />
         </>
     );

@@ -12,7 +12,7 @@ import {
 } from 'styles/common';
 import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { isOverCurrency, isStableCurrency } from 'utils/collaterals';
+import { getCollateralText, isOverCurrency, isStableCurrency } from 'utils/collaterals';
 import { getNetworkNameByNetworkId } from 'utils/network';
 import { useChainId } from 'wagmi';
 import { setPaymentSelectedCollateralIndex } from '../../redux/modules/ticket';
@@ -97,7 +97,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     }, [collateralBalances, hideZeroBalance, collateralArray, isDetailedView, getUSDForCollateral]);
 
     const selectedCollateral = collateralArray[selectedItem];
-    const selectedCollateralText = `${isOverCurrency(selectedCollateral as Coins) ? '$' : ''}${selectedCollateral}`;
+    const selectedCollateralText = getCollateralText(selectedCollateral as Coins);
 
     return (
         <Container stretch={stretch} isDetailedView={isDetailedView}>

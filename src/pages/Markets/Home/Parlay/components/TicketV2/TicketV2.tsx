@@ -107,6 +107,7 @@ import {
     getCollateralAddress,
     getCollateralByAddress,
     getCollateralIndex,
+    getCollateralText,
     getCollaterals,
     getDefaultCollateral,
     getMaxCollateralDollarValue,
@@ -473,7 +474,11 @@ const Ticket: React.FC<TicketProps> = ({
 
     const freeBetCollateralBalances =
         freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data.balances
+            : undefined;
+    const freeBetCollateralValidity =
+        freeBetCollateralBalancesQuery.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data.validity
             : undefined;
 
     const freeBetBalanceExists = freeBetCollateralBalances
@@ -494,7 +499,12 @@ const Ticket: React.FC<TicketProps> = ({
     }, [sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     const paymentTokenBalance: number = useMemo(() => {
-        if (isFreeBetActive && freeBetBalanceExists && freeBetCollateralBalances) {
+        if (
+            isFreeBetActive &&
+            freeBetBalanceExists &&
+            freeBetCollateralBalances &&
+            freeBetCollateralBalances[selectedCollateral]
+        ) {
             return freeBetCollateralBalances[selectedCollateral];
         }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
@@ -1223,6 +1233,8 @@ const Ticket: React.FC<TicketProps> = ({
             (buyInAmountInDefaultCollateral && buyInAmountInDefaultCollateral > Number(ticketLiquidity))
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
+        } else if (isFreeBetActive && freeBetCollateralValidity && !freeBetCollateralValidity[selectedCollateral]) {
+            setTooltipTextBuyInAmount(t('common.errors.free-bet-invalid'));
         } else if (
             Number(buyInAmount) &&
             (swapToOver ? swapQuote && swappedOverToReceive < minBuyInAmount : Number(buyInAmount) < minBuyInAmount)
@@ -1271,6 +1283,8 @@ const Ticket: React.FC<TicketProps> = ({
         swappedOverToReceive,
         swapQuote,
         isBuying,
+        isFreeBetActive,
+        freeBetCollateralValidity,
     ]);
 
     const setCollateralAmount = useCallback(
@@ -2708,7 +2722,7 @@ const Ticket: React.FC<TicketProps> = ({
                                 dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
                             />
                         }
-                        balance={formatCurrencyWithKey(selectedCollateral, paymentTokenBalance)}
+                        balance={formatCurrencyWithKey(getCollateralText(selectedCollateral), paymentTokenBalance)}
                         onMaxButton={() => setMaxAmount(paymentTokenBalance)}
                     />
                 </AmountToBuyContainer>

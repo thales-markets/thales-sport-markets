@@ -43,7 +43,6 @@ import { Rates } from 'types/collateral';
 import { SupportedNetwork } from 'types/network';
 import { AmmSpeedMarketsLimits, SelectedPosition } from 'types/speedMarkets';
 import { ThemeInterface } from 'types/ui';
-import { ViemContract } from 'types/viem';
 import {
     convertCollateralToStable,
     convertFromStableToCollateral,
@@ -90,6 +89,7 @@ type AmmSpeedTradingProps = {
     }>;
     resetData: Dispatch<void>;
     hasError: boolean;
+    isFreeBetActive: boolean;
 };
 
 const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
@@ -102,6 +102,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
     setProfitAndSkewPerPosition,
     resetData,
     hasError,
+    isFreeBetActive,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -466,15 +467,20 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         const speedMarketsCreatorContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM_CREATOR, {
             networkId,
             client: walletClient.data,
-        }) as ViemContract;
+        });
+
+        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, {
+            networkId,
+            client: walletClient.data,
+        });
 
         const speedMarketsAMMContractWithClient = getContractInstance(ContractType.SPEED_MARKETS_AMM, {
             networkId,
             client,
-        }) as ViemContract;
+        });
 
         const numOfActiveUserMarketsBefore = Number(
-            (await speedMarketsAMMContractWithClient.read.getLengths([walletAddress]))[2]
+            (await speedMarketsAMMContractWithClient?.read.getLengths([walletAddress]))[2]
         );
 
         const publicClient = getPublicClient(wagmiConfig, { chainId: networkId });
@@ -511,7 +517,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             // guaranteed by isButtonDisabled that there are no undefined SpeedPositions
             const sides = selectedPosition !== undefined ? [POSITIONS_TO_SIDE_MAP[selectedPosition]] : [];
 
-            const collateralAddressParam = !isDefaultCollateral ? collateralAddress : '';
+            const collateralAddressParam = !isDefaultCollateral || isFreeBetActive ? collateralAddress : '';
 
             const buyInAmountParam = coinParser(
                 truncToDecimals(buyinAmount, COLLATERAL_DECIMALS[selectedCollateral]),
@@ -521,7 +527,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
 
             const skewImpactParam = selectedPosition
                 ? parseUnits(skewImpact[selectedPosition].toString(), 18)
-                : undefined;
+                : BigInt(0);
 
             // contract doesn't support ETH so convert it to WETH when ETH is selected
             if (isEth && !isBiconomy) {
@@ -540,7 +546,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             }
 
             const hash = await getTransactionForSpeedAMM(
-                speedMarketsCreatorContractWithSigner,
+                isFreeBetActive ? freeBetHolderContract : speedMarketsCreatorContractWithSigner,
                 asset,
                 deltaTimeSec,
                 sides,
@@ -548,10 +554,11 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 strikePrice,
                 strikePriceSlippage,
                 collateralAddressParam,
-                referral as string,
-                skewImpactParam as any,
+                referral,
+                skewImpactParam,
                 isBiconomy,
-                isEth
+                isEth,
+                isFreeBetActive
             );
 
             const txReceipt = await waitForTransactionReceipt(client as Client, { hash });
@@ -566,7 +573,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                     await delay(checkDelay);
 
                     const numOfActiveUserMarketsAfter = Number(
-                        (await speedMarketsAMMContractWithClient.read.getLengths([walletAddress]))[2]
+                        (await speedMarketsAMMContractWithClient?.read.getLengths([walletAddress]))[2]
                     );
 
                     if (!isMarketCreated && numOfActiveUserMarketsAfter - numOfActiveUserMarketsBefore > 0) {

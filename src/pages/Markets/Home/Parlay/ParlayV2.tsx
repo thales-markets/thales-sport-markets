@@ -161,12 +161,10 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
     const freeBetBalances =
-        freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
+        freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data.balances : undefined;
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
@@ -190,7 +188,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         (collateral: Coins, freeBetBalance?: boolean) => {
             if (freeBetBalance)
                 return (
-                    (freeBetBalances ? freeBetBalances[collateral] : 0) *
+                    (freeBetBalances ? freeBetBalances[collateral] || 0 : 0) *
                     (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
                 );
             return (
@@ -534,7 +532,8 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                             </SubHeader>
                                         </SubHeaderWrapper>
                                         {freeBetBalances &&
-                                            Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                                            Object.keys(freeBetCollateralsSorted).map((collateral) => {
+                                                const currencyKey = collateral as Coins;
                                                 return freeBetBalances[currencyKey] ? (
                                                     <Section key={`${currencyKey}-freebet`}>
                                                         <SubLabel>
@@ -546,10 +545,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                                                             {currencyKey}
                                                         </SubLabel>
                                                         <SubValue>
-                                                            {formatCurrencyWithSign(
-                                                                null,
-                                                                freeBetBalances ? freeBetBalances[currencyKey] : 0
-                                                            )}
+                                                            {formatCurrencyWithSign(null, freeBetBalances[currencyKey])}
                                                             {!exchangeRates?.[currencyKey] &&
                                                             !isStableCurrency(currencyKey as Coins)
                                                                 ? '...'

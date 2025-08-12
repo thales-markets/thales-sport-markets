@@ -61,13 +61,13 @@ const ParlayRelatedMarkets: React.FC = () => {
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userTicketsQuery = useOtherSinglesQuery(walletAddress, { networkId, client }, ticket[0]?.gameId, {
-        enabled: isConnected && ticket[0] !== undefined && ticket[0]?.gameId !== undefined,
+        enabled: isConnected && !!walletAddress && ticket[0] !== undefined && ticket[0]?.gameId !== undefined,
     });
 
     const liveTradingProcessorDataQuery = useLiveTradingProcessorDataQuery(
         walletAddress,
         { networkId, client },
-        { enabled: isConnected && isLiveFilterSelected }
+        { enabled: isConnected && !!walletAddress && isLiveFilterSelected }
     );
 
     // Created single tickets related to selected game

@@ -66,14 +66,12 @@ const ActivateAccount: React.FC<any> = () => {
     const freeBetCollateralBalancesQuery = useFreeBetCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
 
     const freeBetCollateralBalances =
-        freeBetCollateralBalancesQuery?.isSuccess && freeBetCollateralBalancesQuery.data
-            ? freeBetCollateralBalancesQuery?.data
+        freeBetCollateralBalancesQuery.isSuccess && freeBetCollateralBalancesQuery.data
+            ? freeBetCollateralBalancesQuery.data.balances
             : undefined;
 
     const balanceList = mapMultiCollateralBalances(freeBetCollateralBalances, exchangeRates, networkId);

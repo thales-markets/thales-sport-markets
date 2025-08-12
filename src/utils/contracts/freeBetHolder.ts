@@ -19,14 +19,31 @@ const freeBetHolder: ContractData = {
             name: 'AddressInsufficientBalance',
             type: 'error',
         },
+        { inputs: [], name: 'CallerNotAllowed', type: 'error' },
+        { inputs: [], name: 'DirectionsCannotBeEmpty', type: 'error' },
         { inputs: [], name: 'FailedInnerCall', type: 'error' },
+        { inputs: [], name: 'FreeBetExpired', type: 'error' },
+        { inputs: [], name: 'FreeBetNotExpired', type: 'error' },
+        { inputs: [], name: 'InsufficientBalance', type: 'error' },
+        { inputs: [], name: 'InvalidAddress', type: 'error' },
         { inputs: [], name: 'InvalidInitialization', type: 'error' },
+        { inputs: [], name: 'InvalidTicketType', type: 'error' },
         { inputs: [], name: 'NotInitializing', type: 'error' },
+        { inputs: [], name: 'OnlyCallableFromLiveTradingProcessor', type: 'error' },
+        { inputs: [], name: 'OnlyCallableFromSGPTradingProcessor', type: 'error' },
+        { inputs: [], name: 'OnlyCallableFromSpeedMarketsAMMCreator', type: 'error' },
         {
             inputs: [{ internalType: 'address', name: 'token', type: 'address' }],
             name: 'SafeERC20FailedOperation',
             type: 'error',
         },
+        { inputs: [], name: 'SpeedMarketsAMMCreatorNotSet', type: 'error' },
+        { inputs: [], name: 'UnknownActiveTicket', type: 'error' },
+        { inputs: [], name: 'UnknownLiveTicket', type: 'error' },
+        { inputs: [], name: 'UnknownSGPTicket', type: 'error' },
+        { inputs: [], name: 'UnknownSpeedMarketTicketOwner', type: 'error' },
+        { inputs: [], name: 'UnknownTicket', type: 'error' },
+        { inputs: [], name: 'UnsupportedCollateral', type: 'error' },
         {
             anonymous: false,
             inputs: [
@@ -34,6 +51,19 @@ const freeBetHolder: ContractData = {
                 { indexed: false, internalType: 'bool', name: 'supported', type: 'bool' },
             ],
             name: 'CollateralSupportChanged',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'user', type: 'address' },
+                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                { indexed: false, internalType: 'uint256', name: 'buyInAmount', type: 'uint256' },
+                { indexed: false, internalType: 'bytes32', name: 'asset', type: 'bytes32' },
+                { indexed: false, internalType: 'uint64', name: 'timeFrame', type: 'uint64' },
+                { indexed: false, internalType: 'uint256', name: 'directionsCount', type: 'uint256' },
+            ],
+            name: 'FreeBetChainedSpeedMarketTradeRequested',
             type: 'event',
         },
         {
@@ -54,6 +84,24 @@ const freeBetHolder: ContractData = {
                 { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
             ],
             name: 'FreeBetSGPTradeRequested',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'address', name: 'user', type: 'address' },
+                { indexed: false, internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                { indexed: false, internalType: 'uint256', name: 'buyInAmount', type: 'uint256' },
+                { indexed: false, internalType: 'bytes32', name: 'asset', type: 'bytes32' },
+                { indexed: false, internalType: 'uint64', name: 'strikeTime', type: 'uint64' },
+                {
+                    indexed: false,
+                    internalType: 'enum ISpeedMarketsAMMCreator.Direction',
+                    name: 'direction',
+                    type: 'uint8',
+                },
+            ],
+            name: 'FreeBetSpeedMarketTradeRequested',
             type: 'event',
         },
         {
@@ -106,6 +154,21 @@ const freeBetHolder: ContractData = {
         },
         {
             anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: 'addressManager', type: 'address' }],
+            name: 'SetAddressManager',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [
+                { indexed: false, internalType: 'uint256', name: 'freeBetExpirationPeriod', type: 'uint256' },
+                { indexed: false, internalType: 'uint256', name: 'freeBetExpirationUpgrade', type: 'uint256' },
+            ],
+            name: 'SetFreeBetExpirationPeriod',
+            type: 'event',
+        },
+        {
+            anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'liveTradingProcessor', type: 'address' }],
             name: 'SetLiveTradingProcessor',
             type: 'event',
@@ -120,6 +183,12 @@ const freeBetHolder: ContractData = {
             anonymous: false,
             inputs: [{ indexed: false, internalType: 'address', name: 'sportsAMM', type: 'address' }],
             name: 'SetSportsAMM',
+            type: 'event',
+        },
+        {
+            anonymous: false,
+            inputs: [{ indexed: false, internalType: 'address', name: 'collateral', type: 'address' }],
+            name: 'UpdateMaxApprovalSpeedMarketsAMM',
             type: 'event',
         },
         {
@@ -153,6 +222,13 @@ const freeBetHolder: ContractData = {
             name: 'addSupportedCollateral',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'addressManager',
+            outputs: [{ internalType: 'contract IAddressManager', name: '', type: 'address' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -190,10 +266,59 @@ const freeBetHolder: ContractData = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address', name: '_resolvedTicket', type: 'address' },
+                { internalType: 'uint256', name: '_exercized', type: 'uint256' },
+                { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+            ],
+            name: 'confirmSpeedMarketResolved',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'bytes32', name: 'requestId', type: 'bytes32' },
+                { internalType: 'address', name: '_createdTicket', type: 'address' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'uint256', name: '_buyInAmount', type: 'uint256' },
+                { internalType: 'bool', name: '_isChainedSpeedMarket', type: 'bool' },
+            ],
+            name: 'confirmSpeedOrChainedSpeedMarketTrade',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'address', name: '_resolvedTicket', type: 'address' }],
             name: 'confirmTicketResolved',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '', type: 'address' },
+                { internalType: 'address', name: '', type: 'address' },
+            ],
+            name: 'freeBetExpiration',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'freeBetExpirationPeriod',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [],
+            name: 'freeBetExpirationUpgrade',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -240,6 +365,33 @@ const freeBetHolder: ContractData = {
             stateMutability: 'view',
             type: 'function',
         },
+        {
+            inputs: [
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'uint256', name: '_index', type: 'uint256' },
+                { internalType: 'uint256', name: '_pageSize', type: 'uint256' },
+            ],
+            name: 'getUsersFreeBetDataPerCollateral',
+            outputs: [
+                { internalType: 'address[]', name: 'allUsers', type: 'address[]' },
+                { internalType: 'uint256[]', name: 'freeBetAmounts', type: 'uint256[]' },
+                { internalType: 'bool[]', name: 'isValid', type: 'bool[]' },
+                { internalType: 'uint256[]', name: 'timeToExpiration', type: 'uint256[]' },
+            ],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'uint256', name: '_index', type: 'uint256' },
+                { internalType: 'uint256', name: '_pageSize', type: 'uint256' },
+            ],
+            name: 'getUsersWithFreeBetPerCollateral',
+            outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
         { inputs: [], name: 'initNonReentrant', outputs: [], stateMutability: 'nonpayable', type: 'function' },
         {
             inputs: [
@@ -250,6 +402,19 @@ const freeBetHolder: ContractData = {
             name: 'initialize',
             outputs: [],
             stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address', name: '_user', type: 'address' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+            ],
+            name: 'isFreeBetValid',
+            outputs: [
+                { internalType: 'bool', name: 'isValid', type: 'bool' },
+                { internalType: 'uint256', name: 'timeToExpiration', type: 'uint256' },
+            ],
+            stateMutability: 'view',
             type: 'function',
         },
         {
@@ -302,6 +467,13 @@ const freeBetHolder: ContractData = {
             type: 'function',
         },
         {
+            inputs: [{ internalType: 'address', name: '_collateral', type: 'address' }],
+            name: 'numOfUsersWithFreeBetPerCollateral',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
             inputs: [],
             name: 'owner',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -320,6 +492,16 @@ const freeBetHolder: ContractData = {
             name: 'paused',
             outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
             stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address[]', name: '_users', type: 'address[]' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+            ],
+            name: 'removeExpiredUserFunding',
+            outputs: [],
+            stateMutability: 'nonpayable',
             type: 'function',
         },
         {
@@ -350,6 +532,23 @@ const freeBetHolder: ContractData = {
                 { internalType: 'uint256', name: '_amount', type: 'uint256' },
             ],
             name: 'retrieveFunds',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_addressManager', type: 'address' }],
+            name: 'setAddressManager',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'uint256', name: '_freeBetExpirationPeriod', type: 'uint256' },
+                { internalType: 'uint256', name: '_freeBetExpirationUpgrade', type: 'uint256' },
+            ],
+            name: 'setFreeBetExpirationPeriod',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -390,6 +589,27 @@ const freeBetHolder: ContractData = {
             type: 'function',
         },
         {
+            inputs: [
+                { internalType: 'address', name: '_user', type: 'address' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+                { internalType: 'uint256', name: '_freeBetExpiration', type: 'uint256' },
+            ],
+            name: 'setUserFreeBetExpiration',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                { internalType: 'address[]', name: '_users', type: 'address[]' },
+                { internalType: 'address', name: '_collateral', type: 'address' },
+            ],
+            name: 'setUsersWithAlreadyFundedFreeBetPerCollateral',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
             inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
             name: 'sgpRequestsPerUser',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -400,6 +620,13 @@ const freeBetHolder: ContractData = {
             inputs: [],
             name: 'sgpTradingProcessor',
             outputs: [{ internalType: 'contract ISGPTradingProcessor', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+            name: 'speedMarketRequestToUser',
+            outputs: [{ internalType: 'address', name: '', type: 'address' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -421,6 +648,13 @@ const freeBetHolder: ContractData = {
             inputs: [{ internalType: 'address', name: '', type: 'address' }],
             name: 'ticketToUser',
             outputs: [{ internalType: 'address', name: '', type: 'address' }],
+            stateMutability: 'view',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'ticketType',
+            outputs: [{ internalType: 'enum FreeBetsHolder.TicketType', name: '', type: 'uint8' }],
             stateMutability: 'view',
             type: 'function',
         },
@@ -460,6 +694,33 @@ const freeBetHolder: ContractData = {
                 { internalType: 'address', name: '_collateral', type: 'address' },
             ],
             name: 'trade',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
+                        { internalType: 'bytes32', name: 'asset', type: 'bytes32' },
+                        { internalType: 'uint64', name: 'timeFrame', type: 'uint64' },
+                        { internalType: 'uint256', name: 'strikePrice', type: 'uint256' },
+                        { internalType: 'uint256', name: 'strikePriceSlippage', type: 'uint256' },
+                        {
+                            internalType: 'enum ISpeedMarketsAMMCreator.Direction[]',
+                            name: 'directions',
+                            type: 'uint8[]',
+                        },
+                        { internalType: 'address', name: 'collateral', type: 'address' },
+                        { internalType: 'uint256', name: 'buyinAmount', type: 'uint256' },
+                        { internalType: 'address', name: 'referrer', type: 'address' },
+                    ],
+                    internalType: 'struct ISpeedMarketsAMMCreator.ChainedSpeedMarketParams',
+                    name: '_params',
+                    type: 'tuple',
+                },
+            ],
+            name: 'tradeChainedSpeedMarket',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',
@@ -540,6 +801,31 @@ const freeBetHolder: ContractData = {
             inputs: [
                 {
                     components: [
+                        { internalType: 'bytes32', name: 'asset', type: 'bytes32' },
+                        { internalType: 'uint64', name: 'strikeTime', type: 'uint64' },
+                        { internalType: 'uint64', name: 'delta', type: 'uint64' },
+                        { internalType: 'uint256', name: 'strikePrice', type: 'uint256' },
+                        { internalType: 'uint256', name: 'strikePriceSlippage', type: 'uint256' },
+                        { internalType: 'enum ISpeedMarketsAMMCreator.Direction', name: 'direction', type: 'uint8' },
+                        { internalType: 'address', name: 'collateral', type: 'address' },
+                        { internalType: 'uint256', name: 'buyinAmount', type: 'uint256' },
+                        { internalType: 'address', name: 'referrer', type: 'address' },
+                        { internalType: 'uint256', name: 'skewImpact', type: 'uint256' },
+                    ],
+                    internalType: 'struct ISpeedMarketsAMMCreator.SpeedMarketParams',
+                    name: '_params',
+                    type: 'tuple',
+                },
+            ],
+            name: 'tradeSpeedMarket',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [
+                {
+                    components: [
                         { internalType: 'bytes32', name: 'gameId', type: 'bytes32' },
                         { internalType: 'uint16', name: 'sportId', type: 'uint16' },
                         { internalType: 'uint16', name: 'typeId', type: 'uint16' },
@@ -580,6 +866,13 @@ const freeBetHolder: ContractData = {
         {
             inputs: [{ internalType: 'address', name: 'proxyAddress', type: 'address' }],
             name: 'transferOwnershipAtInit',
+            outputs: [],
+            stateMutability: 'nonpayable',
+            type: 'function',
+        },
+        {
+            inputs: [{ internalType: 'address', name: '_collateral', type: 'address' }],
+            name: 'updateApprovalForSpeedMarketsAMM',
             outputs: [],
             stateMutability: 'nonpayable',
             type: 'function',

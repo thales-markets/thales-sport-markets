@@ -42,18 +42,20 @@ const UserStats: React.FC = () => {
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const userStatsQuery = useUsersStatsV2Query(walletAddress, { networkId, client }, { enabled: isConnected });
+    const userStatsQuery = useUsersStatsV2Query(
+        walletAddress,
+        { networkId, client },
+        { enabled: isConnected && !!walletAddress }
+    );
     const userStats = userStatsQuery.isSuccess && userStatsQuery.data ? userStatsQuery.data : undefined;
 
     const freeBetBalancesQuery = useFreeBetCollateralBalanceQuery(
         walletAddress,
         { networkId, client },
-        {
-            enabled: isConnected,
-        }
+        { enabled: isConnected }
     );
     const freeBetBalances =
-        freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data : undefined;
+        freeBetBalancesQuery.isSuccess && freeBetBalancesQuery.data ? freeBetBalancesQuery.data.balances : undefined;
 
     const isFreeBetExists = freeBetBalances && !!Object.values(freeBetBalances).find((balance) => !!balance);
 
@@ -77,7 +79,7 @@ const UserStats: React.FC = () => {
         (collateral: Coins, freeBetBalance?: boolean) => {
             if (freeBetBalance)
                 return (
-                    (freeBetBalances ? freeBetBalances[collateral] : 0) *
+                    (freeBetBalances ? freeBetBalances[collateral] || 0 : 0) *
                     (isStableCurrency(collateral as Coins) ? 1 : exchangeRates?.[collateral] || 0)
                 );
             return (
@@ -212,7 +214,8 @@ const UserStats: React.FC = () => {
                         </SubHeader>
                     </SubHeaderWrapper>
                     {freeBetBalances &&
-                        Object.keys(freeBetCollateralsSorted).map((currencyKey) => {
+                        Object.keys(freeBetCollateralsSorted).map((collateral) => {
+                            const currencyKey = collateral as Coins;
                             return freeBetBalances[currencyKey] ? (
                                 <Section key={`${currencyKey}-freebet`}>
                                     <SubLabel>
@@ -220,10 +223,7 @@ const UserStats: React.FC = () => {
                                         {currencyKey}
                                     </SubLabel>
                                     <SubValue>
-                                        {formatCurrencyWithSign(
-                                            null,
-                                            freeBetBalances ? freeBetBalances[currencyKey] : 0
-                                        )}
+                                        {formatCurrencyWithSign(null, freeBetBalances[currencyKey])}
                                         {!exchangeRates?.[currencyKey] && !isStableCurrency(currencyKey as Coins)
                                             ? '...'
                                             : ` (${formatCurrencyWithSign(

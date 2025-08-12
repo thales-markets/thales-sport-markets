@@ -127,7 +127,8 @@
             "single-amm-paused": "AMM Paused",
             "invalid-percentage-range": "The percentage must be between {{min}} and {{max}}",
             "invalid-amount-max": "The amount cannot be higher than {{max}}",
-            "swap-quote-low": "Swap quote is too low (receive: {{quote}}, min receive {{minQuote}})! Please try again..."
+            "swap-quote-low": "Swap quote is too low (receive: {{quote}}, min receive {{minQuote}})! Please try again...",
+            "free-bet-invalid": "Free bet expired"
         },
         "time-remaining": {
             "ended": "ended",

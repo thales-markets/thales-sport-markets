@@ -74,6 +74,8 @@ export const isLpSupported = (currencyKey: Coins, isSpeedMarkets = false) => {
               isOverCurrency(currencyKey);
 };
 
+export const getCollateralText = (collateral: Coins) => `${isOverCurrency(collateral) ? '$' : ''}${collateral}`;
+
 export const getSpeedNativeCollateralsText = (
     nativeCollaterals: Coins[],
     excludeCollateral: Coins | null,
@@ -89,11 +91,11 @@ export const getSpeedNativeCollateralsText = (
 
 export const formatValueWithCollateral = (value: number, collateral: Coins | null, networkId: SupportedNetwork) =>
     collateral && collateral !== getDefaultCollateral(networkId)
-        ? formatCurrencyWithKey(`${isOverCurrency(collateral) ? '$' : ''}${collateral}`, value)
+        ? formatCurrencyWithKey(getCollateralText(collateral), value)
         : formatCurrencyWithSign(USD_SIGN, value);
 
 export const mapMultiCollateralBalances = (
-    data: any,
+    data: Partial<Record<Coins, number>> | undefined,
     exchangeRates: Rates | null,
     networkId: SupportedNetwork
 ): Array<{ index: number; collateralKey: Coins; balance: number; balanceDollarValue: number }> | undefined => {
@@ -101,9 +103,9 @@ export const mapMultiCollateralBalances = (
     return Object.keys(data).map((key) => {
         return {
             index: getCollateralIndex(networkId, key as Coins),
-            balance: data[key as string] as number,
+            balance: data[key as Coins] as number,
             balanceDollarValue:
-                (data[key] ? data[key] : 0) * (isStableCurrency(key as Coins) ? 1 : exchangeRates?.[key] || 0),
+                (data[key as Coins] || 0) * (isStableCurrency(key as Coins) ? 1 : exchangeRates?.[key] || 0),
             collateralKey: key as Coins,
         };
     });
@@ -117,7 +119,7 @@ export const getMaxCollateralDollarValue = (
 };
 
 export const sortCollateralBalances = (
-    data: any,
+    data: Partial<Record<Coins, number>> | undefined,
     exchangeRates: Rates | null,
     networkId: SupportedNetwork,
     orderBy: 'asc' | 'desc'

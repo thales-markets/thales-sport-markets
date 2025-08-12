@@ -17,7 +17,7 @@ import { Address } from 'viem';
 const useMultipleCollateralBalanceQuery = (
     walletAddress: string,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<CollateralsBalance>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<CollateralsBalance>({
         queryKey: QUERY_KEYS.Wallet.MultipleCollateral(walletAddress, networkConfig.networkId),

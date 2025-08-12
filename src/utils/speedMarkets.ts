@@ -32,9 +32,10 @@ export const getTransactionForSpeedAMM = async (
     strikePriceSlippage: bigint,
     collateralAddress: string,
     referral: string | null,
-    skewImpact?: bigint,
-    isBiconomy?: boolean,
-    isEth?: boolean
+    skewImpact: bigint,
+    isBiconomy: boolean,
+    isEth: boolean,
+    isFreeBet: boolean
 ) => {
     let txHash;
 
@@ -46,7 +47,7 @@ export const getTransactionForSpeedAMM = async (
             collateralAddress: (collateralAddress || getDefaultCollateral(biconomyChainId)) as Address,
             networkId: biconomyChainId,
             contract: creatorContractWithSigner,
-            methodName: 'addPendingSpeedMarket',
+            methodName: isFreeBet ? 'tradeSpeedMarket' : 'addPendingSpeedMarket',
             data: [
                 [
                     asset,
@@ -67,20 +68,35 @@ export const getTransactionForSpeedAMM = async (
             isSpeed: true,
         });
     } else {
-        txHash = await creatorContractWithSigner.write.addPendingSpeedMarket([
-            [
-                asset,
-                0,
-                deltaTimeSec,
-                strikePrice,
-                strikePriceSlippage,
-                sides[0],
-                collateralAddress || ZERO_ADDRESS,
-                buyInAmount,
-                referral || ZERO_ADDRESS,
-                skewImpact,
-            ],
-        ]);
+        txHash = await (isFreeBet
+            ? creatorContractWithSigner.write.tradeSpeedMarket([
+                  [
+                      asset,
+                      0,
+                      deltaTimeSec,
+                      strikePrice,
+                      strikePriceSlippage,
+                      sides[0],
+                      collateralAddress || ZERO_ADDRESS,
+                      buyInAmount,
+                      referral || ZERO_ADDRESS,
+                      skewImpact,
+                  ],
+              ])
+            : creatorContractWithSigner.write.addPendingSpeedMarket([
+                  [
+                      asset,
+                      0,
+                      deltaTimeSec,
+                      strikePrice,
+                      strikePriceSlippage,
+                      sides[0],
+                      collateralAddress || ZERO_ADDRESS,
+                      buyInAmount,
+                      referral || ZERO_ADDRESS,
+                      skewImpact,
+                  ],
+              ]));
     }
 
     return txHash;
