@@ -210,7 +210,8 @@
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
-        "twitter": "Twitter",
+        "twitter": "X",
+        "farcaster": "Farcaster",
         "discord": "Discord",
         "docs": "Docs",
         "resources": "Resources",
