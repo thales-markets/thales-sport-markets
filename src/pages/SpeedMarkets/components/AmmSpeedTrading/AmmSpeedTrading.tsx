@@ -671,18 +671,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                                     setIsAllowing(false);
                                 }
                             } catch (e) {
-                                console.log('error: ', e);
-                                const isUserRejected = USER_REJECTED_ERRORS.some((rejectedError) =>
-                                    ((e as Error).message + ((e as Error).stack || '')).includes(rejectedError)
-                                );
-                                toast.update(
-                                    id,
-                                    getErrorToastOptions(
-                                        isUserRejected
-                                            ? t('common.errors.tx-canceled')
-                                            : t('common.errors.unknown-error-try-again')
-                                    )
-                                );
+                                toast.update(id, getErrorToastOptions(t('common.errors.unknown-error-try-again')));
                             }
                         }}
                         {...getDefaultButtonProps(theme)}
