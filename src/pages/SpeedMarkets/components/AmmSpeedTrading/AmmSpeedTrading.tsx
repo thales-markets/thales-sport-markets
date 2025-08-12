@@ -687,7 +687,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                         }}
                         {...getDefaultButtonProps(theme)}
                     >
-                        {t('get-started.activate-account.action')}
+                        {t('get-started.activate-account.activate-ot-account')}
                     </Button>
                 );
             } else
