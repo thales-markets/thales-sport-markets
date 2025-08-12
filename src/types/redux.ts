@@ -9,6 +9,7 @@ import { TicketError } from './tickets';
 
 export type AppSliceState = {
     isMobile: boolean;
+    isMiniapp: boolean;
 };
 
 export type MarketSliceState = {

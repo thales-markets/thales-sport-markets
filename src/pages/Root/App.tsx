@@ -27,7 +27,7 @@ import Ticket from 'pages/Ticket';
 import { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
-import { setMobileState } from 'redux/modules/app';
+import { setMiniappState, setMobileState } from 'redux/modules/app';
 import {
     getIsConnectedViaParticle,
     setIsBiconomy,
@@ -96,23 +96,6 @@ const App = () => {
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        if (
-            connector &&
-            (connector.id === WalletConnections.TRUST_WALLET || connector.id === WalletConnections.COINBASE)
-        ) {
-            isSmartContract(address).then((isSmart: any) => {
-                if (isSmart) {
-                    dispatch(setIsSmartAccountDisabled(true));
-                    dispatch(setIsBiconomy(false));
-                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
-                } else {
-                    dispatch(setIsSmartAccountDisabled(false));
-                }
-            });
-        }
-    }, [address, dispatch, networkId, connector]);
-
     // useEffect only for Particle Wallet
     useEffect(() => {
         if (connectionStatus === 'connected') {
@@ -138,6 +121,23 @@ const App = () => {
         isParticleConnected,
     ]);
 
+    useEffect(() => {
+        if (
+            connector &&
+            (connector.id === WalletConnections.TRUST_WALLET || connector.id === WalletConnections.COINBASE)
+        ) {
+            isSmartContract(address).then((isSmart: any) => {
+                if (isSmart) {
+                    dispatch(setIsSmartAccountDisabled(true));
+                    dispatch(setIsBiconomy(false));
+                    localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
+                } else {
+                    dispatch(setIsSmartAccountDisabled(false));
+                }
+            });
+        }
+    }, [address, dispatch, networkId, connector]);
+
     // Signal ready to the Warpcast frame environment (with retry)
     useEffect(() => {
         const attemptReady = async () => {
@@ -147,8 +147,9 @@ const App = () => {
                     await sdk.actions.ready();
                     const lastSelectedNetwork = localStore.get(LOCAL_STORAGE_KEYS.LAST_SELECTED_NETWORK);
                     if (await sdk.isInMiniApp()) {
-                        dispatch(setIsSmartAccountDisabled(true));
+                        dispatch(setMiniappState(true));
                         dispatch(setIsBiconomy(false));
+
                         localStore.set(LOCAL_STORAGE_KEYS.USE_BICONOMY, false);
                         if (!lastSelectedNetwork) switchChain?.({ chainId: Network.Base as SupportedNetwork });
                     }
