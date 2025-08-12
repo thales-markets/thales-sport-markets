@@ -223,13 +223,8 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     ]);
 
     const paymentTokenBalance: number = useMemo(() => {
-        if (
-            isFreeBetActive &&
-            freeBetBalanceExists &&
-            freeBetCollateralBalances &&
-            freeBetCollateralBalances[selectedCollateral]
-        ) {
-            return freeBetCollateralBalances[selectedCollateral];
+        if (isFreeBetActive && freeBetBalanceExists && freeBetCollateralBalances) {
+            return freeBetCollateralBalances[selectedCollateral] || 0;
         }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
             return multipleCollateralBalances.data[selectedCollateral];
@@ -270,8 +265,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
     // Input field validations
     useDebouncedEffect(() => {
         let errorMessageKey = '';
-
-        if (isFreeBetActive && freeBetCollateralValidity) {
+        if (isFreeBetActive && paymentTokenBalance > 0 && freeBetCollateralValidity) {
             const isFreeBetCollateralValid = freeBetCollateralValidity[selectedCollateral];
             if (!isFreeBetCollateralValid) {
                 errorMessageKey = 'common.errors.free-bet-invalid';

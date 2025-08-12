@@ -499,13 +499,8 @@ const Ticket: React.FC<TicketProps> = ({
     }, [sportsAmmDataQuery.isSuccess, sportsAmmDataQuery.data]);
 
     const paymentTokenBalance: number = useMemo(() => {
-        if (
-            isFreeBetActive &&
-            freeBetBalanceExists &&
-            freeBetCollateralBalances &&
-            freeBetCollateralBalances[selectedCollateral]
-        ) {
-            return freeBetCollateralBalances[selectedCollateral];
+        if (isFreeBetActive && freeBetBalanceExists && freeBetCollateralBalances) {
+            return freeBetCollateralBalances[selectedCollateral] || 0;
         }
         if (multipleCollateralBalances.data && multipleCollateralBalances.isSuccess) {
             return multipleCollateralBalances.data[selectedCollateral];
@@ -1233,7 +1228,12 @@ const Ticket: React.FC<TicketProps> = ({
             (buyInAmountInDefaultCollateral && buyInAmountInDefaultCollateral > Number(ticketLiquidity))
         ) {
             setTooltipTextBuyInAmount(t('markets.parlay.validation.availability'));
-        } else if (isFreeBetActive && freeBetCollateralValidity && !freeBetCollateralValidity[selectedCollateral]) {
+        } else if (
+            isFreeBetActive &&
+            paymentTokenBalance > 0 &&
+            freeBetCollateralValidity &&
+            !freeBetCollateralValidity[selectedCollateral]
+        ) {
             setTooltipTextBuyInAmount(t('common.errors.free-bet-invalid'));
         } else if (
             Number(buyInAmount) &&
