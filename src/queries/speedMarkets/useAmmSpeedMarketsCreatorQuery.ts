@@ -3,7 +3,6 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { NetworkConfig } from 'types/network';
 import { AmmSpeedMarketsCreatorParams } from 'types/speedMarkets';
-import { ViemContract } from 'types/viem';
 import { getContractInstance } from 'utils/contract';
 
 const useAmmSpeedMarketsCreatorQuery = (
@@ -19,9 +18,9 @@ const useAmmSpeedMarketsCreatorQuery = (
                 const speedMarketsCreatorContract = getContractInstance(
                     ContractType.SPEED_MARKETS_AMM_CREATOR,
                     networkConfig
-                ) as ViemContract;
+                );
 
-                const maxCreationDelay = await speedMarketsCreatorContract.read.maxCreationDelay();
+                const maxCreationDelay = await speedMarketsCreatorContract?.read.maxCreationDelay();
 
                 ammSpeedMarketsCreatorParams.maxCreationDelay = Number(maxCreationDelay);
             } catch (e) {

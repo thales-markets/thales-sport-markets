@@ -1,5 +1,6 @@
 import { SpeedPositions } from 'enums/speedMarkets';
 import { Coins } from 'thales-utils';
+import { CollateralsBalance } from './collateral';
 
 export type SelectedPosition = SpeedPositions.UP | SpeedPositions.DOWN | undefined;
 
@@ -25,7 +26,7 @@ export type AmmSpeedMarketsLimits = {
     maxSkewImpact: number;
     safeBoxImpact: number;
     whitelistedAddress: boolean;
-    bonusPerCollateral: Record<Coins, number>;
+    bonusPerCollateral: CollateralsBalance;
 };
 
 export type UserPosition = {

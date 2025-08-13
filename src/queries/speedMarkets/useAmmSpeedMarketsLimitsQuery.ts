@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
+import { CRYPTO_CURRENCY_MAP, DEFAULT_MULTI_COLLATERAL_BALANCE } from 'constants/currency';
 import { TBD_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import QUERY_KEYS from 'constants/queryKeys';
 import {
@@ -11,7 +11,6 @@ import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, Coins } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { AmmSpeedMarketsLimits } from 'types/speedMarkets';
-import { ViemContract } from 'types/viem';
 import { getCollateralAddress, getCollateralIndex } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { stringToHex } from 'viem';
@@ -39,29 +38,11 @@ const useAmmSpeedMarketsLimitsQuery = (
                 maxSkewImpact: 0,
                 safeBoxImpact: 0,
                 whitelistedAddress: false,
-                bonusPerCollateral: {
-                    DAI: 0,
-                    USDCe: 0,
-                    USDbC: 0,
-                    USDC: 0,
-                    USDT: 0,
-                    OP: 0,
-                    WETH: 0,
-                    ETH: 0,
-                    ARB: 0,
-                    THALES: 0,
-                    sTHALES: 0,
-                    OVER: 0,
-                    cbBTC: 0,
-                    wBTC: 0,
-                },
+                bonusPerCollateral: DEFAULT_MULTI_COLLATERAL_BALANCE,
             };
 
             try {
-                const speedMarketsDataContract = getContractInstance(
-                    ContractType.SPEED_MARKETS_DATA,
-                    networkConfig
-                ) as ViemContract;
+                const speedMarketsDataContract = getContractInstance(ContractType.SPEED_MARKETS_DATA, networkConfig);
 
                 const definedCollaterals = Object.keys(ammSpeedMarketsLimits.bonusPerCollateral).filter(
                     (collateral) => {
@@ -87,16 +68,20 @@ const useAmmSpeedMarketsLimitsQuery = (
                     directionalRiskForBTC,
                     bonuses,
                 ] = await Promise.all([
-                    speedMarketsDataContract.read.getSpeedMarketsAMMParameters([walletAddress || ZERO_ADDRESS]),
-                    speedMarketsDataContract.read.getRiskPerAsset([stringToHex(CRYPTO_CURRENCY_MAP.ETH, { size: 32 })]),
-                    speedMarketsDataContract.read.getRiskPerAsset([stringToHex(CRYPTO_CURRENCY_MAP.BTC, { size: 32 })]),
-                    speedMarketsDataContract.read.getDirectionalRiskPerAsset([
+                    speedMarketsDataContract?.read.getSpeedMarketsAMMParameters([walletAddress || ZERO_ADDRESS]),
+                    speedMarketsDataContract?.read.getRiskPerAsset([
                         stringToHex(CRYPTO_CURRENCY_MAP.ETH, { size: 32 }),
                     ]),
-                    speedMarketsDataContract.read.getDirectionalRiskPerAsset([
+                    speedMarketsDataContract?.read.getRiskPerAsset([
                         stringToHex(CRYPTO_CURRENCY_MAP.BTC, { size: 32 }),
                     ]),
-                    speedMarketsDataContract.read.getBonusesPerCollateral([collateralAddresses]),
+                    speedMarketsDataContract?.read.getDirectionalRiskPerAsset([
+                        stringToHex(CRYPTO_CURRENCY_MAP.ETH, { size: 32 }),
+                    ]),
+                    speedMarketsDataContract?.read.getDirectionalRiskPerAsset([
+                        stringToHex(CRYPTO_CURRENCY_MAP.BTC, { size: 32 }),
+                    ]),
+                    speedMarketsDataContract?.read.getBonusesPerCollateral([collateralAddresses]),
                 ]);
 
                 ammSpeedMarketsLimits.minBuyinAmount =

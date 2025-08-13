@@ -7,7 +7,6 @@ import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
-import { ViemContract } from 'types/viem';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getCurrentPrices, getPriceConnection, getPriceId } from 'utils/pyth';
@@ -24,29 +23,39 @@ const useUserActiveSpeedMarketsDataQuery = (
             const userSpeedMarketsData: UserPosition[] = [];
 
             try {
-                const speedMarketsDataContract = getContractInstance(
-                    ContractType.SPEED_MARKETS_DATA,
-                    networkConfig
-                ) as ViemContract;
+                const speedMarketsDataContract = getContractInstance(ContractType.SPEED_MARKETS_DATA, networkConfig);
+                const speedMarketsAMMContract = getContractInstance(ContractType.SPEED_MARKETS_AMM, networkConfig);
+                const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
 
-                const speedMarketsAMMContract = getContractInstance(
-                    ContractType.SPEED_MARKETS_AMM,
-                    networkConfig
-                ) as ViemContract;
+                const ammParams = await speedMarketsDataContract?.read.getSpeedMarketsAMMParameters([walletAddress]);
 
-                const ammParams = await speedMarketsDataContract.read.getSpeedMarketsAMMParameters([walletAddress]);
-
-                const activeMarketsPerUser = await speedMarketsAMMContract.read.activeMarketsPerUser([
+                const activeMarketsPerUser = await speedMarketsAMMContract?.read.activeMarketsPerUser([
                     0,
                     ammParams.numActiveMarketsPerUser,
                     walletAddress,
                 ]);
-                const activeMarkets = Array.isArray(activeMarketsPerUser)
+
+                // Free Bet
+                const freeBetNumOfActiveMarketsPerUser = await freeBetHolderContract?.read.numOfActiveSpeedMarketsPerUser(
+                    [walletAddress]
+                );
+                const freeBetActiveMarketsPerUser = await freeBetHolderContract?.read.getActiveSpeedMarketsPerUser([
+                    0,
+                    freeBetNumOfActiveMarketsPerUser,
+                    walletAddress,
+                ]);
+
+                const activeMarkets = (Array.isArray(activeMarketsPerUser)
                     ? activeMarketsPerUser
-                    : [activeMarketsPerUser];
+                    : [activeMarketsPerUser]
+                ).concat(
+                    Array.isArray(freeBetActiveMarketsPerUser)
+                        ? freeBetActiveMarketsPerUser
+                        : [freeBetActiveMarketsPerUser]
+                );
 
                 const marketsData = activeMarkets.length
-                    ? await speedMarketsDataContract.read.getMarketsData([activeMarkets])
+                    ? await speedMarketsDataContract?.read.getMarketsData([activeMarkets])
                     : [];
                 const marketsDataArray = Array.isArray(marketsData) ? marketsData : [marketsData];
 

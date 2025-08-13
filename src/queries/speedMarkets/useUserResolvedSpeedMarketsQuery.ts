@@ -12,7 +12,6 @@ import { ContractType } from 'enums/contract';
 import { bigNumberFormatter, coinFormatter, parseBytes32String } from 'thales-utils';
 import { NetworkConfig } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
-import { ViemContract } from 'types/viem';
 import { getCollateralByAddress } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { getFeesFromHistory } from 'utils/speedMarkets';
@@ -28,37 +27,52 @@ const useUserResolvedSpeedMarketsQuery = (
             const userResolvedPositions: UserPosition[] = [];
 
             try {
-                const speedMarketsAMMContract = getContractInstance(
-                    ContractType.SPEED_MARKETS_AMM,
-                    networkConfig
-                ) as ViemContract;
+                const speedMarketsAMMContract = getContractInstance(ContractType.SPEED_MARKETS_AMM, networkConfig);
+                const speedMarketsDataContract = getContractInstance(ContractType.SPEED_MARKETS_DATA, networkConfig);
+                const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, networkConfig);
 
-                const speedMarketsDataContract = getContractInstance(
-                    ContractType.SPEED_MARKETS_DATA,
-                    networkConfig
-                ) as ViemContract;
-
-                const ammParams = await speedMarketsDataContract.read.getSpeedMarketsAMMParameters([walletAddress]);
+                const ammParams = await speedMarketsDataContract?.read.getSpeedMarketsAMMParameters([walletAddress]);
 
                 const pageSize = Math.min(
                     Number(ammParams.numMaturedMarketsPerUser),
                     MAX_NUMBER_OF_SPEED_MARKETS_TO_FETCH
                 );
                 const index = Number(ammParams.numMaturedMarketsPerUser) - pageSize;
-                const resolvedMarketsPerUser = await speedMarketsAMMContract.read.maturedMarketsPerUser([
+                const resolvedMarketsPerUser = await speedMarketsAMMContract?.read.maturedMarketsPerUser([
                     index,
                     pageSize,
                     walletAddress,
                 ]);
-                const resolvedMarkets = Array.isArray(resolvedMarketsPerUser)
+
+                // Free Bet
+                const freeBetNumOfResolvedMarketsPerUser = await freeBetHolderContract?.read.numOfResolvedSpeedMarketsPerUser(
+                    [walletAddress]
+                );
+                const freeBetPageSize = Math.min(
+                    Number(freeBetNumOfResolvedMarketsPerUser),
+                    MAX_NUMBER_OF_SPEED_MARKETS_TO_FETCH
+                );
+                const freeBetIndex = Number(freeBetNumOfResolvedMarketsPerUser) - freeBetPageSize;
+                const freeBetResolvedMarketsPerUser = await freeBetHolderContract?.read.getResolvedSpeedMarketsPerUser([
+                    freeBetIndex,
+                    freeBetPageSize,
+                    walletAddress,
+                ]);
+
+                const resolvedMarkets = (Array.isArray(resolvedMarketsPerUser)
                     ? resolvedMarketsPerUser
-                    : [resolvedMarketsPerUser];
+                    : [resolvedMarketsPerUser]
+                ).concat(
+                    Array.isArray(freeBetResolvedMarketsPerUser)
+                        ? freeBetResolvedMarketsPerUser
+                        : [freeBetResolvedMarketsPerUser]
+                );
 
                 const promises = [];
                 for (let i = 0; i < Math.ceil(resolvedMarkets.length / BATCH_NUMBER_OF_SPEED_MARKETS); i++) {
                     const start = i * BATCH_NUMBER_OF_SPEED_MARKETS;
                     const batchMarkets = resolvedMarkets.slice(start, start + BATCH_NUMBER_OF_SPEED_MARKETS);
-                    promises.push(speedMarketsDataContract.read.getMarketsData([batchMarkets]));
+                    promises.push(speedMarketsDataContract?.read.getMarketsData([batchMarkets]));
                 }
                 const resolvedMarketsDataArray = await Promise.all(promises);
 

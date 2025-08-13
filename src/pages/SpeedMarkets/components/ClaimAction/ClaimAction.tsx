@@ -296,7 +296,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
             const speedMarketsAMMResolverContractWithSigner = getContractInstance(
                 ContractType.SPEED_MARKETS_AMM_RESOLVER,
                 { networkId, client: walletClient.data }
-            ) as ViemContract;
+            );
 
             let hash;
             if (isBiconomy) {
@@ -321,11 +321,11 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                       });
             } else {
                 hash = isOfframp
-                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketWithOfframp(
+                    ? await speedMarketsAMMResolverContractWithSigner?.write.resolveMarketWithOfframp(
                           [position.market, priceUpdateData, collateralAddress, isEth],
                           { value: updateFee }
                       )
-                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarket(
+                    : await speedMarketsAMMResolverContractWithSigner?.write.resolveMarket(
                           [position.market, priceUpdateData],
                           { value: updateFee }
                       );

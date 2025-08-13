@@ -177,7 +177,7 @@ export const resolveAllSpeedPositions = async (
     const speedMarketsAMMResolverContractWithSigner = getContractInstance(ContractType.SPEED_MARKETS_AMM_RESOLVER, {
         networkId: networkConfig.networkId,
         client: networkConfig.client,
-    }) as ViemContract;
+    });
 
     const marketsToResolve: string[] = isAdmin
         ? positions.filter((position) => !!position.finalPrice).map((position) => position.market)
@@ -246,16 +246,16 @@ export const resolveAllSpeedPositions = async (
                       });
             } else {
                 hash = isAdmin
-                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketManuallyBatch([
+                    ? await speedMarketsAMMResolverContractWithSigner?.write.resolveMarketManuallyBatch([
                           marketsToResolve,
                           manualFinalPrices,
                       ])
                     : isOfframp
-                    ? await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatchOffRamp(
+                    ? await speedMarketsAMMResolverContractWithSigner?.write.resolveMarketsBatchOffRamp(
                           [marketsToResolve, priceUpdateDataArray, collateralAddress, isEth],
                           { value: totalUpdateFee }
                       )
-                    : await speedMarketsAMMResolverContractWithSigner.write.resolveMarketsBatch(
+                    : await speedMarketsAMMResolverContractWithSigner?.write.resolveMarketsBatch(
                           [marketsToResolve, priceUpdateDataArray],
                           { value: totalUpdateFee }
                       );
