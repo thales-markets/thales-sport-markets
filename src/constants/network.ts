@@ -80,6 +80,7 @@ export const GAS_ESTIMATION_BUFFER = 1.1; // Adding 10% on gas estimation as a b
 export const GAS_ESTIMATION_BUFFER_CLAIM_ALL = 1.25; // Adding 25% on gas estimation as a buffer
 
 const INFURA_PROJECT_ID = import.meta.env.VITE_APP_INFURA_PROJECT_ID;
+const DRPC_PROJECT_ID = import.meta.env.VITE_APP_DRPC_PROJECT_ID;
 
 export const RPC_LIST = {
     INFURA: {
@@ -102,6 +103,11 @@ export const RPC_LIST = {
         [NetworkId.OptimismSepolia]: {
             http: `https://optimism-sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
             wss: `wss://optimism-sepolia.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+        },
+    },
+    DRPC: {
+        [NetworkId.OptimismMainnet]: {
+            http: `https://lb.drpc.org/optimism/${DRPC_PROJECT_ID}`,
         },
     },
 };
