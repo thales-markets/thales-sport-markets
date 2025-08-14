@@ -88,6 +88,8 @@ const FooterSidebarMobile = lazy(
 
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
+let finalMarketsCached: any = [];
+
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -346,32 +348,33 @@ const Home: React.FC = () => {
         let marketsToFilter = [];
 
         if (sportFilter === SportFilter.PlayerProps) {
-            const playerMarketMap = allMarkets[statusFilter].reduce(
-                (prev: Record<string, SportMarket>, curr: SportMarket) => {
-                    const playerMap = { ...prev };
-                    curr.childMarkets.forEach((childMarket) => {
-                        if (childMarket.isPlayerPropsMarket) {
-                            if (playerMap[childMarket.playerProps.playerName + childMarket.gameId]) {
-                                playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets = [
-                                    ...playerMap[childMarket.playerProps.playerName + childMarket.gameId].childMarkets,
-                                    childMarket,
-                                ];
-                            } else {
-                                playerMap[childMarket.playerProps.playerName + childMarket.gameId] = {
-                                    ...curr,
-                                    isPlayerPropsMarket: true,
-                                    gameId: childMarket.gameId,
-                                    isOneSideMarket: true,
-                                    childMarkets: [childMarket],
-                                    playerProps: childMarket.playerProps,
-                                };
-                            }
+            const playerMarketMap: Record<string, SportMarket> = (() => {
+                const map: Record<string, SportMarket> = {};
+
+                for (const curr of allMarkets[statusFilter]) {
+                    for (const childMarket of curr.childMarkets) {
+                        if (!childMarket.isPlayerPropsMarket) continue;
+
+                        const key = childMarket.playerProps.playerName + childMarket.gameId;
+
+                        const existing = map[key];
+                        if (existing) {
+                            existing.childMarkets.push(childMarket);
+                        } else {
+                            map[key] = {
+                                ...curr,
+                                isPlayerPropsMarket: true,
+                                gameId: childMarket.gameId,
+                                isOneSideMarket: true,
+                                childMarkets: [childMarket],
+                                playerProps: childMarket.playerProps,
+                            };
                         }
-                    });
-                    return playerMap;
-                },
-                {}
-            );
+                    }
+                }
+
+                return map;
+            })();
 
             marketsToFilter = Object.keys(playerMarketMap).map((key) => playerMarketMap[key]);
             setUnfilteredPlayerPropsMarkets(marketsToFilter);
@@ -498,6 +501,11 @@ const Home: React.FC = () => {
         }
 
         setAvailableMarketTypes(Array.from(marketTypes));
+
+        if (isEqual(finalMarketsCached, filteredMarkets)) {
+            return finalMarketsCached;
+        }
+        finalMarketsCached = filteredMarkets;
 
         return filteredMarkets;
     }, [
