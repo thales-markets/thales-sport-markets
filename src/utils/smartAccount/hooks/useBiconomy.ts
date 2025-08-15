@@ -29,7 +29,7 @@ function useBiconomy() {
                     signer: walletClient,
                     bundlerUrl: bundlerUrl,
                     biconomyPaymasterApiKey: PAYMASTER_API_KEY,
-                    rpcUrl: RPC_LIST.INFURA[networkId].http,
+                    rpcUrl: RPC_LIST.DRPC[networkId].http,
                 });
 
                 const smartAddressNew = await smartAccount.getAccountAddress();
