@@ -369,6 +369,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         await resolveAllSpeedPositions(
             claimablePositions,
             false,
+            walletAddress,
             { networkId, client: walletClient.data },
             isBiconomy,
             collateralAddress

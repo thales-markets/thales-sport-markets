@@ -27,7 +27,7 @@ const NotificationsCount: React.FC<{ isClaimable: boolean; topPosition?: string 
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
     const userActiveSpeedMarketsDataQuery = useUserActiveSpeedMarketsDataQuery({ networkId, client }, walletAddress, {
-        enabled: isConnected,
+        enabled: isConnected && !!walletAddress,
     });
 
     const userActiveSpeedMarketsData = useMemo(
