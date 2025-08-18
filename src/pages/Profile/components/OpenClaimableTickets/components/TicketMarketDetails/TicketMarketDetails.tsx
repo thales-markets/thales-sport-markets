@@ -163,7 +163,7 @@ const TicketMarketDetails: React.FC<{ market: TicketMarket; isLive: boolean; isS
                 <TicketMarketStatus>{t('profile.card.canceled')}</TicketMarketStatus>
             ) : (market.isResolved || market.isGameFinished) && !market.isPlayerPropsMarket && !showContractResult ? (
                 <MatchScoreContainer>
-                    {isSystem && (
+                    {isSystem && market.isResolved && (
                         <>
                             {market.isWinning ? (
                                 <Correct className="icon icon--correct" />
