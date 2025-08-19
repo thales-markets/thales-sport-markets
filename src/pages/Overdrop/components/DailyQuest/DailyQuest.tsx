@@ -2,8 +2,8 @@ import Button from 'components/Button';
 import WheelOfFortune from 'components/WheelOfFortune';
 import ROUTES from 'constants/routes';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import useUserDataQuery from 'queries/overdrop/useUserDataQuery';
-import React, { useMemo, useState } from 'react';
+import useUserDailyQuestInfo from 'queries/overdrop/useUserDailyQuestInfo';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSpeedMarketsWidgetOpen, setSpeedMarketsWidgetOpen } from 'redux/modules/ui';
@@ -47,16 +47,68 @@ const DailyQuest: React.FC = () => {
 
     const [showSpinTheWheel, setShowSpinTheWheel] = useState(false);
     const [showSocialModal, setShowSocialModal] = useState(false);
+    const [isRefetching, setIsRefetching] = useState(true);
     const isSpeedMarketOpen = useSelector(getSpeedMarketsWidgetOpen);
 
     const { address, isConnected } = useAccount();
     const dispatch = useDispatch();
 
-    const userDataQuery = useUserDataQuery(address as string, {
+    const userDataQuery = useUserDailyQuestInfo(address as string, {
         enabled: isConnected,
+        refetchInterval: isRefetching ? 5000 : false,
     });
     const userData: OverdropUserData | undefined =
         userDataQuery?.isSuccess && userDataQuery?.data ? userDataQuery.data : undefined;
+
+    const isOTTradeCompleted = useMemo(() => {
+        if (userData) {
+            const today = getDayOfYearUTC(new Date());
+            if (userData.lastTradeOvertime) {
+                const lastTradeDay = getDayOfYearUTC(new Date(userData.lastTradeOvertime));
+                return today === lastTradeDay;
+            } else {
+                return false;
+            }
+        }
+    }, [userData]);
+
+    const isSpeedTradeCompleted = useMemo(() => {
+        if (userData) {
+            const today = getDayOfYearUTC(new Date());
+            if (userData.lastTradeSpeed) {
+                const lastTradeDay = getDayOfYearUTC(new Date(userData.lastTradeSpeed));
+                return today === lastTradeDay;
+            } else {
+                return false;
+            }
+        }
+    }, [userData]);
+
+    const isSpinTheWheelCompleted = useMemo(() => {
+        if (userData) {
+            const today = getDayOfYearUTC(new Date());
+
+            if (userData.wheel && userData.wheel.lastSpinTime) {
+                return getDayOfYearUTC(new Date(userData.wheel.lastSpinTime)) === today;
+            }
+        }
+        return false;
+    }, [userData]);
+
+    const spintTheWheelRewardText = useMemo(() => {
+        if (userData && isSpinTheWheelCompleted) {
+            if (userData.wheel?.reward?.xpAmount) {
+                return `${userData.wheel?.reward?.boostAmount}% XP Boost \n+ ${userData.wheel?.reward?.xpAmount} XP`;
+            } else {
+                return `${userData.wheel?.reward?.boostAmount}% XP Boost`;
+            }
+        }
+        return false;
+    }, [isSpinTheWheelCompleted, userData]);
+
+    useEffect(() => {
+        setIsRefetching(!isOTTradeCompleted || !isSpeedTradeCompleted);
+    }, [isOTTradeCompleted, isSpeedTradeCompleted]);
 
     useMemo(() => {
         if (userData) {
@@ -93,28 +145,6 @@ const DailyQuest: React.FC = () => {
             }
         }
     }, [userData]);
-
-    const isSpinTheWheelCompleted = useMemo(() => {
-        if (userData) {
-            const today = getDayOfYearUTC(new Date());
-
-            if (userData.wheel && userData.wheel.lastSpinTime) {
-                return getDayOfYearUTC(new Date(userData.wheel.lastSpinTime)) === today;
-            }
-        }
-        return false;
-    }, [userData]);
-
-    const spintTheWheelRewardText = useMemo(() => {
-        if (userData && isSpinTheWheelCompleted) {
-            if (userData.wheel?.reward?.xpAmount) {
-                return `${userData.wheel?.reward?.boostAmount}% XP Boost + ${userData.wheel?.reward?.xpAmount}XP`;
-            } else {
-                return `${userData.wheel?.reward?.boostAmount}% XP Boost`;
-            }
-        }
-        return false;
-    }, [isSpinTheWheelCompleted, userData]);
 
     return (
         <Container>
