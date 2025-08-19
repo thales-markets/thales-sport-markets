@@ -403,6 +403,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.TENNIS_WTA:
             return `/logos/leagueLogos/wta.webp`;
         case League.FIBA_EUROBASKET_QUALIFIERS:
+        case League.FIBA_EUROBASKET:
+        case League.FIBA_EUROBASKET_FUTURES:
             return `/logos/leagueLogos/eurobasket.webp`;
         case League.FIBA_AMERICUP_QUALIFIERS:
         case League.FIBA_AMERICUP_WOMEN:
@@ -413,6 +415,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIBA_WORLD_CUP_U19:
             return `/logos/leagueLogos/fiba-world-cup.webp`;
         case League.FIBA_AFRO_BASKET_QUALIFIERS:
+        case League.FIBA_AFROBASKET:
             return `/logos/leagueLogos/afrobasket.webp`;
         case League.SIX_NATIONS:
             return `/logos/leagueLogos/six-nations.webp`;
