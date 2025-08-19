@@ -109,5 +109,14 @@ export const RPC_LIST = {
         [NetworkId.OptimismMainnet]: {
             http: `https://lb.drpc.org/optimism/${DRPC_PROJECT_ID}`,
         },
+        [NetworkId.Arbitrum]: {
+            http: `https://lb.drpc.org/arbitrum/${DRPC_PROJECT_ID}`,
+        },
+        [NetworkId.Base]: {
+            http: `https://lb.drpc.org/base/${DRPC_PROJECT_ID}`,
+        },
+        [NetworkId.OptimismSepolia]: {
+            http: `https://lb.drpc.org/optimism-sepolia/${DRPC_PROJECT_ID}`,
+        },
     },
 };
