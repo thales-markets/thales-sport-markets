@@ -558,7 +558,7 @@ const Home: React.FC = () => {
                                     childMarket,
                                 ];
                             } else {
-                                playerMap[childMarket.playerProps.playerName as string] = {
+                                playerMap[childMarket.playerProps.playerName + childMarket.gameId] = {
                                     ...curr,
                                     homeTeam: childMarket.playerProps.playerName,
                                     isOneSideMarket: true,
