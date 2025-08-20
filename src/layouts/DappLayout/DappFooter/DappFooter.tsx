@@ -82,6 +82,9 @@ const DappFooter: React.FC = () => {
                     </Link>
                 </LinksContainer>
             </Container>
+            <a href={LINKS.Drpc.Ref} target="_blank" rel="noreferrer">
+                <DrpcImage src={LINKS.Drpc.Image} alt="Powered by dRPC" />
+            </a>
             <DisclaimerContainer>
                 <Trans
                     i18nKey="footer.disclaimer"
@@ -103,6 +106,7 @@ const DappFooter: React.FC = () => {
 
 const Container = styled(FlexDivColumnCentered)`
     max-height: 75px;
+    margin-bottom: 20px;
     @media (max-width: 950px) {
         max-height: fit-content;
         margin-top: 100px;
@@ -256,6 +260,11 @@ const ResourcesIcon = styled.i`
         font-family: OvertimeIconsV2 !important;
         content: '\\0122';
     }
+`;
+
+const DrpcImage = styled.img`
+    width: 218px;
+    height: 54px;
 `;
 
 export default DappFooter;
