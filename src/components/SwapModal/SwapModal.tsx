@@ -439,11 +439,12 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     isDetailedView
                                     collateralBalances={multiCollateralBalances}
                                     exchangeRates={exchangeRates}
-                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) - 32 + 'px'}
+                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
                                     topPosition="50px"
                                     hideZeroBalance
+                                    rightPosition="-8px"
                                 />
                             }
                             balance={formatCurrencyWithKey(fromToken, tokenBalance.fromTokenBalance)}
@@ -489,10 +490,11 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     collateralBalances={multiCollateralBalances}
                                     isDetailedView
                                     exchangeRates={exchangeRates}
-                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) - 32 + 'px'}
+                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
                                     topPosition="50px"
+                                    rightPosition="-8px"
                                 />
                             }
                             balance={formatCurrencyWithKey(toToken, tokenBalance.toTokenBalance)}
@@ -556,9 +558,10 @@ const Wrapper = styled.div`
 const InputContainer = styled(FlexDiv)`
     position: relative;
     width: 100%;
-    border: 1px solid ${(props) => props.theme.borderColor.primary};
+
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 12px 8px;
+    background: ${(props) => props.theme.background.quinary};
 `;
 
 const InfoBox = styled(FlexDivColumn)<{ disabled?: boolean }>`
