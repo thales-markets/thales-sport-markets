@@ -6,6 +6,7 @@ export const LINKS = {
     TwitterTweetStatus: 'https://twitter.com/intent/tweet?text=',
     Footer: {
         Twitter: 'https://x.com/overtime_io',
+        Farcaster: 'https://farcaster.xyz/overtimemarkets',
         Discord: 'http://discord.gg/overtime-io',
         Docs: 'https://docs.overtime.io/',
         Medium: 'https://medium.com/@OvertimeMarkets.xyz',
@@ -34,4 +35,8 @@ export const LINKS = {
     },
     ResolvingResultsInstructions:
         'https://docs.google.com/document/d/1zLAwO5FQ2xgCTfu-cyXNieVIiTRcdNS-jysttvsDMm8/edit?tab=t.0#heading=h.hzo4pzm1siyl',
+    Drpc: {
+        Image: 'https://drpc.org/images/external/powered-by-drpc-dark.svg',
+        Ref: 'https://drpc.org/?ref=923cfb',
+    },
 };

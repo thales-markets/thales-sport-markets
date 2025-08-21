@@ -211,7 +211,8 @@
     },
     "footer": {
         "all-rights-reserved": "© {{year}} Overtime Sportsbook ALL RIGHTS RESERVED.",
-        "twitter": "Twitter",
+        "twitter": "X",
+        "farcaster": "Farcaster",
         "discord": "Discord",
         "docs": "Docs",
         "resources": "Resources",
@@ -1241,7 +1242,8 @@
             "success": "Your Overtime account is now funded. Click on the button below to activate a smart account session for this device and enjoy gasless transactions and enhanced user experience.",
             "activate-my-account": "Activate My Account",
             "activate-progress": "Activating...",
-            "action": "Activate"
+            "action": "Activate",
+            "activate-ot-account": "Activate Overtime Account"
         },
         "universal-account": {
             "title": "Universal deposit",
