@@ -130,6 +130,11 @@ const speedMarketsDataContract: ContractData = {
                             type: 'address',
                         },
                         {
+                            internalType: 'address',
+                            name: 'freeBetUser',
+                            type: 'address',
+                        },
+                        {
                             internalType: 'bytes32',
                             name: 'asset',
                             type: 'bytes32',
@@ -382,6 +387,11 @@ const speedMarketsDataContract: ContractData = {
                         {
                             internalType: 'address',
                             name: 'user',
+                            type: 'address',
+                        },
+                        {
+                            internalType: 'address',
+                            name: 'freeBetUser',
                             type: 'address',
                         },
                         {
