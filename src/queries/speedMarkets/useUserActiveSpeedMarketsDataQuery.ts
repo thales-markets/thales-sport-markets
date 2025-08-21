@@ -36,12 +36,9 @@ const useUserActiveSpeedMarketsDataQuery = (
                 ]);
 
                 // Free Bet
-                const freeBetNumOfActiveMarketsPerUser = await freeBetHolderContract?.read.numOfActiveSpeedMarketsPerUser(
-                    [walletAddress]
-                );
                 const freeBetActiveMarketsPerUser = await freeBetHolderContract?.read.getActiveSpeedMarketsPerUser([
                     0,
-                    freeBetNumOfActiveMarketsPerUser,
+                    ammParams.numFreeBetActiveMarketsPerUser,
                     walletAddress,
                 ]);
 

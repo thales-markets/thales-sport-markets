@@ -45,14 +45,11 @@ const useUserResolvedSpeedMarketsQuery = (
                 ]);
 
                 // Free Bet
-                const freeBetNumOfResolvedMarketsPerUser = await freeBetHolderContract?.read.numOfResolvedSpeedMarketsPerUser(
-                    [walletAddress]
-                );
                 const freeBetPageSize = Math.min(
-                    Number(freeBetNumOfResolvedMarketsPerUser),
+                    Number(ammParams.numFreeBetMaturedMarketsPerUser),
                     MAX_NUMBER_OF_SPEED_MARKETS_TO_FETCH
                 );
-                const freeBetIndex = Number(freeBetNumOfResolvedMarketsPerUser) - freeBetPageSize;
+                const freeBetIndex = Number(ammParams.numFreeBetMaturedMarketsPerUser) - freeBetPageSize;
                 const freeBetResolvedMarketsPerUser = await freeBetHolderContract?.read.getResolvedSpeedMarketsPerUser([
                     freeBetIndex,
                     freeBetPageSize,
