@@ -3,7 +3,7 @@ import useSportMarketV2Query from 'queries/markets/useSportMarketV2Query';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { FlexDivColumn } from 'styles/common';
+import { FlexDivCentered, FlexDivColumn } from 'styles/common';
 import { SportMarket } from 'types/markets';
 import { useChainId } from 'wagmi';
 import MarketDetailsV2 from './MarketDetailsV2';
@@ -35,7 +35,9 @@ const Market: React.FC = () => {
             {lastValidMarket && !singleMarketQuery.isLoading ? (
                 <MarketDetailsV2 market={lastValidMarket} />
             ) : (
-                <SimpleLoader />
+                <LoaderContainer>
+                    <SimpleLoader />
+                </LoaderContainer>
             )}
         </Container>
     );
@@ -43,6 +45,12 @@ const Market: React.FC = () => {
 
 const Container = styled(FlexDivColumn)`
     align-items: center;
+    width: 100%;
+`;
+
+const LoaderContainer = styled(FlexDivCentered)`
+    position: relative;
+    min-height: 200px;
     width: 100%;
 `;
 
