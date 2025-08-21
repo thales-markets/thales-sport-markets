@@ -472,6 +472,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                             inputFontSize="16px"
                             background={theme.background.quinary}
                             borderColor={theme.background.quinary}
+                            placeholder={t('common.enter-amount')}
                             fontWeight="700"
                             color={theme.textColor.primary}
                             width="100%"
@@ -561,6 +562,7 @@ const InputContainer = styled(FlexDiv)`
 
     border-radius: 8px;
     padding: 12px 8px;
+    padding-top: 16px;
     background: ${(props) => props.theme.background.quinary};
 `;
 
