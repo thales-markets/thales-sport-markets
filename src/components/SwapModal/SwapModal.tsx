@@ -39,12 +39,12 @@ import { delay } from 'utils/timer';
 import { Address } from 'viem';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
 
-type FundModalProps = {
+type SwapModalProps = {
     onClose: () => void;
     preSelectedToken?: number;
 };
 
-const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
+const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     const theme = useTheme();
     const networkId = useChainId();
     const { address, isConnected } = useAccount();
@@ -62,6 +62,11 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
 
     const [toToken, setToToken] = useState<Coins>('OVER');
     const [toAmount, setToAmount] = useState<string | number>('');
+
+    const [activeSide, setActiveSide] = useState<'from' | 'to'>('from');
+
+    const requestId = useRef(0);
+    const lastFetched = useRef<{ side: 'from' | 'to' | null; value: string | null }>({ side: null, value: null });
 
     const [isBuying, setIsBuying] = useState(false);
 
@@ -115,23 +120,50 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
         [fromAmount, fromToken, toToken, networkId, walletAddress]
     );
 
-    // Set THALES swap receive
     useDebouncedEffect(() => {
-        if (fromAmount) {
-            const getSwapQuote = async () => {
-                setIsFetching(true);
-                const quote = await getQuote(networkId, swapParams, toToken);
-                setToAmount(quote);
-                setSwapQuote(Number(fromAmount) > 0 ? quote / Number(fromAmount) : 0);
-                setIsFetching(false);
-            };
+        const amount = activeSide === 'from' ? fromAmount : toAmount;
 
-            getSwapQuote();
-        } else {
-            setToAmount(0);
-            setSwapQuote(0);
+        if (!amount || Number(amount) === 0) {
+            setFromAmount((prev) => (activeSide === 'from' ? prev : ''));
+            setToAmount((prev) => (activeSide === 'to' ? prev : ''));
+
+            return;
         }
-    }, [fromAmount, networkId, swapParams]);
+
+        if (lastFetched.current.side === activeSide && lastFetched.current.value === amount) return;
+        lastFetched.current = { side: activeSide, value: '' + amount };
+
+        const id = ++requestId.current;
+        setIsFetching(true);
+
+        (async () => {
+            try {
+                if (activeSide === 'from') {
+                    const quote = await getQuote(networkId, swapParams, toToken);
+                    if (id !== requestId.current) return; // stale
+
+                    setToAmount(quote);
+                    setSwapQuote(Number(fromAmount) > 0 ? quote / Number(fromAmount) : 0);
+                } else {
+                    const quote = await getQuote(
+                        networkId,
+                        getSwapParams(
+                            networkId,
+                            walletAddress as Address,
+                            coinParser(toAmount.toString(), networkId, toToken),
+                            getCollateralAddress(networkId, getCollateralIndex(networkId, toToken)),
+                            getCollateralAddress(networkId, getCollateralIndex(networkId, fromToken))
+                        ),
+                        fromToken
+                    );
+                    if (id !== requestId.current) return; // stale
+                    setFromAmount(quote);
+                }
+            } finally {
+                if (id === requestId.current) setIsFetching(false);
+            }
+        })();
+    }, [activeSide, fromAmount, toAmount, networkId, swapParams]);
 
     // Check swap allowance
     useEffect(() => {
@@ -366,83 +398,107 @@ const SwapModal: React.FC<FundModalProps> = ({ onClose, preSelectedToken }) => {
                     <FlexDivRow>{<CloseIcon onClick={onClose} />}</FlexDivRow>
                 </FlexDivRow>
                 <Note>{t('profile.swap.note')}</Note>
-                <InputContainer ref={inputRef}>
-                    <NumericInput
-                        value={fromAmount}
-                        onChange={(e) => {
-                            setFromAmount(e.target.value);
+                <Inputs>
+                    <InputContainer ref={inputRef}>
+                        <NumericInput
+                            value={fromAmount}
+                            onChange={(e) => {
+                                setActiveSide('from');
+                                setFromAmount(e.target.value);
+                            }}
+                            showValidation={inputRefVisible && !isAmountValid}
+                            validationMessage={t('common.errors.insufficient-balance-wallet', {
+                                currencyKey: fromToken,
+                            })}
+                            disabled={isBuying}
+                            label="from"
+                            inputFontWeight="700"
+                            height="44px"
+                            inputFontSize="16px"
+                            background={theme.background.quinary}
+                            borderColor={theme.background.quinary}
+                            fontWeight="700"
+                            color={theme.textColor.primary}
+                            width="100%"
+                            placeholder={t('common.enter-amount')}
+                            currencyComponent={
+                                <CollateralSelector
+                                    borderColor="none"
+                                    collateralArray={fromCollaterals}
+                                    selectedItem={fromCollaterals.indexOf(fromToken as any)}
+                                    onChangeCollateral={(index: number) => {
+                                        if (toToken === fromCollaterals[index]) {
+                                            const toTokenLocal = toToken;
+                                            setToToken(fromToken);
+                                            setFromToken(toTokenLocal);
+                                        } else {
+                                            setFromAmount('');
+                                            setFromToken(fromCollaterals[index]);
+                                        }
+                                    }}
+                                    isDetailedView
+                                    collateralBalances={multiCollateralBalances}
+                                    exchangeRates={exchangeRates}
+                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) - 32 + 'px'}
+                                    background={theme.background.quinary}
+                                    color={theme.textColor.primary}
+                                    topPosition="50px"
+                                    hideZeroBalance
+                                />
+                            }
+                            balance={formatCurrencyWithKey(fromToken, tokenBalance.fromTokenBalance)}
+                            onMaxButton={() => setFromAmount(tokenBalance.fromTokenBalance)}
+                        />
+                    </InputContainer>
+                    <ExchangeIcon
+                        onClick={() => {
+                            const toTokenLocal = toToken;
+                            setToToken(fromToken);
+                            setFromToken(toTokenLocal);
                         }}
-                        showValidation={inputRefVisible && !isAmountValid}
-                        validationMessage={t('common.errors.insufficient-balance-wallet', {
-                            currencyKey: fromToken,
-                        })}
-                        disabled={isBuying}
-                        label="from"
-                        inputFontWeight="700"
-                        height="44px"
-                        inputFontSize="16px"
-                        background={theme.background.quinary}
-                        borderColor={theme.background.quinary}
-                        fontWeight="700"
-                        color={theme.textColor.primary}
-                        width="100%"
-                        placeholder={t('common.enter-amount')}
-                        currencyComponent={
-                            <CollateralSelector
-                                borderColor="none"
-                                collateralArray={fromCollaterals}
-                                selectedItem={fromCollaterals.indexOf(fromToken as any)}
-                                onChangeCollateral={(index: number) => {
-                                    setFromAmount('');
-                                    setFromToken(fromCollaterals[index]);
-                                }}
-                                isDetailedView
-                                collateralBalances={multiCollateralBalances}
-                                exchangeRates={exchangeRates}
-                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                background={theme.background.quinary}
-                                color={theme.textColor.primary}
-                                topPosition="50px"
-                                hideZeroBalance
-                            />
-                        }
-                        balance={formatCurrencyWithKey(fromToken, tokenBalance.fromTokenBalance)}
-                        onMaxButton={() => setFromAmount(tokenBalance.fromTokenBalance)}
+                        className="icon icon--exchange"
                     />
-                </InputContainer>
-                <InputContainer>
-                    <NumericInput
-                        value={toAmount}
-                        onChange={() => {}}
-                        label="to"
-                        inputFontWeight="700"
-                        height="44px"
-                        inputFontSize="16px"
-                        background={theme.background.quinary}
-                        borderColor={theme.background.quinary}
-                        fontWeight="700"
-                        color={theme.textColor.primary}
-                        width="100%"
-                        currencyComponent={
-                            <CollateralSelector
-                                borderColor="none"
-                                collateralArray={fromCollaterals}
-                                selectedItem={fromCollaterals.indexOf(toToken as any)}
-                                onChangeCollateral={(index: number) => {
-                                    setToToken(fromCollaterals[index]);
-                                }}
-                                collateralBalances={multiCollateralBalances}
-                                isDetailedView
-                                exchangeRates={exchangeRates}
-                                dropDownWidth={inputRef.current?.getBoundingClientRect().width + 'px'}
-                                background={theme.background.quinary}
-                                color={theme.textColor.primary}
-                                topPosition="50px"
-                            />
-                        }
-                        balance={formatCurrencyWithKey(toToken, tokenBalance.toTokenBalance)}
-                    />
-                </InputContainer>
+                    <InputContainer>
+                        <NumericInput
+                            value={toAmount}
+                            onChange={(e) => {
+                                setActiveSide('to');
+                                setToAmount(e.target.value);
+                            }}
+                            label="to"
+                            inputFontWeight="700"
+                            height="44px"
+                            inputFontSize="16px"
+                            background={theme.background.quinary}
+                            borderColor={theme.background.quinary}
+                            fontWeight="700"
+                            color={theme.textColor.primary}
+                            width="100%"
+                            currencyComponent={
+                                <CollateralSelector
+                                    borderColor="none"
+                                    collateralArray={fromCollaterals}
+                                    selectedItem={fromCollaterals.indexOf(toToken as any)}
+                                    onChangeCollateral={(index: number) => {
+                                        if (fromToken === fromCollaterals[index]) {
+                                            const toTokenLocal = toToken;
+                                            setToToken(fromToken);
+                                            setFromToken(toTokenLocal);
+                                        } else setToToken(fromCollaterals[index]);
+                                    }}
+                                    collateralBalances={multiCollateralBalances}
+                                    isDetailedView
+                                    exchangeRates={exchangeRates}
+                                    dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) - 32 + 'px'}
+                                    background={theme.background.quinary}
+                                    color={theme.textColor.primary}
+                                    topPosition="50px"
+                                />
+                            }
+                            balance={formatCurrencyWithKey(toToken, tokenBalance.toTokenBalance)}
+                        />
+                    </InputContainer>
+                </Inputs>
 
                 <InfoBox>
                     <Section>
@@ -498,10 +554,11 @@ const Wrapper = styled.div`
 `;
 
 const InputContainer = styled(FlexDiv)`
-    margin-top: 10px;
-    margin-bottom: 5px;
     position: relative;
     width: 100%;
+    border: 1px solid ${(props) => props.theme.borderColor.primary};
+    border-radius: 8px;
+    padding: 12px 16px;
 `;
 
 const InfoBox = styled(FlexDivColumn)<{ disabled?: boolean }>`
@@ -514,6 +571,15 @@ const InfoBox = styled(FlexDivColumn)<{ disabled?: boolean }>`
     opacity: ${(props) => (props.disabled ? 0.5 : 1)};
     margin-top: 28px;
     margin-bottom: 0;
+`;
+
+const ExchangeIcon = styled.i`
+    color: ${(props) => props.theme.textColor.primary};
+    transform: rotate(90deg);
+    font-size: 34px;
+    margin: auto;
+    width: 34px;
+    cursor: pointer;
 `;
 
 const LoaderContainer = styled.div`
@@ -582,6 +648,12 @@ const Note = styled.div`
     @media (max-width: 575px) {
         font-size: 14px;
     }
+`;
+
+const Inputs = styled(FlexDivColumn)`
+    margin-top: 20px;
+    margin-bottom: 30px;
+    gap: 16px;
 `;
 
 export default SwapModal;
