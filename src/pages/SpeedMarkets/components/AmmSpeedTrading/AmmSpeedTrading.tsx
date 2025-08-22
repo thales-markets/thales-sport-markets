@@ -62,6 +62,7 @@ import { getPriceConnection, getPriceId, priceParser } from 'utils/pyth';
 import {
     refetchActiveSpeedMarkets,
     refetchBalances,
+    refetchFreeBetBalance,
     refetchSpeedMarketsLimits,
     refetchUserSpeedMarkets,
 } from 'utils/queryConnector';
@@ -363,7 +364,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         };
 
         if (isConnected) {
-            getAllowance();
+            isFreeBetActive ? setAllowance(true) : getAllowance();
         }
     }, [
         collateralAddress,
@@ -440,8 +441,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             refetchActiveSpeedMarkets(networkId);
             refetchSpeedMarketsLimits(networkId);
             refetchBalances(walletAddress, networkId);
+            isFreeBetActive && refetchFreeBetBalance(walletAddress, networkId);
         },
-        [networkId, resetData, t, walletAddress]
+        [networkId, resetData, t, walletAddress, isFreeBetActive]
     );
 
     const handleSubmit = async () => {

@@ -40,7 +40,12 @@ import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAM
 import { isErrorExcluded } from 'utils/discord';
 import { checkAllowance } from 'utils/network';
 import { getPriceConnection, getPriceId } from 'utils/pyth';
-import { refetchBalances, refetchUserResolvedSpeedMarkets, refetchUserSpeedMarkets } from 'utils/queryConnector';
+import {
+    refetchBalances,
+    refetchFreeBetBalance,
+    refetchUserResolvedSpeedMarkets,
+    refetchUserSpeedMarkets,
+} from 'utils/queryConnector';
 import { executeBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { resolveAllSpeedPositions } from 'utils/speedMarkets';
@@ -123,17 +128,28 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         ? getCollateralByAddress(nativeCollateralAddress, networkId)
         : null;
 
-    const claimablePositions = positions.filter((marketData) =>
-        nativeCollateralAddress
-            ? nativeCollateralAddress === marketData.collateralAddress
-            : marketData.isDefaultCollateral
+    const claimAllPositions = useMemo(
+        () =>
+            isClaimAll
+                ? positions.filter(
+                      (marketData) =>
+                          (isClaimDefaultCollateral || !marketData.isFreeBet) &&
+                          (nativeCollateralAddress
+                              ? nativeCollateralAddress === marketData.collateralAddress
+                              : marketData.isDefaultCollateral)
+                  )
+                : [],
+        [isClaimAll, positions, nativeCollateralAddress, isClaimDefaultCollateral]
     );
 
-    const payout = useMemo(() => (isClaimAll ? sumBy(claimablePositions, 'payout') : position.payout), [
+    const payout = useMemo(() => (isClaimAll ? sumBy(claimAllPositions, 'payout') : position.payout), [
         isClaimAll,
         position.payout,
-        claimablePositions,
+        claimAllPositions,
     ]);
+
+    const isFreeBetPosition = position.isFreeBet;
+    const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress && !isFreeBetPosition;
 
     const isButtonDisabled = isSubmitting || isAllowing || isDisabled;
 
@@ -291,7 +307,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
             const collateralAddress = (nativeCollateralAddress || claimCollateralAddress) as Address;
             const isEth = claimCollateralAddress === ZERO_ADDRESS;
-            const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress;
 
             const speedMarketsAMMResolverContractWithSigner = getContractInstance(
                 ContractType.SPEED_MARKETS_AMM_RESOLVER,
@@ -339,6 +354,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 refetchUserSpeedMarkets(networkId, walletAddress);
                 refetchUserResolvedSpeedMarkets(networkId, walletAddress);
                 refetchBalances(walletAddress, networkId);
+                isFreeBetPosition && refetchFreeBetBalance(walletAddress, networkId);
             } else {
                 await delay(800);
                 toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
@@ -367,7 +383,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         const collateralAddress = nativeCollateralAddress || claimCollateralAddress;
 
         await resolveAllSpeedPositions(
-            claimablePositions,
+            claimAllPositions,
             false,
             walletAddress,
             { networkId, client: walletClient.data },
@@ -422,18 +438,14 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                 {t(
                                     `speed-markets.user-positions.${
                                         isClaimAll
-                                            ? `claim-all${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
-                                                  isSubmitting ? '-progress' : ''
-                                              }`
-                                            : `claim${isClaimDefaultCollateral && !nativeCollateral ? '' : '-in'}${
-                                                  isSubmitting ? '-progress' : ''
-                                              }`
+                                            ? `claim-all${isOfframp ? '-in' : ''}${isSubmitting ? '-progress' : ''}`
+                                            : `claim${isOfframp ? '-in' : ''}${isSubmitting ? '-progress' : ''}`
                                     }`
                                 )}{' '}
                                 <CollateralText>
                                     {nativeCollateral
                                         ? `${isOverCurrency(nativeCollateral) ? '$' : ''}${nativeCollateral}`
-                                        : isClaimDefaultCollateral
+                                        : isClaimDefaultCollateral || isFreeBetPosition
                                         ? formatCurrencyWithSign(USD_SIGN, payout, 2)
                                         : claimCollateral}
                                 </CollateralText>

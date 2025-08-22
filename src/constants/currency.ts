@@ -109,8 +109,10 @@ export const FREE_BET_COLLATERALS: Record<SupportedNetwork, Coins[]> = {
     ],
     [Network.OptimismSepolia]: [
         CRYPTO_CURRENCY_MAP.USDC as Coins,
+        CRYPTO_CURRENCY_MAP.OVER as Coins,
         CRYPTO_CURRENCY_MAP.USDT as Coins,
         CRYPTO_CURRENCY_MAP.WETH as Coins,
+        CRYPTO_CURRENCY_MAP.ETH as Coins,
     ],
 };
 

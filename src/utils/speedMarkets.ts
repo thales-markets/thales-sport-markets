@@ -12,7 +12,12 @@ import { NetworkConfig, SupportedNetwork } from 'types/network';
 import { UserPosition } from 'types/speedMarkets';
 import { ViemContract } from 'types/viem';
 import { getPriceConnection, getPriceId, priceParser } from 'utils/pyth';
-import { refetchActiveSpeedMarkets, refetchBalances, refetchUserSpeedMarkets } from 'utils/queryConnector';
+import {
+    refetchActiveSpeedMarkets,
+    refetchBalances,
+    refetchFreeBetBalance,
+    refetchUserSpeedMarkets,
+} from 'utils/queryConnector';
 import { delay } from 'utils/timer';
 import { Address, Client, getContract } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -269,6 +274,8 @@ export const resolveAllSpeedPositions = async (
 
                 refetchUserSpeedMarkets(networkConfig.networkId, walletAddress);
                 refetchBalances(walletAddress, networkConfig.networkId);
+                const hasFreeBet = positions.some((position) => position.isFreeBet);
+                hasFreeBet && refetchFreeBetBalance(walletAddress, networkConfig.networkId);
                 refetchActiveSpeedMarkets(networkConfig.networkId);
             } else {
                 await delay(800);
