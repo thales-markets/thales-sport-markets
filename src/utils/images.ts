@@ -135,6 +135,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.ITALY_COPPA_ITALIA_SUPERLEGA:
         case League.ITALY_SERIE_A1_WOMEN:
         case League.ITALY_SUPERLEGA:
+        case League.ITALY_SERIE_C:
             return `/logos/Countries/italy.svg`;
         case League.J1_LEAGUE:
         case League.NPB:
@@ -346,6 +347,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/Countries/uzbekistan.svg`;
         case League.BELARUS_PREMIER_LEAGUE:
             return `/logos/Countries/belarus.svg`;
+        case League.UKRAINE_PREMIER_LEAGUE:
+            return `/logos/Countries/ukraine.svg`;
         case League.UEFA_CL:
         case League.UEFA_EL:
         case League.UEFA_EURO:
