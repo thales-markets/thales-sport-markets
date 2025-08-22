@@ -23,7 +23,13 @@ import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrencyWithKey, formatCurrencyWithPrecision } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { convertCollateralToStable, getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import {
+    convertCollateralToStable,
+    getCollateralAddress,
+    getCollateralIndex,
+    getCollaterals,
+    isStableCurrency,
+} from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
@@ -403,7 +409,9 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
 
         return formatCurrencyWithKey(
             USD_SIGN,
-            convertCollateralToStable(fromToken, 1 / swapQuote, exchangeRates ? exchangeRates[fromToken] : 0)
+            isStableCurrency(toToken)
+                ? swapQuote
+                : convertCollateralToStable(fromToken, 1 / swapQuote, exchangeRates ? exchangeRates[fromToken] : 0)
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [swapQuote]);
@@ -543,7 +551,9 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
 
                 <InfoBox>
                     <Section>
-                        <SubLabel>{t('profile.swap.token-price', { token: toToken })}:</SubLabel>
+                        <SubLabel>
+                            {t('profile.swap.token-price', { token: isStableCurrency(toToken) ? fromToken : toToken })}:
+                        </SubLabel>
                         {isFetching ? (
                             <LoaderContainer>
                                 <SimpleLoader size={16} strokeWidth={6} />
