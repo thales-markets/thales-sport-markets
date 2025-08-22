@@ -4,6 +4,7 @@ import NumericInput from 'components/fields/NumericInput';
 import Modal from 'components/Modal';
 import SimpleLoader from 'components/SimpleLoader';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
+import { USD_SIGN } from 'constants/currency';
 import { SWAP_APPROVAL_BUFFER } from 'constants/markets';
 import { ContractType } from 'enums/contract';
 import { BuyTicketStep } from 'enums/tickets';
@@ -22,7 +23,7 @@ import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
 import { coinParser, Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
-import { getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
+import { convertCollateralToStable, getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
 import { checkAllowance } from 'utils/network';
 import { sendBiconomyTransaction } from 'utils/smartAccount/biconomy/biconomy';
@@ -44,6 +45,11 @@ type SwapModalProps = {
     preSelectedToken?: number;
 };
 
+enum SIDE {
+    FROM = 'from',
+    TO = 'to',
+}
+
 const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     const theme = useTheme();
     const networkId = useChainId();
@@ -63,10 +69,10 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     const [toToken, setToToken] = useState<Coins>('OVER');
     const [toAmount, setToAmount] = useState<string | number>('');
 
-    const [activeSide, setActiveSide] = useState<'from' | 'to'>('from');
+    const [activeSide, setActiveSide] = useState<SIDE>(SIDE.FROM);
 
     const requestId = useRef(0);
-    const lastFetched = useRef<{ side: 'from' | 'to' | null; value: string | null }>({ side: null, value: null });
+    const lastFetched = useRef<{ side: SIDE | null; value: string | null }>({ side: null, value: null });
 
     const [isBuying, setIsBuying] = useState(false);
 
@@ -121,11 +127,11 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     );
 
     useDebouncedEffect(() => {
-        const amount = activeSide === 'from' ? fromAmount : toAmount;
+        const amount = activeSide === SIDE.FROM ? fromAmount : toAmount;
 
         if (!amount || Number(amount) === 0) {
-            setFromAmount((prev) => (activeSide === 'from' ? prev : ''));
-            setToAmount((prev) => (activeSide === 'to' ? prev : ''));
+            setFromAmount((prev) => (activeSide === SIDE.FROM ? prev : ''));
+            setToAmount((prev) => (activeSide === SIDE.TO ? prev : ''));
 
             return;
         }
@@ -138,7 +144,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
 
         (async () => {
             try {
-                if (activeSide === 'from') {
+                if (activeSide === SIDE.FROM) {
                     const quote = await getQuote(networkId, swapParams, toToken);
                     if (id !== requestId.current) return; // stale
 
@@ -403,7 +409,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                         <NumericInput
                             value={fromAmount}
                             onChange={(e) => {
-                                setActiveSide('from');
+                                setActiveSide(SIDE.FROM);
                                 setFromAmount(e.target.value);
                             }}
                             showValidation={inputRefVisible && !isAmountValid}
@@ -463,7 +469,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                         <NumericInput
                             value={toAmount}
                             onChange={(e) => {
-                                setActiveSide('to');
+                                setActiveSide(SIDE.TO);
                                 setToAmount(e.target.value);
                             }}
                             label="to"
@@ -512,7 +518,16 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                             </LoaderContainer>
                         ) : (
                             <Value>
-                                {Number(swapQuote) === 0 ? '-' : formatCurrencyWithKey(fromToken, 1 / swapQuote)}
+                                {Number(swapQuote) === 0
+                                    ? '-'
+                                    : formatCurrencyWithKey(
+                                          USD_SIGN,
+                                          convertCollateralToStable(
+                                              fromToken,
+                                              1 / swapQuote,
+                                              exchangeRates ? exchangeRates[fromToken] : 0
+                                          )
+                                      )}
                             </Value>
                         )}
                     </Section>
@@ -562,7 +577,7 @@ const InputContainer = styled(FlexDiv)`
 
     border-radius: 8px;
     padding: 12px 8px;
-    padding-top: 16px;
+    padding-top: 20px;
     background: ${(props) => props.theme.background.quinary};
 `;
 
@@ -656,8 +671,8 @@ const Note = styled.div`
 `;
 
 const Inputs = styled(FlexDivColumn)`
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 40px;
     gap: 16px;
 `;
 
