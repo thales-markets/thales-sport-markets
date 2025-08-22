@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { coinParser, Coins, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
+import { coinParser, Coins, formatCurrency, formatCurrencyWithKey, formatCurrencyWithPrecision } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { convertCollateralToStable, getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
@@ -159,7 +159,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                     const quote = await getQuote(networkId, swapParams, toToken);
                     if (id !== requestId.current) return; // stale
 
-                    setToAmount(quote);
+                    setToAmount(formatCurrencyWithPrecision(quote));
                     setSwapQuote(Number(fromAmount) > 0 ? quote / Number(fromAmount) : 0);
                 } else {
                     const quote = await getQuote(
