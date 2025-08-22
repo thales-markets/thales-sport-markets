@@ -39,14 +39,16 @@ export const getSwapParams = (
 
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams, toToken?: Coins) => {
     try {
+        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.src;
+        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.dst;
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
                 network: networkId,
-                srcToken: swapParams.src,
-                destToken: swapParams.dst,
+                srcToken: src,
+                destToken: dst,
                 amount: swapParams.amount, // 100 DAI
-                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.src, networkId)],
-                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.dst, networkId)],
+                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(src, networkId)],
+                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(dst, networkId)],
                 mode: 'delta',
                 side: 'SELL',
                 version: 6.2,
@@ -100,14 +102,16 @@ export const buildTxForSwap = async (
     walletAddress: string
 ): Promise<any> => {
     try {
+        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.src;
+        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.dst;
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
                 network: networkId,
-                srcToken: swapParams.src,
-                destToken: swapParams.dst,
+                srcToken: src,
+                destToken: dst,
                 amount: swapParams.amount,
-                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.src, networkId)],
-                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(swapParams.dst, networkId)],
+                srcDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(src, networkId)],
+                destDecimals: COLLATERAL_DECIMALS[getCollateralByAddress(dst, networkId)],
                 mode: 'delta',
                 side: 'SELL',
                 version: 6.2,
@@ -116,8 +120,8 @@ export const buildTxForSwap = async (
 
         const response = await axios.post(`${API_URL}/transactions/${networkId}`, {
             priceRoute: quote.priceRoute,
-            srcToken: swapParams.src,
-            destToken: swapParams.dst,
+            srcToken: src,
+            destToken: dst,
             srcAmount: swapParams.amount,
             userAddress: walletAddress,
             slippage: 200, // Eg: for 2.5% slippage, set the value to 2.5 * 100 = 250; for 10% = 1000.

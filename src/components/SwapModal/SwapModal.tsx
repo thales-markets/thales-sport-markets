@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled, { useTheme } from 'styled-components';
 import { CloseIcon, FlexDiv, FlexDivColumn, FlexDivRow } from 'styles/common';
-import { coinParser, Coins, formatCurrency, formatCurrencyWithKey, formatCurrencyWithPrecision } from 'thales-utils';
+import { coinParser, Coins, formatCurrencyWithKey, formatCurrencyWithPrecision } from 'thales-utils';
 import { Rates } from 'types/collateral';
 import { RootState } from 'types/redux';
 import { convertCollateralToStable, getCollateralAddress, getCollateralIndex, getCollaterals } from 'utils/collaterals';
@@ -339,9 +339,9 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
             toastId,
             getSuccessToastOptions(
                 t('profile.stats.swap-success', {
-                    fromAmount: formatCurrency(fromAmount, 4),
+                    fromAmount: formatCurrencyWithPrecision(fromAmount),
                     fromToken: fromToken,
-                    toAmount: formatCurrency(toAmount, 2),
+                    toAmount: formatCurrencyWithPrecision(toAmount),
                     toToken: toToken,
                 })
             )
@@ -559,7 +559,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                 <SimpleLoader size={16} strokeWidth={6} />
                             </LoaderContainer>
                         ) : (
-                            <Value>{toAmount === 0 ? '-' : formatCurrency(toAmount)}</Value>
+                            <Value>{toAmount === 0 ? '-' : formatCurrencyWithPrecision(toAmount)}</Value>
                         )}
                     </Section>
                 </InfoBox>
