@@ -40,6 +40,7 @@ export type UserPosition = {
     payout: number;
     collateralAddress: string;
     isDefaultCollateral: boolean;
+    isFreeBet: boolean;
     currentPrice: number;
     finalPrice: number;
     isClaimable: boolean;

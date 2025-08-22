@@ -150,14 +150,30 @@ const SpeedPositionCard: React.FC<SpeedPositionCardProps> = ({
                 </Time>
             </FlexDivRowCentered>
             <FlexDivRowCentered>
-                <Paid>{`${t('speed-markets.user-positions.labels.paid')}: ${formatValueWithCollateral(
-                    position.paid,
-                    collateral,
-                    networkId
-                )}`}</Paid>
-                <Payout isClaimable={position.isClaimable}>{`${t(
-                    'speed-markets.user-positions.labels.payout'
-                )}: ${formatValueWithCollateral(position.payout, collateral, networkId)}`}</Payout>
+                <Paid>
+                    {`${t('speed-markets.user-positions.labels.paid')}: ${formatValueWithCollateral(
+                        position.paid,
+                        collateral,
+                        networkId
+                    )}`}
+                </Paid>
+                <PayoutWrapper>
+                    <Payout isClaimable={position.isClaimable}>
+                        {`${t('speed-markets.user-positions.labels.payout')}: ${formatValueWithCollateral(
+                            position.payout,
+                            collateral,
+                            networkId
+                        )}`}
+                    </Payout>
+                    {position.isFreeBet && (
+                        <Tooltip
+                            overlay={t('speed-markets.user-positions.free-bet')}
+                            zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
+                        >
+                            <FreeBetIcon className="icon icon--gift" />
+                        </Tooltip>
+                    )}
+                </PayoutWrapper>
             </FlexDivRowCentered>
         </Container>
     );
@@ -237,6 +253,10 @@ const Time = styled(Text)``;
 
 const Paid = styled(Text)``;
 
+const PayoutWrapper = styled(FlexDivRowCentered)`
+    gap: 8px;
+`;
+
 const Payout = styled(Text)<{ isClaimable: boolean }>`
     ${(props) => (props.isClaimable ? `color: ${props.theme.status.win};` : '')}
 `;
@@ -248,6 +268,13 @@ const PlayIcon = styled.i`
     line-height: 12px;
     margin-right: 5px;
     margin-bottom: 2px;
+`;
+
+const FreeBetIcon = styled.i`
+    font-size: 14px;
+    text-transform: none;
+    color: ${(props) => props.theme.textColor.quaternary};
+    cursor: pointer;
 `;
 
 export default SpeedPositionCard;

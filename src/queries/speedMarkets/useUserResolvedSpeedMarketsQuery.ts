@@ -1,4 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
 import QUERY_KEYS from 'constants/queryKeys';
 import {
@@ -108,9 +109,10 @@ const useUserResolvedSpeedMarketsQuery = (
 
                     const paid = marketBuyinAmount * (1 + fees);
                     const payout = coinFormatter(marketData.payout, networkConfig.networkId, collateral);
+                    const isFreeBet = marketData.freeBetUser !== ZERO_ADDRESS;
 
                     const userData: UserPosition = {
-                        user: marketData.user,
+                        user: isFreeBet ? marketData.freeBetUser : marketData.user,
                         market: marketData.market,
                         asset: parseBytes32String(marketData.asset),
                         side: SIDE_TO_POSITION_MAP[marketData.direction],
@@ -120,6 +122,7 @@ const useUserResolvedSpeedMarketsQuery = (
                         payout,
                         collateralAddress: marketData.collateral,
                         isDefaultCollateral: marketData.isDefaultCollateral,
+                        isFreeBet,
                         currentPrice: 0,
                         finalPrice: bigNumberFormatter(marketData.finalPrice, PYTH_CURRENCY_DECIMALS),
                         isClaimable: false,

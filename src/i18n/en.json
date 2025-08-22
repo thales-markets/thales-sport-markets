@@ -1809,6 +1809,7 @@
             "no-resolve-positions": "No positions for this section with price",
             "no-positions": "No positions",
             "history-limit": "* Showing only markets with expiry date not older than {{days}} days.",
+            "free-bet": "Claim amount will be reduced by buy-in amount.",
             "filters": {
                 "pending": "Pending",
                 "claimable": "Claimable",

@@ -1,4 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS, SUPPORTED_ASSETS } from 'constants/pyth';
 import QUERY_KEYS from 'constants/queryKeys';
 import { SIDE_TO_POSITION_MAP } from 'constants/speedMarkets';
@@ -95,8 +96,10 @@ const useUserActiveSpeedMarketsDataQuery = (
                             : getFeesFromHistory(createdAt).safeBoxImpact;
                     const fees = lpFee + safeBoxImpact;
 
+                    const isFreeBet = marketData.freeBetUser !== ZERO_ADDRESS;
+
                     const userData: UserPosition = {
-                        user: marketData.user,
+                        user: isFreeBet ? marketData.freeBetUser : marketData.user,
                         market: marketData.market,
                         asset: parseBytes32String(marketData.asset),
                         side,
@@ -106,6 +109,7 @@ const useUserActiveSpeedMarketsDataQuery = (
                         payout: coinFormatter(marketData.payout, networkConfig.networkId, collateral),
                         collateralAddress: marketData.collateral,
                         isDefaultCollateral: marketData.isDefaultCollateral,
+                        isFreeBet,
                         currentPrice: prices[currencyKey],
                         finalPrice: 0,
                         isClaimable: false,
