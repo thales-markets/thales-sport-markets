@@ -12,12 +12,16 @@ import useUserResolvedSpeedMarketsQuery from 'queries/speedMarkets/useUserResolv
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivRow, FlexDivRowCentered } from 'styles/common';
 import { UserPosition } from 'types/speedMarkets';
-import { getCollateralByAddress, getSpeedNativeCollateralsText, getSpeedOfframpCollaterals } from 'utils/collaterals';
+import {
+    getCollateralByAddress,
+    getDefaultCollateral,
+    getSpeedNativeCollateralsText,
+    getSpeedOfframpCollaterals,
+} from 'utils/collaterals';
 import { getIsMultiCollateralSupported } from 'utils/network';
 import { getPriceId } from 'utils/pyth';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
@@ -30,7 +34,6 @@ const SpeedPositions: React.FC = () => {
     const { t } = useTranslation();
 
     const isBiconomy = useSelector(getIsBiconomy);
-    const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId();
     const client = useClient();
@@ -116,6 +119,9 @@ const SpeedPositions: React.FC = () => {
         );
 
     const hasPositionsDefaultCollateral = positions.some((marketData) => marketData.isDefaultCollateral);
+    const hasPositionsFreeBetWithDefaultCol = positions.some(
+        (marketData) => marketData.isDefaultCollateral && marketData.isFreeBet
+    );
 
     const nativeCollateralAddress = positions.find(
         (marketData) => !hasPositionsDefaultCollateral && !marketData.isDefaultCollateral
@@ -124,6 +130,12 @@ const SpeedPositions: React.FC = () => {
     const nativeCollateral = nativeCollateralAddress
         ? getCollateralByAddress(nativeCollateralAddress, networkId)
         : null;
+
+    const availableCollaterals = nativeCollateral
+        ? [nativeCollateral]
+        : hasPositionsFreeBetWithDefaultCol
+        ? [getDefaultCollateral(networkId)]
+        : getSpeedOfframpCollaterals(networkId);
 
     const isLoading =
         (!isLoadedOnce &&
@@ -200,9 +212,7 @@ const SpeedPositions: React.FC = () => {
                             <FlexDivRowCentered>
                                 <ClaimInLabel>{t('speed-markets.user-positions.claim-in')}:</ClaimInLabel>
                                 <CollateralSelector
-                                    collateralArray={
-                                        nativeCollateral ? [nativeCollateral] : getSpeedOfframpCollaterals(networkId)
-                                    }
+                                    collateralArray={availableCollaterals}
                                     selectedItem={nativeCollateral ? 0 : claimCollateralIndex}
                                     onChangeCollateral={setClaimCollateralIndex}
                                     preventPaymentCollateralChange
@@ -213,7 +223,7 @@ const SpeedPositions: React.FC = () => {
                             </FlexDivRowCentered>
                         )}
                     </ClaimAllRow>
-                    {isMobile && !isAllPositionsInSameCollateral && (
+                    {!isAllPositionsInSameCollateral && (
                         <FlexDivRow>
                             <Info>{`* ${t('speed-markets.tooltips.claim-all-except-native', {
                                 collaterals: getSpeedNativeCollateralsText(

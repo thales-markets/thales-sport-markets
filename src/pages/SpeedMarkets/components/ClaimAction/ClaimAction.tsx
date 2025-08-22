@@ -11,13 +11,12 @@ import { PYTH_CONTRACT_ADDRESS } from 'constants/pyth';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
 import { differenceInSeconds, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
-import { sumBy, uniq } from 'lodash';
+import { sumBy } from 'lodash';
 import useAmmSpeedMarketsLimitsQuery from 'queries/speedMarkets/useAmmSpeedMarketsLimitsQuery';
 import React, { Dispatch, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getIsMobile } from 'redux/modules/app';
 import { getIsBiconomy, getIsConnectedViaParticle } from 'redux/modules/wallet';
 import styled from 'styled-components';
 import { FlexDivCentered } from 'styles/common';
@@ -31,7 +30,6 @@ import {
     getCollateralByAddress,
     getCollateralIndex,
     getDefaultCollateral,
-    getSpeedNativeCollateralsText,
     getSpeedOfframpCollaterals,
     isOverCurrency,
 } from 'utils/collaterals';
@@ -75,7 +73,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
     const isBiconomy = useSelector(getIsBiconomy);
     const isParticle = useSelector(getIsConnectedViaParticle);
-    const isMobile = useSelector(getIsMobile);
 
     const networkId = useChainId() as SupportedNetwork;
     const client = useClient();
@@ -110,14 +107,6 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
 
     const position = useMemo(() => positions[0], [positions]);
 
-    const isAllPositionsInSameCollateral =
-        positions.every((marketData) => marketData.isDefaultCollateral) ||
-        positions.every(
-            (marketData) =>
-                !marketData.isDefaultCollateral &&
-                !!positions.length &&
-                positions[0].collateralAddress === marketData.collateralAddress
-        );
     const hasPositionsDefaultCollateral = isClaimAll && positions.some((marketData) => marketData.isDefaultCollateral);
 
     const nativeCollateralAddress = positions.find(
@@ -131,15 +120,13 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
     const claimAllPositions = useMemo(
         () =>
             isClaimAll
-                ? positions.filter(
-                      (marketData) =>
-                          (isClaimDefaultCollateral || !marketData.isFreeBet) &&
-                          (nativeCollateralAddress
-                              ? nativeCollateralAddress === marketData.collateralAddress
-                              : marketData.isDefaultCollateral)
+                ? positions.filter((marketData) =>
+                      nativeCollateralAddress
+                          ? nativeCollateralAddress === marketData.collateralAddress
+                          : marketData.isDefaultCollateral
                   )
                 : [],
-        [isClaimAll, positions, nativeCollateralAddress, isClaimDefaultCollateral]
+        [isClaimAll, positions, nativeCollateralAddress]
     );
 
     const payout = useMemo(() => (isClaimAll ? sumBy(claimAllPositions, 'payout') : position.payout), [
@@ -148,8 +135,15 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         claimAllPositions,
     ]);
 
-    const isFreeBetPosition = position.isFreeBet;
-    const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress && !isFreeBetPosition;
+    const collateralText = nativeCollateral
+        ? `${isOverCurrency(nativeCollateral) ? '$' : ''}${nativeCollateral}`
+        : isClaimDefaultCollateral
+        ? formatCurrencyWithSign(USD_SIGN, payout, 2)
+        : claimCollateral;
+
+    const isClaimInNonDefaultCollateral = isClaimAll
+        ? !isClaimDefaultCollateral
+        : nativeCollateral || !isClaimDefaultCollateral;
 
     const isButtonDisabled = isSubmitting || isAllowing || isDisabled;
 
@@ -313,6 +307,9 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 { networkId, client: walletClient.data }
             );
 
+            const isFreeBet = position.isFreeBet;
+            const isOfframp = !isClaimDefaultCollateral && !nativeCollateralAddress && !isFreeBet;
+
             let hash;
             if (isBiconomy) {
                 hash = isOfframp
@@ -354,7 +351,7 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                 refetchUserSpeedMarkets(networkId, walletAddress);
                 refetchUserResolvedSpeedMarkets(networkId, walletAddress);
                 refetchBalances(walletAddress, networkId);
-                isFreeBetPosition && refetchFreeBetBalance(walletAddress, networkId);
+                isFreeBet && refetchFreeBetBalance(walletAddress, networkId);
             } else {
                 await delay(800);
                 toast.update(id, getErrorToastOptions(t('common.errors.tx-reverted')));
@@ -398,24 +395,13 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
         <>
             <Container>
                 <Tooltip
-                    open={!hasAllowance || (!isMobile && !isAllPositionsInSameCollateral)}
                     overlay={
                         !hasAllowance
                             ? t('speed-markets.tooltips.approve-swap-tooltip', {
                                   currencyKey: claimCollateral,
                                   defaultCurrency: defaultCollateral,
                               })
-                            : t('speed-markets.tooltips.claim-all-except-native', {
-                                  collaterals: getSpeedNativeCollateralsText(
-                                      uniq(
-                                          positions.map((position) =>
-                                              getCollateralByAddress(position.collateralAddress, networkId)
-                                          )
-                                      ),
-                                      nativeCollateral,
-                                      networkId
-                                  ),
-                              })
+                            : ''
                     }
                     zIndex={SPEED_MARKETS_WIDGET_Z_INDEX}
                 >
@@ -438,17 +424,15 @@ const ClaimAction: React.FC<ClaimActionProps> = ({
                                 {t(
                                     `speed-markets.user-positions.${
                                         isClaimAll
-                                            ? `claim-all${isOfframp ? '-in' : ''}${isSubmitting ? '-progress' : ''}`
-                                            : `claim${isOfframp ? '-in' : ''}${isSubmitting ? '-progress' : ''}`
+                                            ? `claim-all${isClaimInNonDefaultCollateral ? '-in' : ''}${
+                                                  isSubmitting ? '-progress' : ''
+                                              }`
+                                            : `claim${isClaimInNonDefaultCollateral ? '-in' : ''}${
+                                                  isSubmitting ? '-progress' : ''
+                                              }`
                                     }`
                                 )}{' '}
-                                <CollateralText>
-                                    {nativeCollateral
-                                        ? `${isOverCurrency(nativeCollateral) ? '$' : ''}${nativeCollateral}`
-                                        : isClaimDefaultCollateral || isFreeBetPosition
-                                        ? formatCurrencyWithSign(USD_SIGN, payout, 2)
-                                        : claimCollateral}
-                                </CollateralText>
+                                <CollateralText>{collateralText}</CollateralText>
                             </>
                         ) : isAllowing ? (
                             <Trans
