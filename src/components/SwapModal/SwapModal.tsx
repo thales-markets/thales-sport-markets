@@ -72,7 +72,12 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     const [activeSide, setActiveSide] = useState<SIDE>(SIDE.FROM);
 
     const requestId = useRef(0);
-    const lastFetched = useRef<{ side: SIDE | null; value: string | null }>({ side: null, value: null });
+    const lastFetched = useRef<{ side: SIDE | null; value: string | null; from: string | null; to: string | null }>({
+        side: null,
+        value: null,
+        from: null,
+        to: null,
+    });
 
     const [isBuying, setIsBuying] = useState(false);
 
@@ -136,8 +141,14 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
             return;
         }
 
-        if (lastFetched.current.side === activeSide && lastFetched.current.value === amount) return;
-        lastFetched.current = { side: activeSide, value: '' + amount };
+        if (
+            lastFetched.current.side === activeSide &&
+            lastFetched.current.value === amount &&
+            lastFetched.current.from === fromToken &&
+            lastFetched.current.to === toToken
+        )
+            return;
+        lastFetched.current = { side: activeSide, value: '' + amount, from: fromToken, to: toToken };
 
         const id = ++requestId.current;
         setIsFetching(true);
@@ -169,7 +180,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                 if (id === requestId.current) setIsFetching(false);
             }
         })();
-    }, [activeSide, fromAmount, toAmount, networkId, swapParams]);
+    }, [activeSide, fromAmount, toAmount, networkId, swapParams, toToken, fromToken]);
 
     // Check swap allowance
     useEffect(() => {
@@ -200,6 +211,17 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
     useEffect(() => {
         setBuyStep(BuyTicketStep.APPROVE_SWAP);
     }, [fromToken]);
+
+    useEffect(() => {
+        setIsAmountValid(
+            Number(fromAmount) === 0 || (Number(fromAmount) > 0 && Number(fromAmount) <= tokenBalance.fromTokenBalance)
+        );
+    }, [fromAmount, tokenBalance.fromTokenBalance]);
+
+    // Reset buy step when collateral is changed
+    useEffect(() => {
+        setSwapQuote(0);
+    }, [toToken]);
 
     const handleBuyWithThalesSteps = async (
         initialStep: BuyTicketStep
@@ -362,6 +384,10 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
             return getButton(t(`common.errors.enter-amount`), true);
         }
 
+        if (isFetching) {
+            return getButton(t('profile.swap.fetching'), true);
+        }
+
         return getButton(t('profile.swap.swap', { token: toToken }), isButtonDisabled);
     };
 
@@ -370,11 +396,17 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
 
     const fromCollaterals = getCollaterals(networkId);
 
-    useEffect(() => {
-        setIsAmountValid(
-            Number(fromAmount) === 0 || (Number(fromAmount) > 0 && Number(fromAmount) <= tokenBalance.fromTokenBalance)
+    const quotePrice = useMemo(() => {
+        if (swapQuote === 0) {
+            return '-';
+        }
+
+        return formatCurrencyWithKey(
+            USD_SIGN,
+            convertCollateralToStable(fromToken, 1 / swapQuote, exchangeRates ? exchangeRates[fromToken] : 0)
         );
-    }, [fromAmount, tokenBalance.fromTokenBalance]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [swapQuote]);
 
     return (
         <Modal
@@ -517,18 +549,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                 <SimpleLoader size={16} strokeWidth={6} />
                             </LoaderContainer>
                         ) : (
-                            <Value>
-                                {Number(swapQuote) === 0
-                                    ? '-'
-                                    : formatCurrencyWithKey(
-                                          USD_SIGN,
-                                          convertCollateralToStable(
-                                              fromToken,
-                                              1 / swapQuote,
-                                              exchangeRates ? exchangeRates[fromToken] : 0
-                                          )
-                                      )}
-                            </Value>
+                            <Value>{quotePrice}</Value>
                         )}
                     </Section>
                     <Section>
