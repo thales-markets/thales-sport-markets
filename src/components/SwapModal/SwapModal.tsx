@@ -621,6 +621,9 @@ const ExchangeIcon = styled.i`
     margin: auto;
     width: 34px;
     cursor: pointer;
+    &:hover {
+        color: ${(props) => props.theme.textColor.quaternary};
+    }
 `;
 
 const LoaderContainer = styled.div`
