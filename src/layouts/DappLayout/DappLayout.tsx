@@ -154,7 +154,7 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
             const isMetamaskBrowser = isMobile() && (await isMetamask());
             // Do not load Discord Widget Bot on Android MM browser due to issue with MM wallet connect
             // issue raised on https://github.com/rainbow-me/rainbowkit/issues/1181
-            setPreventDiscordWidgetLoad((isMetamaskBrowser && isAndroid()) || true);
+            setPreventDiscordWidgetLoad(isMetamaskBrowser && isAndroid());
         };
         checkMetamaskBrowser();
     }, []);

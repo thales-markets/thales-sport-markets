@@ -1,4 +1,5 @@
 import termsOfUse from 'assets/docs/overtime-terms-of-use.pdf';
+import DrpcLogo from 'assets/images/drpc.png';
 import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import { ScreenSizeBreakpoint } from 'enums/ui';
@@ -80,11 +81,11 @@ const DappFooter: React.FC = () => {
                             <LinkText>{t('footer.reddit')}</LinkText>
                         </LinkContent>
                     </Link>
+                    <Link target="_blank" rel="noreferrer" href={LINKS.Drpc.Ref}>
+                        <DrpcImage src={DrpcLogo} alt="Powered by dRPC" />
+                    </Link>
                 </LinksContainer>
             </Container>
-            <a href={LINKS.Drpc.Ref} target="_blank" rel="noreferrer">
-                <DrpcImage src={LINKS.Drpc.Image} alt="Powered by dRPC" />
-            </a>
             <DisclaimerContainer>
                 <Trans
                     i18nKey="footer.disclaimer"
@@ -109,7 +110,7 @@ const Container = styled(FlexDivColumnCentered)`
     margin-bottom: 20px;
     @media (max-width: 950px) {
         max-height: fit-content;
-        margin-top: 100px;
+        margin-top: 40px;
     }
 `;
 
@@ -123,15 +124,12 @@ const DisclaimerContainer = styled(FlexDivCentered)`
     color: ${(props) => props.theme.textColor.secondary};
     text-align: justify;
     @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
-        margin-top: 30px;
+        margin-top: 10px;
         margin-bottom: 60px;
-    }
-    @media (max-width: 400px) {
-        margin-top: 50px;
     }
 `;
 
-const Link = styled.a``;
+const Link = styled.a<{ mobile?: boolean }>``;
 
 const DisclaimerLink = styled.a`
     display: contents;
@@ -167,7 +165,7 @@ const LinksContainer = styled(FlexDivRowCentered)`
         }
     }
     @media (max-width: 950px) {
-        gap: 10px;
+        gap: 4px;
     }
 `;
 
@@ -188,74 +186,76 @@ const LinkText = styled(FlexDivCentered)`
     font-size: 14px;
     line-height: 15px;
     color: ${(props) => props.theme.textColor.secondary};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 12px;
+        line-height: 14px;
+    }
 `;
 
-const TwitterIcon = styled.i`
+const Icon = styled.i`
     color: ${(props) => props.theme.textColor.secondary};
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        font-size: 22px;
+    }
+`;
+
+const TwitterIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0021';
     }
 `;
 
-const FarcasterIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const FarcasterIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\006E';
     }
 `;
 
-const DiscordIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const DiscordIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0023';
     }
 `;
 
-const DocsIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const DocsIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0025';
     }
 `;
 
-const MediumIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const MediumIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0024';
     }
 `;
 
-const GithubIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const GithubIcon = styled(Icon)`
     &:before {
         font-family: HomepageIconsV2 !important;
         content: '\\0022';
     }
 `;
 
-const InstagramIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const InstagramIcon = styled(Icon)`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0116';
     }
 `;
 
-const RedditIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const RedditIcon = styled(Icon)`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0114';
     }
 `;
 
-const ResourcesIcon = styled.i`
-    color: ${(props) => props.theme.textColor.secondary};
+const ResourcesIcon = styled(Icon)`
     &:before {
         font-family: OvertimeIconsV2 !important;
         content: '\\0122';
@@ -263,8 +263,7 @@ const ResourcesIcon = styled.i`
 `;
 
 const DrpcImage = styled.img`
-    width: 218px;
-    height: 54px;
+    margin-top: 5px;
 `;
 
 export default DappFooter;
