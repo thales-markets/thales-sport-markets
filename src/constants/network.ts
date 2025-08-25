@@ -4,6 +4,7 @@ import { Address } from 'viem';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as Address;
+export const DEAD_ADDRESS = '0x000000000000000000000000000000000000dEaD' as Address;
 export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const TBD_ADDRESS = '0xTBD' as Address;
 

@@ -1,4 +1,3 @@
-import { getPublicClient } from '@wagmi/core';
 import ApprovalModal from 'components/ApprovalModal';
 import Button from 'components/Button';
 import Tooltip from 'components/Tooltip';
@@ -7,17 +6,16 @@ import { PLAUSIBLE, PLAUSIBLE_KEYS } from 'constants/analytics';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { USER_REJECTED_ERRORS } from 'constants/errors';
 import { APPROVAL_BUFFER } from 'constants/markets';
+import { DEAD_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { PYTH_CURRENCY_DECIMALS } from 'constants/pyth';
-import { DEFAULT_MAX_CREATOR_DELAY_TIME_SEC, POSITIONS_TO_SIDE_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
+import { MAX_CREATION_DELAY_TIME_SEC, POSITIONS_TO_SIDE_MAP, SPEED_MARKETS_QUOTE } from 'constants/speedMarkets';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { SPEED_MARKETS_WIDGET_Z_INDEX } from 'constants/ui';
-import { secondsToMilliseconds } from 'date-fns';
+import { millisecondsToSeconds } from 'date-fns';
 import { ContractType } from 'enums/contract';
 import { SpeedPositions } from 'enums/speedMarkets';
 import useDebouncedEffect from 'hooks/useDebouncedEffect';
-import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import useExchangeRatesQuery from 'queries/rates/useExchangeRatesQuery';
-import useAmmSpeedMarketsCreatorQuery from 'queries/speedMarkets/useAmmSpeedMarketsCreatorQuery';
 import React, { Dispatch, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +51,6 @@ import {
     isStableCurrency,
 } from 'utils/collaterals';
 import { getContractInstance } from 'utils/contract';
-import { getContractAbi } from 'utils/contracts/abi';
 import multipleCollateral from 'utils/contracts/multipleCollateralContract';
 import speedMarketsAMMContract from 'utils/contracts/speedMarkets/speedMarketsAMMContract';
 import { isErrorExcluded } from 'utils/discord';
@@ -71,6 +68,7 @@ import { activateOvertimeAccount } from 'utils/smartAccount/biconomy/session';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import { getFeeByTimeThreshold, getTransactionForSpeedAMM } from 'utils/speedMarkets';
 import { delay } from 'utils/timer';
+import { getRequestId } from 'utils/tradingProcessor';
 import { Client, parseUnits, stringToHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useChainId, useClient, useWalletClient } from 'wagmi';
@@ -182,12 +180,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
         },
         [selectedCollateral, exchangeRates, networkId]
     );
-
-    const ammSpeedMarketsCreatorQuery = useAmmSpeedMarketsCreatorQuery({ networkId, client });
-
-    const ammSpeedMarketsCreatorData = useMemo(() => {
-        return ammSpeedMarketsCreatorQuery.isSuccess ? ammSpeedMarketsCreatorQuery.data : null;
-    }, [ammSpeedMarketsCreatorQuery]);
 
     const skewImpact = useMemo(() => {
         const skewPerPosition = { [SpeedPositions.UP]: 0, [SpeedPositions.DOWN]: 0 };
@@ -457,32 +449,9 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             client: walletClient.data,
         });
 
-        const freeBetHolderContract = getContractInstance(ContractType.FREE_BET_HOLDER, {
+        const freeBetHolderContractWithSigner = getContractInstance(ContractType.FREE_BET_HOLDER, {
             networkId,
             client: walletClient.data,
-        });
-
-        const speedMarketsAMMContractWithClient = getContractInstance(ContractType.SPEED_MARKETS_AMM, {
-            networkId,
-            client,
-        });
-
-        const numOfActiveUserMarketsBefore = Number(
-            (await speedMarketsAMMContractWithClient?.read.getLengths([walletAddress]))[2]
-        );
-
-        const publicClient = getPublicClient(wagmiConfig, { chainId: networkId });
-        let isMarketCreated = false;
-
-        const unwatch = publicClient.watchContractEvent({
-            address: speedMarketsAMMContract.addresses[networkId],
-            abi: getContractAbi(speedMarketsAMMContract, networkId),
-            eventName: 'MarketCreatedWithFees',
-            args: { ['_user']: walletAddress },
-            onLogs: () => {
-                isMarketCreated = true;
-                onMarketCreated(id);
-            },
         });
 
         try {
@@ -534,7 +503,7 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             }
 
             const hash = await getTransactionForSpeedAMM(
-                isFreeBetActive ? freeBetHolderContract : speedMarketsCreatorContractWithSigner,
+                isFreeBetActive ? freeBetHolderContractWithSigner : speedMarketsCreatorContractWithSigner,
                 asset,
                 deltaTimeSec,
                 sides,
@@ -552,25 +521,27 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
             const txReceipt = await waitForTransactionReceipt(client as Client, { hash });
 
             if (txReceipt.status === 'success') {
-                // if creator didn't created market for max time then check for total number of markets
-                const maxCreationTime = secondsToMilliseconds(
-                    ammSpeedMarketsCreatorData?.maxCreationDelay || DEFAULT_MAX_CREATOR_DELAY_TIME_SEC
-                );
-                let checkDelay = 2000; // check on every 2s is market created
-                while (!isMarketCreated && checkDelay < maxCreationTime) {
-                    await delay(checkDelay);
+                const requestId = getRequestId(txReceipt.logs, true, isFreeBetActive, false);
 
-                    const numOfActiveUserMarketsAfter = Number(
-                        (await speedMarketsAMMContractWithClient?.read.getLengths([walletAddress]))[2]
-                    );
+                let isMarketCreationPending = true;
+                let isMarketCreated = false;
+                const startTime = Date.now();
+                const CHECK_DEALY = 500; // check on every 0.5s is market created
+                while (isMarketCreationPending) {
+                    await delay(CHECK_DEALY);
 
-                    if (!isMarketCreated && numOfActiveUserMarketsAfter - numOfActiveUserMarketsBefore > 0) {
-                        unwatch();
-                        isMarketCreated = true;
+                    const marketAddress = await speedMarketsCreatorContractWithSigner?.read.requestIdToMarket([
+                        requestId,
+                    ]);
+
+                    const timePassedSec = millisecondsToSeconds(Date.now() - startTime);
+                    isMarketCreationPending =
+                        marketAddress === ZERO_ADDRESS && timePassedSec < MAX_CREATION_DELAY_TIME_SEC;
+                    isMarketCreated = marketAddress !== ZERO_ADDRESS && marketAddress !== DEAD_ADDRESS;
+
+                    if (isMarketCreated) {
                         onMarketCreated(id);
                     }
-
-                    checkDelay += checkDelay;
                 }
                 if (!isMarketCreated) {
                     toast.update(id, getErrorToastOptions(t('speed-markets.errors.buy-failed')));
@@ -610,7 +581,6 @@ const AmmSpeedTrading: React.FC<AmmSpeedTradingProps> = ({
                 console.log(e);
             }
         }
-        unwatch();
     };
 
     const getSubmitButton = () => {

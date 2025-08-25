@@ -7,10 +7,6 @@ export type SelectedPosition = SpeedPositions.UP | SpeedPositions.DOWN | undefin
 export type RiskPerAsset = { currency: string; current: number; max: number };
 export type RiskPerAssetAndPosition = RiskPerAsset & { position: SpeedPositions };
 
-export type AmmSpeedMarketsCreatorParams = {
-    maxCreationDelay: number;
-};
-
 export type AmmSpeedMarketsLimits = {
     maxBuyinAmount: number;
     minBuyinAmount: number;

@@ -1852,7 +1852,7 @@
             "max-buyin": "Maximal buy-in is {{maxAmount}}",
             "out-of-liquidity-direction": "Out of liquidity for direction",
             "out-of-liquidity": "Out of liquidity",
-            "buy-failed": "Failed to create position or creation event not received! Please check your open positions.",
+            "buy-failed": "Failed to create position! Increase slippage (Settings) and try again.",
             "price-stale": "Can't resolve position with stale price"
         },
         "flex-card": {

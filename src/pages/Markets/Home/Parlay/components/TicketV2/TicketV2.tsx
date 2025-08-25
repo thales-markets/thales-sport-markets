@@ -1793,7 +1793,7 @@ const Ticket: React.FC<TicketProps> = ({
                             : Number(buyInAmount);
 
                     if (isLiveTicket || isSgp) {
-                        const requestId = getRequestId(txReceipt.logs, isFreeBetActive, isSgp);
+                        const requestId = getRequestId(txReceipt.logs, false, isFreeBetActive, isSgp);
                         if (!requestId) {
                             throw new Error('Request ID not found');
                         }

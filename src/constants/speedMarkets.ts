@@ -25,7 +25,7 @@ export const MIN_BUYIN_COLLATERAL_CONVERSION_BUFFER_PERCENTAGE = 0.4; // 40%
 export const MAX_BUYIN_COLLATERAL_CONVERSION_BUFFER_PERCENTAGE = 0.05; // 5%
 
 export const DEFAULT_PRICE_SLIPPAGES_PERCENTAGE = [0.001, 0.005, 0.01, 0.02]; // [0.1%, 0.5%, 1%, 2%]
-export const DEFAULT_MAX_CREATOR_DELAY_TIME_SEC = 15;
+export const MAX_CREATION_DELAY_TIME_SEC = 30; // 30s
 
 const TODAY = new Date();
 // show history for 90 days in the past

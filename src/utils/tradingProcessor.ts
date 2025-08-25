@@ -15,6 +15,7 @@ import { decodeEventLog, DecodeEventLogParameters } from 'viem';
 import freeBetHolder from './contracts/freeBetHolder';
 import liveTradingProcessorContract from './contracts/liveTradingProcessorContract';
 import sgpTradingProcessorContract from './contracts/sgpTradingProcessorContract';
+import speedMarketsAMMCreatorContract from './contracts/speedMarkets/speedMarketsAMMCreatorContract';
 import { convertFromBytes32 } from './formatters/string';
 import { executeBiconomyTransaction } from './smartAccount/biconomy/biconomy';
 
@@ -114,12 +115,14 @@ export const processTransaction = async (
     return { isFulfilledTx, isFulfilledAdapter, isAdapterError };
 };
 
-export const getRequestId = (txLogs: any, isFreeBet: boolean, isSgp: boolean) => {
+export const getRequestId = (txLogs: any, isSpeed: boolean, isFreeBet: boolean, isSgp: boolean) => {
     const requestIdEvent = txLogs
         .map((log: any) => {
             try {
                 const decoded = decodeEventLog({
-                    abi: isFreeBet
+                    abi: isSpeed
+                        ? speedMarketsAMMCreatorContract.abi
+                        : isFreeBet
                         ? freeBetHolder.abi
                         : isSgp
                         ? sgpTradingProcessorContract.abi
@@ -132,9 +135,12 @@ export const getRequestId = (txLogs: any, isFreeBet: boolean, isSgp: boolean) =>
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetLiveTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'FreeBetSGPTradeRequested' ||
                     (decoded as DecodeEventLogParameters)?.eventName == 'LiveTradeRequested' ||
-                    (decoded as DecodeEventLogParameters)?.eventName == 'SGPTradeRequested'
+                    (decoded as DecodeEventLogParameters)?.eventName == 'SGPTradeRequested' ||
+                    (decoded as DecodeEventLogParameters)?.eventName == 'AddSpeedMarket'
                 ) {
-                    return (decoded as any)?.args;
+                    const args = (decoded as any)?.args;
+                    args.requestId = args?.requestId || args?._requestId;
+                    return args;
                 }
             } catch (e) {
                 return;
