@@ -488,7 +488,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
-                                    topPosition="-40px"
+                                    topPosition="50px"
                                     hideZeroBalance
                                     rightPosition="-8px"
                                 />
