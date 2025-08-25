@@ -221,3 +221,7 @@
 .override-validation-arrow > div > .rc-tooltip-arrow {
     border-top-color: #1f274d;
 }
+
+.override-input-validation-fixed {
+    position: fixed;
+}

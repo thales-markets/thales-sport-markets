@@ -385,6 +385,7 @@ const SelectBuyin: React.FC<SelectBuyinProps> = ({
                         onChange={(e) => setBuyinAmount(e.target.value)}
                         showValidation={inputRefVisible && !!errorMessageKey}
                         validationPlacement={freeBetBalanceExists ? 'bottom' : undefined}
+                        validationClassName="override-input-validation-fixed"
                         validationMessage={t(errorMessageKey, {
                             currencyKey: selectedCollateral,
                             minAmount: `${formatCurrencyWithKey(

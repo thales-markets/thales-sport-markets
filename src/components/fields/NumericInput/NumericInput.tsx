@@ -18,6 +18,7 @@ type NumericInputProps = {
     showValidation?: boolean;
     validationPlacement?: string;
     validationMessage?: string;
+    validationClassName?: string;
     validationZIndex?: number;
     currencyComponent?: any;
     readonly?: boolean;
@@ -59,6 +60,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
     showValidation,
     validationPlacement,
     validationMessage,
+    validationClassName,
     validationZIndex,
     currencyComponent,
     readonly,
@@ -120,6 +122,7 @@ const NumericInput: React.FC<NumericInputProps> = ({
             <Tooltip
                 overlay={showValidation ? validationMessage || '' : ''}
                 isValidation={showValidation}
+                overlayClassName={validationClassName}
                 placement={validationPlacement}
                 zIndex={validationZIndex}
             >
