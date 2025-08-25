@@ -62,6 +62,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NFL_FUTURES:
         case League.NBA_FUTURES:
         case League.NHL_FUTURES:
+        case League.NCAAF_FUTURES:
         case League.USA_NWSL:
         case League.NCAAB_FUTURES:
         case League.NCAAW:
