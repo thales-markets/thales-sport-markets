@@ -540,7 +540,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
-                                    topPosition="-40px"
+                                    topPosition="50px"
                                     rightPosition="-8px"
                                 />
                             }
@@ -705,8 +705,8 @@ const Note = styled.div`
 `;
 
 const Inputs = styled(FlexDivColumn)`
-    margin-top: 30px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 70px;
     gap: 16px;
 `;
 
