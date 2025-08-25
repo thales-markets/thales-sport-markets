@@ -50,7 +50,7 @@ const Container = styled(FlexDivColumn)`
 
 const LoaderContainer = styled(FlexDivCentered)`
     position: relative;
-    min-height: 200px;
+    min-height: 100vh;
     width: 100%;
 `;
 

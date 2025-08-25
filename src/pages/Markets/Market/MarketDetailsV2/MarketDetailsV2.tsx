@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import FooterSidebarMobile from 'components/FooterSidebarMobile';
 import IncentivizedLeague from 'components/IncentivizedLeague';
+import Scroll from 'components/Scroll';
 import Toggle from 'components/Toggle';
 import { MarketTypeGroupsBySport } from 'constants/marketTypes';
 import { GameStatusKey } from 'constants/markets';
@@ -301,29 +302,31 @@ const MarketDetails: React.FC<MarketDetailsPropType> = ({ market }) => {
                                 </Button>
                             </NoMarketsContainer>
                         ) : (
-                            <>
-                                {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
-                                    <PositionsV2
-                                        markets={[market]}
-                                        marketType={market.typeId}
-                                        isGameOpen={isGameOpen}
-                                        showInvalid={!hidePausedMarkets}
-                                    />
-                                )}
-                                {Object.keys(groupedChildMarkets).map((key, index) => {
-                                    const typeId = Number(key);
-                                    const childMarkets = groupedChildMarkets[typeId];
-                                    return (
+                            <Scroll height={`calc(100vh - ${isMobile ? '300px' : '500px'}`}>
+                                <ListContainer>
+                                    {(!marketTypesFilter.length || marketTypesFilter.includes(MarketType.WINNER)) && (
                                         <PositionsV2
-                                            key={index}
-                                            markets={childMarkets}
-                                            marketType={typeId}
+                                            markets={[market]}
+                                            marketType={market.typeId}
                                             isGameOpen={isGameOpen}
                                             showInvalid={!hidePausedMarkets}
                                         />
-                                    );
-                                })}
-                            </>
+                                    )}
+                                    {Object.keys(groupedChildMarkets).map((key, index) => {
+                                        const typeId = Number(key);
+                                        const childMarkets = groupedChildMarkets[typeId];
+                                        return (
+                                            <PositionsV2
+                                                key={index}
+                                                markets={childMarkets}
+                                                marketType={typeId}
+                                                isGameOpen={isGameOpen}
+                                                showInvalid={!hidePausedMarkets}
+                                            />
+                                        );
+                                    })}
+                                </ListContainer>
+                            </Scroll>
                         )}
                     </PositionsContainer>
                 </>
@@ -349,9 +352,20 @@ const PositionsContainer = styled(FlexDivColumn)`
     width: 100%;
     border-radius: 8px;
     margin-top: 10px;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 5px 10px 10px;
     background-color: ${(props) => props.theme.oddsContainerBackground.secondary};
     flex: initial;
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding-right: 2px;
+    }
+`;
+
+const ListContainer = styled.div`
+    padding-right: 15px;
+
+    @media (max-width: ${ScreenSizeBreakpoint.SMALL}px) {
+        padding-right: 5px;
+    }
 `;
 
 const RowContainer = styled(FlexDivRow)`
