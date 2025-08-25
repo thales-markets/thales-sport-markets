@@ -1244,7 +1244,7 @@ const Ticket: React.FC<TicketProps> = ({
                 swapToOver && isDefaultCollateral && minBuyin < minBuyInAmountInDefaultCollateral
                     ? minBuyInAmountInDefaultCollateral
                     : minBuyin;
-            const decimals = getPrecision(minBuyin);
+            const decimals = isStableCurrency(selectedCollateral) ? DEFAULT_CURRENCY_DECIMALS : LONG_CURRENCY_DECIMALS;
 
             setTooltipTextBuyInAmount(
                 t('markets.parlay.validation.min-amount', {
