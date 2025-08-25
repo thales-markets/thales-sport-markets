@@ -406,9 +406,10 @@
         "swap": {
             "title": "<icon /> swap",
             "swap": "BUY ${{token}}",
-            "note": "Swap your crypto to $OVER",
+            "note": "The easiest way to swap tokens",
             "token-price": "${{token}} price",
-            "token-to-receive": "${{token}} to receive"
+            "token-to-receive": "${{token}} to receive",
+            "fetching": "Fetching quote..."
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",

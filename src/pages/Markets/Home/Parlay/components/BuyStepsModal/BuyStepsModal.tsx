@@ -7,7 +7,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
-import { Coins, formatCurrency } from 'thales-utils';
+import { Coins, formatCurrencyWithPrecision } from 'thales-utils';
+import { isSmallDevice } from 'utils/device';
 import { defaultButtonProps } from '../styled-components';
 
 type BuyStepsModalProps = {
@@ -26,6 +27,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
     step,
     isFailed,
     currencyKey,
+    dstToken,
     onSubmit,
     onClose,
     onlySwap,
@@ -53,6 +55,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                 overlay: {
                     zIndex: 1000,
                 },
+                content: isSmallDevice ? { marginTop: '50%' } : {},
             }}
             containerStyle={{
                 background: theme.background.secondary,
@@ -68,7 +71,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                         <Text>
                             {t('markets.parlay.buy-steps.approve-swap', {
                                 src: currencyKey,
-                                amount: formatCurrency(fromAmount, 4),
+                                amount: formatCurrencyWithPrecision(fromAmount),
                             })}
                             :
                         </Text>
@@ -79,9 +82,9 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                     <Text>
                         {t('markets.parlay.buy-steps.swap', {
                             src: currencyKey,
-                            dst: CRYPTO_CURRENCY_MAP.OVER,
-                            fromAmount: formatCurrency(fromAmount, 4),
-                            toAmount: formatCurrency(toAmount, 2),
+                            dst: dstToken,
+                            fromAmount: formatCurrencyWithPrecision(fromAmount),
+                            toAmount: formatCurrencyWithPrecision(toAmount),
                         })}
                         :
                     </Text>

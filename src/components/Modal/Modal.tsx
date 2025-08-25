@@ -5,6 +5,7 @@ import styled, { CSSProperties } from 'styled-components';
 import { FlexDiv, FlexDivRow } from 'styles/common';
 import { convertCssToStyledProperties } from 'thales-utils';
 import { isSmallDevice } from 'utils/device';
+import './modal.css';
 
 type ModalProps = {
     title: string;
@@ -78,6 +79,7 @@ const Modal: React.FC<ModalProps> = ({
             onRequestClose={onClose}
             shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
             style={customStylesOverride}
+            closeTimeoutMS={200} // must match CSS transition time
         >
             <Container mobileStyle={mobileStyle?.container} containerStyle={containerStyle}>
                 {!hideHeader && (
