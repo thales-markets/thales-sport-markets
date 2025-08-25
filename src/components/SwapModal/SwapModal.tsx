@@ -488,7 +488,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
-                                    topPosition="50px"
+                                    topPosition="-40px"
                                     hideZeroBalance
                                     rightPosition="-8px"
                                 />
@@ -540,7 +540,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ onClose, preSelectedToken }) => {
                                     dropDownWidth={Number(inputRef.current?.getBoundingClientRect().width) + 'px'}
                                     background={theme.background.quinary}
                                     color={theme.textColor.primary}
-                                    topPosition="50px"
+                                    topPosition="-40px"
                                     rightPosition="-8px"
                                 />
                             }

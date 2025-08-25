@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
 import { Coins, formatCurrencyWithPrecision } from 'thales-utils';
+import { isSmallDevice } from 'utils/device';
 import { defaultButtonProps } from '../styled-components';
 
 type BuyStepsModalProps = {
@@ -54,6 +55,7 @@ const BuyStepsModal: React.FC<BuyStepsModalProps> = ({
                 overlay: {
                     zIndex: 1000,
                 },
+                content: isSmallDevice ? { marginTop: '50%' } : {},
             }}
             containerStyle={{
                 background: theme.background.secondary,
