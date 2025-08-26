@@ -72,6 +72,7 @@ const useSportsMarketsV2Query = (
                             'ungroup=true&onlyBasicProperties=true' +
                                 `&status=${status}` +
                                 `&includeProofs=${includeProofs}` +
+                                `${sport ? '&includeFuturesInSport=true' : ''}` +
                                 `${sport ? `&sport=${sport}` : ''}` +
                                 `${!ticket ? `&minMaturity=${minMaturity}` : ''}` +
                                 `${ticket ? `&gameIds=${gameIds}` : ''}` +
