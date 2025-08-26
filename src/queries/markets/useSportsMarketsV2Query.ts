@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { secondsToMilliseconds } from 'date-fns';
+import { addHours, millisecondsToSeconds, secondsToMilliseconds, subDays } from 'date-fns';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { orderBy } from 'lodash';
 import { League, LeagueMap, Sport } from 'overtime-utils';
@@ -23,8 +23,10 @@ type SportsMarketsFilterProps = {
     includeProofs: boolean;
     status: StatusFilter;
     sport?: SportFilter;
+    leaguedIds?: League[];
     gameIds?: string[];
     ticket?: TicketPosition[];
+    timeLimitHours?: number;
 };
 
 const useSportsMarketsV2Query = (
@@ -32,8 +34,17 @@ const useSportsMarketsV2Query = (
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    const { status: statusFilter, includeProofs, sport: sportFilter, gameIds: gameIdsFilter, ticket } = filters;
+    const {
+        status: statusFilter,
+        includeProofs,
+        sport: sportFilter,
+        leaguedIds: leaguedIdsFilter,
+        gameIds: gameIdsFilter,
+        ticket,
+        timeLimitHours,
+    } = filters;
 
+    const leaguedIds = leaguedIdsFilter?.map((leagueId) => leagueId).join(',') || '';
     const gameIds = ticket?.map((market) => market.gameId).join(',') || gameIdsFilter?.join(',') || '';
     const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
     const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
@@ -45,21 +56,29 @@ const useSportsMarketsV2Query = (
             networkConfig.networkId,
             includeProofs,
             sportFilter || '',
+            leaguedIds,
             gameIds,
             typeIds,
             playerIds,
-            lines
+            lines,
+            timeLimitHours?.toString() || ''
         ),
         queryFn: async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
                 const sport = sportFilter
-                    ? Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase())
-                    : undefined;
+                    ? Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) ||
+                      ''
+                    : '';
 
-                const today = new Date();
                 // API takes timestamp argument in seconds
-                const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
+                // show history for 7 days in the past
+                const today = new Date();
+                const minMaturity = !ticket ? millisecondsToSeconds(subDays(today, 7).getTime()) : '';
+                // show all markets for next hours
+                const maxMaturity = timeLimitHours
+                    ? millisecondsToSeconds(addHours(today, timeLimitHours).getTime())
+                    : '';
 
                 const fetchLiveScore = statusFilter === StatusFilter.ONGOING_MARKETS;
                 const fetchGameInfo =
@@ -73,9 +92,11 @@ const useSportsMarketsV2Query = (
                             'ungroup=true&onlyBasicProperties=true' +
                                 `&status=${status}` +
                                 `&includeProofs=${includeProofs}` +
-                                `${sport ? '&includeFuturesInSport=true' : ''}` +
                                 `${sport ? `&sport=${sport}` : ''}` +
-                                `${!ticket ? `&minMaturity=${minMaturity}` : ''}` +
+                                `${sport ? '&includeFuturesInSport=true' : ''}` +
+                                `${minMaturity ? `&minMaturity=${minMaturity}` : ''}` +
+                                `${maxMaturity ? `&maxMaturity=${maxMaturity}` : ''}` +
+                                `${leaguedIds ? `&leagueIds=${leaguedIds}` : ''}` +
                                 `${gameIds ? `&gameIds=${gameIds}` : ''}` +
                                 `${ticket ? `&typeIds=${typeIds}` : ''}` +
                                 `${ticket ? `&playerIds=${playerIds}` : ''}` +

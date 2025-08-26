@@ -21,11 +21,25 @@ const QUERY_KEYS = {
         networkId: Network,
         includeProofs: boolean,
         sport: string,
+        leaguedIds: string,
         gameIds: string,
         typeIds: string,
         playerIds: string,
-        lines: string
-    ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, sport, gameIds, typeIds, playerIds, lines],
+        lines: string,
+        nextHours: string
+    ) => [
+        'sportMarketsV2',
+        statusFilter,
+        networkId,
+        includeProofs,
+        sport,
+        leaguedIds,
+        gameIds,
+        typeIds,
+        playerIds,
+        lines,
+        nextHours,
+    ],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],
     SportMarketSgp: (networkId: Network, gameId: string, params: string) => [
