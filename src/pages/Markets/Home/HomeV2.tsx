@@ -242,6 +242,16 @@ const Home: React.FC = () => {
         { networkId }
     );
 
+    const selectedSportMarketQuery = useSportsMarketsV2Query(
+        {
+            status: StatusFilter.OPEN_MARKETS,
+            includeProofs: false,
+            gameIds: selectedMarket ? [selectedMarket.gameId] : [],
+        },
+        { networkId },
+        { enabled: selectedMarket && !selectedMarket.live }
+    );
+
     const openSportMarketsQuery = useSportsMarketsV2Query(
         { status: StatusFilter.OPEN_MARKETS, includeProofs: false },
         { networkId }
@@ -702,19 +712,17 @@ const Home: React.FC = () => {
                 );
             } else {
                 // Non-live
-                const openSportMarkets: SportMarkets =
-                    openSportMarketsQuery.isSuccess && openSportMarketsQuery.data
-                        ? openSportMarketsQuery.data[StatusFilter.OPEN_MARKETS]
+                const selectedMarket: SportMarkets =
+                    selectedSportMarketQuery.isSuccess && selectedSportMarketQuery.data
+                        ? selectedSportMarketQuery.data[StatusFilter.OPEN_MARKETS]
                         : [];
 
-                return openSportMarkets.find(
-                    (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
-                );
+                return selectedMarket.length > 0 ? selectedMarket[0] : undefined;
             }
         }
     }, [
-        openSportMarketsQuery.data,
-        openSportMarketsQuery.isSuccess,
+        selectedSportMarketQuery.data,
+        selectedSportMarketQuery.isSuccess,
         liveSportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         selectedMarket,
@@ -1035,7 +1043,7 @@ const Home: React.FC = () => {
                 {/* RIGHT PART */}
                 <RightSidebarContainer>
                     <Suspense fallback={<Loader />}>
-                        <Parlay openMarkets={openSportMarkets} />
+                        <Parlay />
                     </Suspense>
                 </RightSidebarContainer>
             </RowContainer>
@@ -1043,7 +1051,6 @@ const Home: React.FC = () => {
                 <TicketMobileModal
                     onClose={() => setShowTicketMobileModal(false)}
                     isOpen={isMobile && showTicketMobileModal}
-                    openMarkets={openSportMarkets}
                 />
             </Suspense>
             {isMobile && (

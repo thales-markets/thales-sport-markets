@@ -45,7 +45,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
+import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { isSameMarket } from 'utils/marketsV2';
@@ -58,10 +58,9 @@ import ValidationModal from './components/ValidationModal';
 
 type ParlayProps = {
     onSuccess?: () => void;
-    openMarkets?: SportMarkets;
 };
 
-const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
+const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
@@ -95,12 +94,6 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     >([]);
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
-
-    const sportMarketsQuery = useSportsMarketsV2Query(
-        { status: StatusFilter.OPEN_MARKETS, includeProofs: false },
-        { networkId },
-        { enabled: !!openMarkets }
-    );
 
     const sportMarketsProofsQuery = useSportsMarketsV2Query(
         { status: StatusFilter.OPEN_MARKETS, includeProofs: true, ticket },
@@ -299,23 +292,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
     const sportMarkets = useMemo(() => {
+        if (!ticket.length) {
+            return [];
+        }
         if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
             return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
         }
-        if (openMarkets) {
-            return openMarkets;
-        }
-        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return sportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
-        }
+
         return undefined;
-    }, [
-        openMarkets,
-        sportMarketsProofsQuery.data,
-        sportMarketsProofsQuery.isSuccess,
-        sportMarketsQuery.data,
-        sportMarketsQuery.isSuccess,
-    ]);
+    }, [ticket, sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess]);
 
     // Non-Live matches
     useEffect(() => {

@@ -23,6 +23,7 @@ type SportsMarketsFilterProps = {
     includeProofs: boolean;
     status: StatusFilter;
     sport?: SportFilter;
+    gameIds?: string[];
     ticket?: TicketPosition[];
 };
 
@@ -31,9 +32,9 @@ const useSportsMarketsV2Query = (
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
-    const { status: statusFilter, includeProofs, sport: sportFilter, ticket } = filters;
+    const { status: statusFilter, includeProofs, sport: sportFilter, gameIds: gameIdsFilter, ticket } = filters;
 
-    const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
+    const gameIds = ticket?.map((market) => market.gameId).join(',') || gameIdsFilter?.join(',') || '';
     const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
     const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
     const lines = ticket?.map((market) => market.line).join(',') || '';
@@ -75,7 +76,7 @@ const useSportsMarketsV2Query = (
                                 `${sport ? '&includeFuturesInSport=true' : ''}` +
                                 `${sport ? `&sport=${sport}` : ''}` +
                                 `${!ticket ? `&minMaturity=${minMaturity}` : ''}` +
-                                `${ticket ? `&gameIds=${gameIds}` : ''}` +
+                                `${gameIds ? `&gameIds=${gameIds}` : ''}` +
                                 `${ticket ? `&typeIds=${typeIds}` : ''}` +
                                 `${ticket ? `&playerIds=${playerIds}` : ''}` +
                                 `${ticket ? `&lines=${lines}` : ''}`
