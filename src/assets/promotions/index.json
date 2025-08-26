@@ -382,7 +382,7 @@
         "promotionUrl": "/promotions/overtime-v2-over-boost",
         "backgroundImageUrl": "/promotions/thales-new.webp",
         "callToActionButton": "How to earn",
-        "availableOnNetworks": [10, 42161],
+        "availableOnNetworks": [10, 42161, 8453],
         "article": {
             "coverImageUrl": "/promotions/thales-stakers.webp",
             "headerHtml": "<h1><span><span><span>Use OVER to boost winnings by 2% for every market added to parlay</span></span></span></h1>",
