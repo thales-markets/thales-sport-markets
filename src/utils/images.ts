@@ -412,6 +412,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
             return `/logos/leagueLogos/eurobasket.webp`;
         case League.FIBA_AMERICUP_QUALIFIERS:
         case League.FIBA_AMERICUP_WOMEN:
+        case League.FIBA_AMERICUP:
             return `/logos/leagueLogos/americup.webp`;
         case League.FIBA_ASIA_CUP_QUALIFIERS:
             return `/logos/leagueLogos/asia-cup.webp`;
