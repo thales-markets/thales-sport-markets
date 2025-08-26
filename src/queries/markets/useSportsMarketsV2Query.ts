@@ -3,9 +3,9 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { secondsToMilliseconds } from 'date-fns';
-import { StatusFilter } from 'enums/markets';
+import { SportFilter, StatusFilter } from 'enums/markets';
 import { orderBy } from 'lodash';
-import { League, LeagueMap } from 'overtime-utils';
+import { League, LeagueMap, Sport } from 'overtime-utils';
 import { MarketsCache, TicketPosition } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getProtectedApiRoute } from 'utils/api';
@@ -19,13 +19,20 @@ const marketsCache: MarketsCache = {
     [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
+type SportsMarketsFilterProps = {
+    includeProofs: boolean;
+    status: StatusFilter;
+    sport?: SportFilter;
+    ticket?: TicketPosition[];
+};
+
 const useSportsMarketsV2Query = (
-    statusFilter: StatusFilter,
-    includeProofs: boolean,
+    filters: SportsMarketsFilterProps,
     networkConfig: NetworkConfig,
-    ticket?: TicketPosition[],
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
+    const { status: statusFilter, includeProofs, sport: sportFilter, ticket } = filters;
+
     const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
     const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
     const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
@@ -36,6 +43,7 @@ const useSportsMarketsV2Query = (
             statusFilter,
             networkConfig.networkId,
             includeProofs,
+            sportFilter || '',
             gameIds,
             typeIds,
             playerIds,
@@ -44,6 +52,10 @@ const useSportsMarketsV2Query = (
         queryFn: async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
+                const sport = sportFilter
+                    ? Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase())
+                    : undefined;
+
                 const today = new Date();
                 // API takes timestamp argument in seconds
                 const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
@@ -51,16 +63,21 @@ const useSportsMarketsV2Query = (
                 const fetchLiveScore = statusFilter === StatusFilter.ONGOING_MARKETS;
                 const fetchGameInfo =
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
+
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         getProtectedApiRoute(
                             networkConfig.networkId,
                             'markets',
-                            `status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
-                                ticket ? '' : `&minMaturity=${minMaturity}`
-                            }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
-                                ticket ? `&playerIds=${playerIds}` : ''
-                            }${ticket ? `&lines=${lines}` : ''}`
+                            'ungroup=true&onlyBasicProperties=true' +
+                                `&status=${status}` +
+                                `&includeProofs=${includeProofs}` +
+                                `${sport ? `&sport=${sport}` : ''}` +
+                                `${!ticket ? `&minMaturity=${minMaturity}` : ''}` +
+                                `${ticket ? `&gameIds=${gameIds}` : ''}` +
+                                `${ticket ? `&typeIds=${typeIds}` : ''}` +
+                                `${ticket ? `&playerIds=${playerIds}` : ''}` +
+                                `${ticket ? `&lines=${lines}` : ''}`
                         ),
                         noCacheConfig
                     ),

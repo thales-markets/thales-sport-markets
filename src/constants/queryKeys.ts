@@ -20,11 +20,12 @@ const QUERY_KEYS = {
         statusFilter: StatusFilter,
         networkId: Network,
         includeProofs: boolean,
+        sport: string,
         gameIds: string,
         typeIds: string,
         playerIds: string,
         lines: string
-    ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines],
+    ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, sport, gameIds, typeIds, playerIds, lines],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],
     SportMarketSgp: (networkId: Network, gameId: string, params: string) => [

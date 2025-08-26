@@ -26,6 +26,7 @@ export const refetchBalances = (walletAddress: string, networkId: Network) => {
 };
 
 export const refetchProofs = (networkId: Network, markets: TicketMarket[]) => {
+    const sport = ''; // using game IDs
     const gameIds = markets.map((market) => market.gameId).join(',');
     const typeIds = markets.map((market) => market.typeId).join(',');
     const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
@@ -36,6 +37,7 @@ export const refetchProofs = (networkId: Network, markets: TicketMarket[]) => {
             StatusFilter.OPEN_MARKETS,
             networkId,
             true,
+            sport,
             gameIds,
             typeIds,
             playerIds,

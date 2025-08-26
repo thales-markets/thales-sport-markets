@@ -226,8 +226,6 @@ const Home: React.FC = () => {
         []
     );
 
-    const sportMarketsQuery = useSportsMarketsV2Query(statusFilter, false, { networkId }, undefined);
-
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
 
     const liveSportMarkets = useMemo(() => {
@@ -239,7 +237,15 @@ const Home: React.FC = () => {
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
-    const openSportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined);
+    const sportMarketsQuery = useSportsMarketsV2Query(
+        { status: statusFilter, includeProofs: false, sport: sportFilter },
+        { networkId }
+    );
+
+    const openSportMarketsQuery = useSportsMarketsV2Query(
+        { status: StatusFilter.OPEN_MARKETS, includeProofs: false },
+        { networkId }
+    );
 
     const openSportMarkets = useMemo(() => {
         if (openSportMarketsQuery.isSuccess && openSportMarketsQuery.data) {
