@@ -4,7 +4,7 @@ import { Address } from 'viem';
 import { NetworkParams, SupportedNetwork } from '../types/network';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as Address;
-export const NATIVE_TOKEN_ADDRES = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+export const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const TBD_ADDRESS = '0xTBD' as Address;
 
 export const TEST_NETWORKS = [NetworkId.OptimismSepolia];
