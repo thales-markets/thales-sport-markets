@@ -45,7 +45,7 @@ const TimeFilters: React.FC = () => {
                     <Label>12H</Label>
                 </TimeFilterContainer>
             )}
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 0) && (
+            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 24) && (
                 <TimeFilterContainer
                     selected={datePeriodFilter == 24}
                     onClick={() => {
@@ -62,7 +62,7 @@ const TimeFilters: React.FC = () => {
                     <Label>24H</Label>
                 </TimeFilterContainer>
             )}
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 0) && (
+            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 72) && (
                 <TimeFilterContainer
                     selected={datePeriodFilter == 72}
                     onClick={() => {
