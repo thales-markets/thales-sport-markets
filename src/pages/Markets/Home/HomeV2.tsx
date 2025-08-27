@@ -299,6 +299,8 @@ const Home: React.FC = () => {
             } else {
                 dispatch(setDatePeriodFilter(0));
             }
+        } else {
+            dispatch(setDatePeriodFilter(0));
         }
 
         return {
