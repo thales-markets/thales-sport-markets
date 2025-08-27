@@ -1,7 +1,7 @@
 import { getWalletClient } from '@wagmi/core';
 import axios from 'axios';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
-import { NATIVE_TOKEN_ADDRES, ZERO_ADDRESS } from 'constants/network';
+import { NATIVE_TOKEN_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';
 import { wagmiConfig } from 'pages/Root/wagmiConfig';
 import { coinFormatter, Coins, COLLATERAL_DECIMALS } from 'thales-utils';
@@ -22,7 +22,7 @@ export const getSwapParams = (
     tokenAddress: Address,
     dstTokenAddress?: Address
 ): SwapParams => {
-    const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : tokenAddress;
+    const src = tokenAddress === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRESS : tokenAddress;
 
     return {
         src,
@@ -39,8 +39,8 @@ export const getSwapParams = (
 
 export const getQuote = async (networkId: SupportedNetwork, swapParams: SwapParams, toToken?: Coins) => {
     try {
-        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.src;
-        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.dst;
+        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRESS : swapParams.src;
+        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRESS : swapParams.dst;
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
                 network: networkId,
@@ -102,8 +102,8 @@ export const buildTxForSwap = async (
     walletAddress: string
 ): Promise<any> => {
     try {
-        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.src;
-        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRES : swapParams.dst;
+        const src = swapParams.src === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRESS : swapParams.src;
+        const dst = swapParams.dst === ZERO_ADDRESS ? NATIVE_TOKEN_ADDRESS : swapParams.dst;
         const { data: quote } = await axios.get(`${API_URL}/prices`, {
             params: {
                 network: networkId,
