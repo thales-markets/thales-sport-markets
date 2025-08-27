@@ -373,7 +373,7 @@
             "deposit": "Deposit",
             "token": "Overtime token",
             "over": "$OVER",
-            "swap": "Buy $OVER",
+            "swap": "Swap",
             "withdraw": "Withdraw",
             "use-eoa": "Switch to EOA mode",
             "use-smart": "Switch to your Overtime Account",
