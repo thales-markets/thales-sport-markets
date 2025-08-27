@@ -1,7 +1,7 @@
 import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { MarketTypeGroup } from 'enums/marketTypes';
-import { GameStatus, MarketStatus, Position } from 'enums/markets';
+import { GameStatus, MarketStatus, Position, SportFilter } from 'enums/markets';
 import _, { orderBy } from 'lodash';
 import {
     getLeagueInitialSport,
@@ -956,3 +956,7 @@ export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
     }
     return sortedMarkets;
 };
+
+// TODO: add logic by number of games per sport
+export const isSportTimeLimited = (sportFilter: SportFilter) =>
+    [SportFilter.All, SportFilter.Soccer].includes(sportFilter);

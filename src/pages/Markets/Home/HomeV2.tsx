@@ -62,7 +62,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, NonEmptySport, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { isStalePausedMarket } from 'utils/marketsV2';
+import { isSportTimeLimited, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -281,22 +281,23 @@ const Home: React.FC = () => {
                 break;
         }
 
-        // TODO: add logic by number of games per sport
-        const isLeaguesTimeLimited = [SportFilter.All, SportFilter.Soccer].includes(sportFilter);
-
         const leagueIdsFilter = isMetaSportFilter
             ? leagueIdsForMetaSportFilter
-            : isLeaguesTimeLimited && tagFilter.length > 0
+            : isSportTimeLimited(sportFilter) && tagFilter.length > 0
             ? tagFilter.map((tag) => tag.id)
             : undefined;
 
-        // TODO: add logic by number of games per sport and update date range filter
+        // TODO: add logic by number of games per sport
         let timeLimitHoursFilter = undefined;
         if (!leagueIdsFilter) {
             if (sportFilter === SportFilter.All) {
                 timeLimitHoursFilter = 12;
+                dispatch(setDatePeriodFilter(12));
             } else if (sportFilter === SportFilter.Soccer) {
                 timeLimitHoursFilter = 24;
+                dispatch(setDatePeriodFilter(24));
+            } else {
+                dispatch(setDatePeriodFilter(0));
             }
         }
 
@@ -309,7 +310,7 @@ const Home: React.FC = () => {
             timeLimitHours: timeLimitHoursFilter,
             isDisabled: isMetaSportFilter && !leagueIdsForMetaSportFilter.length && !gameIdsForMetaSportFilter.length,
         };
-    }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers]);
+    }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers, dispatch]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(
         sportMarketsQueryFilters,
