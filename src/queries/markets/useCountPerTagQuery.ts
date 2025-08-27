@@ -3,9 +3,10 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
+import { CountPerTag } from 'types/markets';
 
 const useCountPerTagQuery = (networkId: Network, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<any | undefined>({
+    return useQuery<CountPerTag | undefined>({
         queryKey: QUERY_KEYS.SportMarketsCount(networkId),
         queryFn: async () => {
             try {

@@ -306,3 +306,32 @@ export type GameData = {
     tickets: Ticket[];
     gameStats: GameStats;
 };
+
+type LeagueCounts = Record<League, number>;
+
+type TotalCountAndTournaments = {
+    total: number;
+    tournaments?: Record<string, number>;
+    tournamentsCount?: Record<
+        League,
+        [
+            {
+                leagueId: League;
+                name: string;
+            }
+        ]
+    >;
+};
+
+type SportSummary = {
+    leagueCounts: LeagueCounts;
+} & TotalCountAndTournaments;
+
+export type NonEmptySport = Exclude<Sport, Sport.EMPTY>;
+
+export type CountPerTag = {
+    Live: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
+    PlayerProps: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
+    QuickSgp: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
+} & TotalCountAndTournaments &
+    Record<NonEmptySport, SportSummary>;
