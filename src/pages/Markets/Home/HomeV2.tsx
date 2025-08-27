@@ -228,41 +228,9 @@ const Home: React.FC = () => {
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
-    const sportMarketsQueryFilters = useMemo(() => {
-        const isLeaguesTimeLimited = [SportFilter.All, SportFilter.Soccer].includes(sportFilter);
-        const leagueIdsFilter =
-            isLeaguesTimeLimited && tagFilter.length > 0 ? tagFilter.map((tag) => tag.id) : undefined;
-
-        // TODO: add logic by number of games per sport and update date range filter
-        let timeLimitHoursFilter = undefined;
-        if (!leagueIdsFilter) {
-            if (sportFilter === SportFilter.All) {
-                timeLimitHoursFilter = 12;
-            } else if (sportFilter === SportFilter.Soccer) {
-                timeLimitHoursFilter = 24;
-            }
-            // TODO: add more sports e.g. player props, quick SGP, ...
-        }
-
-        return {
-            status: statusFilter,
-            includeProofs: false,
-            sport: sportFilter,
-            leaguedIds: leagueIdsFilter,
-            timeLimitHours: timeLimitHoursFilter,
-        };
-    }, [statusFilter, sportFilter, tagFilter]);
-
-    const sportMarketsQuery = useSportsMarketsV2Query(sportMarketsQueryFilters, { networkId });
-
-    const selectedSportMarketQuery = useSportsMarketsV2Query(
-        {
-            status: StatusFilter.OPEN_MARKETS,
-            includeProofs: false,
-            gameIds: selectedMarket ? [selectedMarket.gameId] : [],
-        },
-        { networkId },
-        { enabled: !!selectedMarket && !selectedMarket.live }
+    const gameMultipliers = useMemo(
+        () => (gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : []),
+        [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess]
     );
 
     const countPerTagQuery = useCountPerTagQuery(networkId);
@@ -273,6 +241,89 @@ const Home: React.FC = () => {
         }
         return undefined;
     }, [countPerTagQuery.data, countPerTagQuery.isSuccess]);
+
+    const sportMarketsQueryFilters = useMemo(() => {
+        const isMetaSportFilter = [
+            SportFilter.Boosted,
+            SportFilter.Favourites,
+            SportFilter.PlayerProps,
+            SportFilter.QuickSgp,
+        ].includes(sportFilter);
+
+        let leagueIdsForMetaSportFilter: League[] = [];
+        let gameIdsForMetaSportFilter: string[] = [];
+        switch (sportFilter) {
+            case SportFilter.Boosted:
+                gameIdsForMetaSportFilter = gameMultipliers.map((multiplier) => multiplier.gameId);
+                break;
+            case SportFilter.Favourites:
+                leagueIdsForMetaSportFilter = favouriteLeagues.map((tag) => tag.id);
+                break;
+            case SportFilter.PlayerProps:
+                leagueIdsForMetaSportFilter = countPerTag
+                    ? Object.keys(countPerTag.PlayerProps)
+                          .map((sportKey) =>
+                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport].leagueCounts)
+                          )
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                break;
+            case SportFilter.QuickSgp:
+                leagueIdsForMetaSportFilter = countPerTag
+                    ? Object.keys(countPerTag[SportFilter.QuickSgp])
+                          .map((sportKey) => Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport].leagueCounts))
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                break;
+        }
+
+        // TODO: add logic by number of games per sport
+        const isLeaguesTimeLimited = [SportFilter.All, SportFilter.Soccer].includes(sportFilter);
+
+        const leagueIdsFilter = isMetaSportFilter
+            ? leagueIdsForMetaSportFilter
+            : isLeaguesTimeLimited && tagFilter.length > 0
+            ? tagFilter.map((tag) => tag.id)
+            : undefined;
+
+        // TODO: add logic by number of games per sport and update date range filter
+        let timeLimitHoursFilter = undefined;
+        if (!leagueIdsFilter) {
+            if (sportFilter === SportFilter.All) {
+                timeLimitHoursFilter = 12;
+            } else if (sportFilter === SportFilter.Soccer) {
+                timeLimitHoursFilter = 24;
+            }
+        }
+
+        return {
+            status: statusFilter,
+            includeProofs: false,
+            sport: sportFilter,
+            leaguedIds: leagueIdsFilter,
+            gameIds: gameIdsForMetaSportFilter,
+            timeLimitHours: timeLimitHoursFilter,
+            isDisabled: isMetaSportFilter && !leagueIdsForMetaSportFilter.length && !gameIdsForMetaSportFilter.length,
+        };
+    }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers]);
+
+    const sportMarketsQuery = useSportsMarketsV2Query(
+        sportMarketsQueryFilters,
+        { networkId },
+        { enabled: !sportMarketsQueryFilters.isDisabled }
+    );
+
+    const selectedSportMarketQuery = useSportsMarketsV2Query(
+        {
+            status: StatusFilter.OPEN_MARKETS,
+            includeProofs: false,
+            gameIds: selectedMarket ? [selectedMarket.gameId] : [],
+        },
+        { networkId },
+        { enabled: !!selectedMarket && !selectedMarket.live }
+    );
 
     const {
         openTournamentsByLeague,
@@ -331,9 +382,6 @@ const Home: React.FC = () => {
                       return keepMarket;
                   })
                 : [];
-
-        const gameMultipliers =
-            gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : [];
 
         let marketsToFilter = [];
 
@@ -503,8 +551,7 @@ const Home: React.FC = () => {
         sportMarketsQuery.data,
         liveSportMarketsQuery.isSuccess,
         liveSportMarketsQuery.data,
-        gameMultipliersQuery.isSuccess,
-        gameMultipliersQuery.data,
+        gameMultipliers,
         sportFilter,
         statusFilter,
         marketSearch,
