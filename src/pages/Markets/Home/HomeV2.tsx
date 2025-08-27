@@ -263,7 +263,7 @@ const Home: React.FC = () => {
                 leagueIdsForMetaSportFilter = countPerTag
                     ? Object.keys(countPerTag.PlayerProps)
                           .map((sportKey) =>
-                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport].leagueCounts)
+                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagueCounts || '')
                           )
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
@@ -272,7 +272,9 @@ const Home: React.FC = () => {
             case SportFilter.QuickSgp:
                 leagueIdsForMetaSportFilter = countPerTag
                     ? Object.keys(countPerTag[SportFilter.QuickSgp])
-                          .map((sportKey) => Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport].leagueCounts))
+                          .map((sportKey) =>
+                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagueCounts || '')
+                          )
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
                     : [];
@@ -679,7 +681,7 @@ const Home: React.FC = () => {
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
                 const sportForTag = getLeagueSport(tag.id);
-                favouriteCount += countPerTag.Live[sportForTag as NonEmptySport].leagueCounts[tag.id] || 0;
+                favouriteCount += countPerTag.Live[sportForTag as NonEmptySport]?.leagueCounts[tag.id] || 0;
             });
             liveMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
