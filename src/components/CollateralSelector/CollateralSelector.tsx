@@ -36,6 +36,7 @@ type CollateralSelectorProps = {
     color?: string;
     background?: string;
     topPosition?: string;
+    rightPosition?: string;
     borderColor?: string;
     hideZeroBalance?: boolean;
     displayTokenBalance?: boolean;
@@ -65,6 +66,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
     hideZeroBalance,
     displayTokenBalance,
     hideDropDownIcon,
+    rightPosition,
 }) => {
     const dispatch = useDispatch();
 
@@ -145,6 +147,7 @@ const CollateralSelector: React.FC<CollateralSelectorProps> = ({
                               width={dropDownWidth}
                               maxHeight={dropDownMaxHeight}
                               top={topPosition}
+                              right={rightPosition}
                               onClick={() => setOpen(!open)}
                           >
                               {collateralsDetailsSorted.map((collateral, i) => {
@@ -328,12 +331,13 @@ const DetailedDropdown = styled(FlexDivColumnCentered)<{
     width?: string;
     background?: string;
     top?: string;
+    right?: string;
     borderColor?: string;
     maxHeight?: string;
 }>`
     position: absolute;
     top: ${(props) => (props.top ? props.top : '34px')};
-    right: 0px;
+    right: ${(props) => (props.right ? props.right : '0px')};
     width: ${(props) => (props.width ? props.width : '350px')};
     padding: 5px 3px;
     border-radius: 8px;
