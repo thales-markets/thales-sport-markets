@@ -307,31 +307,21 @@ export type GameData = {
     gameStats: GameStats;
 };
 
-type LeagueCounts = Record<League, number>;
-
-type TotalCountAndTournaments = {
+type LeagueSummary = {
     total: number;
-    tournaments?: Record<string, number>;
-    tournamentsCount?: Record<
-        League,
-        [
-            {
-                leagueId: League;
-                name: string;
-            }
-        ]
-    >;
+    tournaments: Record<string, number>;
 };
 
 type SportSummary = {
-    leagueCounts: LeagueCounts;
-} & TotalCountAndTournaments;
+    leagues: Record<League, LeagueSummary>;
+    total: number;
+};
 
 export type NonEmptySport = Exclude<Sport, Sport.EMPTY>;
 
 export type CountPerTag = {
-    Live: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
-    PlayerProps: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
-    QuickSgp: TotalCountAndTournaments & Record<NonEmptySport, SportSummary>;
-} & TotalCountAndTournaments &
-    Record<NonEmptySport, SportSummary>;
+    Live: Record<NonEmptySport, SportSummary> & { total: number };
+    PlayerProps: Record<NonEmptySport, SportSummary> & { total: number };
+    QuickSgp: Record<NonEmptySport, SportSummary> & { total: number };
+    All: { total: number };
+} & Record<NonEmptySport, SportSummary>;

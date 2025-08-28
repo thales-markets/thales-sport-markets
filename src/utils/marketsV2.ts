@@ -490,7 +490,7 @@ export const isSameMarket = (market: SportMarket | TicketPosition, ticketPositio
 export const isStalePausedMarket = (market: SportMarket) =>
     market.isPaused &&
     market.pausedAt &&
-    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES;
+    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES; // TODO: Move this to overtime-utils
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
@@ -992,7 +992,7 @@ export const getFiltersInfo = (
                 gamesCount = countPerTag
                     ? sumBy(leagueIdsFilter, (leagueId: League) => {
                           const sportForTag = getLeagueSport(leagueId);
-                          return countPerTag[sportForTag as NonEmptySport]?.leagueCounts[leagueId] || 0;
+                          return countPerTag[sportForTag as NonEmptySport]?.leagues[leagueId].total || 0;
                       })
                     : null;
                 break;
@@ -1000,7 +1000,7 @@ export const getFiltersInfo = (
                 leagueIdsFilter = countPerTag
                     ? Object.keys(countPerTag.PlayerProps)
                           .map((sportKey) =>
-                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagueCounts || '')
+                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagues || '')
                           )
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
@@ -1011,7 +1011,7 @@ export const getFiltersInfo = (
                 leagueIdsFilter = countPerTag
                     ? Object.keys(countPerTag[SportFilter.QuickSgp])
                           .map((sportKey) =>
-                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagueCounts || '')
+                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagues || '')
                           )
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
@@ -1021,7 +1021,7 @@ export const getFiltersInfo = (
             default:
                 gamesCount = countPerTag
                     ? sportFilter === SportFilter.All
-                        ? countPerTag?.total || 0
+                        ? countPerTag?.All.total || 0
                         : countPerTag[sportFilter.toString() as NonEmptySport]?.total || 0
                     : null;
         }

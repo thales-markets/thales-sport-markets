@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { TagInfo, Tags, Tournament } from 'types/markets';
+import { CountPerTag, TagInfo, Tags } from 'types/markets';
 import Tag from '../Tag';
 
 const favouritesTag = {
@@ -24,9 +24,7 @@ type TagsDropdownProps = {
     showActive: boolean;
     showLive: boolean;
     sport: SportFilter;
-    tournamentsByLeague: Record<number, Tournament[]>;
-    marketsCountPerTournament: any;
-    playerPropsCountPerTournament: any;
+    countPerTag: CountPerTag | undefined;
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -41,9 +39,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     showActive,
     showLive,
     sport,
-    tournamentsByLeague,
-    marketsCountPerTournament,
-    playerPropsCountPerTournament,
+    countPerTag,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -127,10 +123,8 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     showLive={sport == SportFilter.Live}
                                     quickSgpMarketsCountPerTag={quickSgpMarketsCountPerTag}
                                     sport={sport}
-                                    marketsCountPerTournament={marketsCountPerTournament}
-                                    playerPropsCountPerTournament={playerPropsCountPerTournament}
                                     tag={tag}
-                                    tournaments={tournamentsByLeague[tag.id] || []}
+                                    countPerTag={countPerTag}
                                 ></Tag>
                             );
                         })}
