@@ -11,7 +11,7 @@ import { NetworkConfig } from 'types/network';
 import { getProtectedApiRoute } from 'utils/api';
 import { packMarket } from 'utils/marketsV2';
 
-const marketsCache: MarketsCache = {
+export const marketsCache: MarketsCache = {
     [StatusFilter.OPEN_MARKETS]: [],
     [StatusFilter.ONGOING_MARKETS]: [],
     [StatusFilter.RESOLVED_MARKETS]: [],

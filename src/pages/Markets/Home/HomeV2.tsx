@@ -10,6 +10,7 @@ import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
+import { TimeFilter } from 'enums/filters';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -28,9 +29,12 @@ import {
 } from 'overtime-utils';
 import useCountPerTagQuery from 'queries/markets/useCountPerTagQuery';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
-import useSportsMarketsV2Query from 'queries/markets/useSportsMarketsV2Query';
+import useSportsMarketsV2Query, {
+    SportsMarketsFilterProps,
+    marketsCache,
+} from 'queries/markets/useSportsMarketsV2Query';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
-import React, { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactModal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,7 +66,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, NonEmptySport, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { isSportTimeLimited, isStalePausedMarket } from 'utils/marketsV2';
+import { getFiltersInfo, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -116,6 +120,14 @@ const Home: React.FC = () => {
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
+    const [sportMarketsQueryFilters, setSportMarketsQueryFilters] = useState<SportsMarketsFilterProps>({
+        status: statusFilter,
+        includeProofs: false,
+        sport: sportFilter,
+        leaguedIds: [],
+        gameIds: [],
+        timeLimitHours: datePeriodFilter,
+    });
 
     const tagsList: Tags = useMemo(
         () =>
@@ -166,16 +178,16 @@ const Home: React.FC = () => {
             statusParam != '' ? dispatch(setStatusFilter(statusParam as StatusFilter)) : setStatusParam(statusFilter);
 
             if (dateParam != '' && dateParam.includes('hour')) {
-                const timeFilter = dateParam.split('h')[0];
+                const timeFilter = Number(dateParam.split('h')[0]) as TimeFilter;
                 switch (timeFilter) {
-                    case '12':
-                        dispatch(setDatePeriodFilter(12));
+                    case TimeFilter.TWELVE_HOURS:
+                        dispatch(setDatePeriodFilter(TimeFilter.TWELVE_HOURS));
                         break;
-                    case '24':
-                        dispatch(setDatePeriodFilter(24));
+                    case TimeFilter.DAY:
+                        dispatch(setDatePeriodFilter(TimeFilter.DAY));
                         break;
-                    case '72':
-                        dispatch(setDatePeriodFilter(72));
+                    case TimeFilter.THREE_DAYS:
+                        dispatch(setDatePeriodFilter(TimeFilter.THREE_DAYS));
                         break;
                 }
             } else if (datePeriodFilter !== 0) {
@@ -242,83 +254,36 @@ const Home: React.FC = () => {
         return undefined;
     }, [countPerTagQuery.data, countPerTagQuery.isSuccess]);
 
-    const sportMarketsQueryFilters = useMemo(() => {
-        const isMetaSportFilter = [
-            SportFilter.Boosted,
-            SportFilter.Favourites,
-            SportFilter.PlayerProps,
-            SportFilter.QuickSgp,
-        ].includes(sportFilter);
+    const wasSportTimeLimited = useRef<boolean>(false);
+    useEffect(() => {
+        const { leagueIdsFilter, gameIdsFilter, timeLimit } = getFiltersInfo(
+            sportFilter,
+            tagFilter,
+            countPerTag,
+            gameMultipliers,
+            favouriteLeagues
+        );
+        const isSportTimeLimited = timeLimit !== TimeFilter.ALL;
 
-        let leagueIdsForMetaSportFilter: League[] = [];
-        let gameIdsForMetaSportFilter: string[] = [];
-        switch (sportFilter) {
-            case SportFilter.Boosted:
-                gameIdsForMetaSportFilter = gameMultipliers.map((multiplier) => multiplier.gameId);
-                break;
-            case SportFilter.Favourites:
-                leagueIdsForMetaSportFilter = favouriteLeagues.map((tag) => tag.id);
-                break;
-            case SportFilter.PlayerProps:
-                leagueIdsForMetaSportFilter = countPerTag
-                    ? Object.keys(countPerTag.PlayerProps)
-                          .map((sportKey) =>
-                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagueCounts || '')
-                          )
-                          .flat()
-                          .map((leagueId) => Number(leagueId) as League)
-                    : [];
-                break;
-            case SportFilter.QuickSgp:
-                leagueIdsForMetaSportFilter = countPerTag
-                    ? Object.keys(countPerTag[SportFilter.QuickSgp])
-                          .map((sportKey) =>
-                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagueCounts || '')
-                          )
-                          .flat()
-                          .map((leagueId) => Number(leagueId) as League)
-                    : [];
-                break;
+        if (isSportTimeLimited) {
+            dispatch(setDatePeriodFilter(timeLimit));
+            wasSportTimeLimited.current = true;
+        } else if (wasSportTimeLimited.current) {
+            dispatch(setDatePeriodFilter(TimeFilter.ALL));
+            wasSportTimeLimited.current = false;
         }
 
-        const leagueIdsFilter = isMetaSportFilter
-            ? leagueIdsForMetaSportFilter
-            : isSportTimeLimited(sportFilter) && tagFilter.length > 0
-            ? tagFilter.map((tag) => tag.id)
-            : undefined;
-
-        // TODO: add logic by number of games per sport
-        let timeLimitHoursFilter = undefined;
-        if (!leagueIdsFilter) {
-            if (sportFilter === SportFilter.All) {
-                timeLimitHoursFilter = 12;
-                dispatch(setDatePeriodFilter(12));
-            } else if (sportFilter === SportFilter.Soccer) {
-                timeLimitHoursFilter = 24;
-                dispatch(setDatePeriodFilter(24));
-            } else {
-                dispatch(setDatePeriodFilter(0));
-            }
-        } else {
-            dispatch(setDatePeriodFilter(0));
-        }
-
-        return {
+        setSportMarketsQueryFilters({
             status: statusFilter,
             includeProofs: false,
             sport: sportFilter,
-            leaguedIds: leagueIdsFilter,
-            gameIds: gameIdsForMetaSportFilter,
-            timeLimitHours: timeLimitHoursFilter,
-            isDisabled: isMetaSportFilter && !leagueIdsForMetaSportFilter.length && !gameIdsForMetaSportFilter.length,
-        };
+            leaguedIds: isSportTimeLimited ? leagueIdsFilter : [],
+            gameIds: isSportTimeLimited ? gameIdsFilter : [],
+            timeLimitHours: timeLimit,
+        });
     }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers, dispatch]);
 
-    const sportMarketsQuery = useSportsMarketsV2Query(
-        sportMarketsQueryFilters,
-        { networkId },
-        { enabled: !sportMarketsQueryFilters.isDisabled }
-    );
+    const sportMarketsQuery = useSportsMarketsV2Query(sportMarketsQueryFilters, { networkId });
 
     const selectedSportMarketQuery = useSportsMarketsV2Query(
         {
@@ -357,15 +322,7 @@ const Home: React.FC = () => {
             return [];
         }
         const allMarkets: MarketsCache =
-            sportMarketsQuery.isSuccess && sportMarketsQuery.data
-                ? sportMarketsQuery.data
-                : {
-                      [StatusFilter.OPEN_MARKETS]: [],
-                      [StatusFilter.ONGOING_MARKETS]: [],
-                      [StatusFilter.RESOLVED_MARKETS]: [],
-                      [StatusFilter.PAUSED_MARKETS]: [],
-                      [StatusFilter.CANCELLED_MARKETS]: [],
-                  };
+            sportMarketsQuery.isSuccess && sportMarketsQuery.data ? sportMarketsQuery.data : marketsCache;
 
         const marketTypes = new Set<MarketType>();
         const allLiveMarkets =
@@ -748,7 +705,7 @@ const Home: React.FC = () => {
         dispatch(setSportFilter(SportFilter.All));
         setSportParam(SportFilter.All);
         setDateParam('');
-        dispatch(setDatePeriodFilter(0));
+        dispatch(setDatePeriodFilter(TimeFilter.ALL));
         dispatch(setTagFilter([]));
         setTagParam('');
         setSearchParam('');
@@ -826,12 +783,12 @@ const Home: React.FC = () => {
                                     dispatch(setTournamentFilter([]));
                                     setTournamentParam('');
                                     if (filterItem === SportFilter.All) {
-                                        dispatch(setDatePeriodFilter(0));
+                                        dispatch(setDatePeriodFilter(TimeFilter.ALL));
                                         setDateParam('');
                                         setAvailableTags(tagsList);
                                     } else if (filterItem === SportFilter.Live) {
                                         setDateParam('');
-                                        dispatch(setDatePeriodFilter(0));
+                                        dispatch(setDatePeriodFilter(TimeFilter.ALL));
                                         const filteredTags = tagsList.filter(
                                             (tag: TagInfo) =>
                                                 (showActive && !!liveMarketsCountPerTag[tag.id]) ||

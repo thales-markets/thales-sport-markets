@@ -1,43 +1,73 @@
+import { TimeFilter } from 'enums/filters';
+import useCountPerTagQuery from 'queries/markets/useCountPerTagQuery';
+import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { getDatePeriodFilter, getSportFilter, setDatePeriodFilter } from 'redux/modules/market';
-import { isSportTimeLimited } from 'utils/marketsV2';
+import { getDatePeriodFilter, getSportFilter, getTagFilter, setDatePeriodFilter } from 'redux/modules/market';
+import { getFavouriteLeagues } from 'redux/modules/ui';
+import { SupportedNetwork } from 'types/network';
+import { getFiltersInfo } from 'utils/marketsV2';
 import useQueryParam from 'utils/useQueryParams';
+import { useChainId } from 'wagmi';
 import { Circle, FilterTypeContainer, Label, TimeFilterContainer } from './styled-components';
 
 const TimeFilters: React.FC = () => {
     const dispatch = useDispatch();
 
-    const isMobile = useSelector(getIsMobile);
-    const datePeriodFilter = useSelector(getDatePeriodFilter);
+    const networkId = useChainId() as SupportedNetwork;
+
+    const tagFilter = useSelector(getTagFilter);
     const sportFilter = useSelector(getSportFilter);
+    const favouriteLeagues = useSelector(getFavouriteLeagues);
+    const datePeriodFilter = useSelector(getDatePeriodFilter);
+    const isMobile = useSelector(getIsMobile);
 
     const [, setDateParam] = useQueryParam('date', '');
 
+    const countPerTagQuery = useCountPerTagQuery(networkId);
+
+    const countPerTag = useMemo(() => {
+        if (countPerTagQuery.isSuccess && countPerTagQuery.data) {
+            return countPerTagQuery.data;
+        }
+        return undefined;
+    }, [countPerTagQuery.data, countPerTagQuery.isSuccess]);
+
+    const gameMultipliersQuery = useGameMultipliersQuery();
+
+    const gameMultipliers = useMemo(
+        () => (gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : []),
+        [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess]
+    );
+
+    const { timeLimit } = getFiltersInfo(sportFilter, tagFilter, countPerTag, gameMultipliers, favouriteLeagues);
+    const isSportTimeLimited = timeLimit !== TimeFilter.ALL;
+
     return (
         <FilterTypeContainer isMobile={isMobile}>
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 0) && (
+            {(!isSportTimeLimited || datePeriodFilter === TimeFilter.ALL) && (
                 <TimeFilterContainer
-                    selected={datePeriodFilter == 0}
+                    selected={datePeriodFilter === TimeFilter.ALL}
                     onClick={() => {
                         setDateParam('');
-                        dispatch(setDatePeriodFilter(0));
+                        dispatch(setDatePeriodFilter(TimeFilter.ALL));
                     }}
                 >
                     <Circle isMobile={isMobile} />
                     <Label>ALL</Label>
                 </TimeFilterContainer>
             )}
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 12) && (
+            {(!isSportTimeLimited || datePeriodFilter === TimeFilter.TWELVE_HOURS) && (
                 <TimeFilterContainer
-                    selected={datePeriodFilter == 12}
+                    selected={datePeriodFilter === TimeFilter.TWELVE_HOURS}
                     onClick={() => {
-                        if (datePeriodFilter == 12) {
+                        if (datePeriodFilter === TimeFilter.TWELVE_HOURS) {
                             setDateParam('');
-                            dispatch(setDatePeriodFilter(0));
+                            dispatch(setDatePeriodFilter(TimeFilter.ALL));
                         } else {
                             setDateParam('12hours');
-                            dispatch(setDatePeriodFilter(12));
+                            dispatch(setDatePeriodFilter(TimeFilter.TWELVE_HOURS));
                         }
                     }}
                 >
@@ -45,16 +75,16 @@ const TimeFilters: React.FC = () => {
                     <Label>12H</Label>
                 </TimeFilterContainer>
             )}
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 24) && (
+            {(!isSportTimeLimited || datePeriodFilter === TimeFilter.DAY) && (
                 <TimeFilterContainer
-                    selected={datePeriodFilter == 24}
+                    selected={datePeriodFilter === TimeFilter.DAY}
                     onClick={() => {
-                        if (datePeriodFilter == 24) {
+                        if (datePeriodFilter === TimeFilter.DAY) {
                             setDateParam('');
-                            dispatch(setDatePeriodFilter(0));
+                            dispatch(setDatePeriodFilter(TimeFilter.ALL));
                         } else {
                             setDateParam('24hours');
-                            dispatch(setDatePeriodFilter(24));
+                            dispatch(setDatePeriodFilter(TimeFilter.DAY));
                         }
                     }}
                 >
@@ -62,16 +92,16 @@ const TimeFilters: React.FC = () => {
                     <Label>24H</Label>
                 </TimeFilterContainer>
             )}
-            {(!isSportTimeLimited(sportFilter) || datePeriodFilter == 72) && (
+            {(!isSportTimeLimited || datePeriodFilter === TimeFilter.THREE_DAYS) && (
                 <TimeFilterContainer
-                    selected={datePeriodFilter == 72}
+                    selected={datePeriodFilter === TimeFilter.THREE_DAYS}
                     onClick={() => {
-                        if (datePeriodFilter == 72) {
+                        if (datePeriodFilter === TimeFilter.THREE_DAYS) {
                             setDateParam('');
-                            dispatch(setDatePeriodFilter(0));
+                            dispatch(setDatePeriodFilter(TimeFilter.ALL));
                         } else {
                             setDateParam('72hours');
-                            dispatch(setDatePeriodFilter(72));
+                            dispatch(setDatePeriodFilter(TimeFilter.THREE_DAYS));
                         }
                     }}
                 >

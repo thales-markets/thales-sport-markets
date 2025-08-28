@@ -1,8 +1,14 @@
-import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
+import {
+    LIVE_MARKETS_STALE_PAUSED_MINUTES,
+    NOT_AVAILABLE,
+    NUM_OF_GAMES_MEDIUM_TIME_FILTER_THRESHOLD,
+    NUM_OF_GAMES_SHORT_TIME_FILTER_THRESHOLD,
+} from 'constants/markets';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
+import { TimeFilter } from 'enums/filters';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { GameStatus, MarketStatus, Position, SportFilter } from 'enums/markets';
-import _, { orderBy } from 'lodash';
+import _, { orderBy, sumBy } from 'lodash';
 import {
     getLeagueInitialSport,
     getLeagueLabel,
@@ -38,17 +44,21 @@ import {
     Sport,
 } from 'overtime-utils';
 import {
+    CountPerTag,
     LiveTradingRequest,
     LiveTradingRequestRaw,
+    NonEmptySport,
     SerializableSportMarket,
     SerializableTicketMarket,
     SportMarket,
+    Tags,
     Team,
     Ticket,
     TicketMarket,
     TicketPosition,
     TradeData,
 } from 'types/markets';
+import { GameMultiplier } from 'types/overdrop';
 import { parseEther } from 'viem';
 import { MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
 import {
@@ -957,6 +967,74 @@ export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
     return sortedMarkets;
 };
 
-// TODO: add logic by number of games per sport
-export const isSportTimeLimited = (sportFilter: SportFilter) =>
-    [SportFilter.All, SportFilter.Soccer].includes(sportFilter);
+export const getFiltersInfo = (
+    sportFilter: SportFilter,
+    tagFilter: Tags,
+    countPerTag: CountPerTag | undefined,
+    gameMultipliers: GameMultiplier[],
+    favouriteLeagues: Tags
+) => {
+    let leagueIdsFilter: League[] = [];
+    let gameIdsFilter: string[] = [];
+    let gamesCount: number | null = 0;
+    let timeLimit = TimeFilter.ALL;
+
+    if (tagFilter.length > 0) {
+        leagueIdsFilter = tagFilter.map((tag) => tag.id);
+    } else {
+        switch (sportFilter) {
+            case SportFilter.Boosted:
+                gameIdsFilter = gameMultipliers.map((multiplier) => multiplier.gameId);
+                gamesCount = gameIdsFilter.length;
+                break;
+            case SportFilter.Favourites:
+                leagueIdsFilter = favouriteLeagues.map((tag) => tag.id);
+                gamesCount = countPerTag
+                    ? sumBy(leagueIdsFilter, (leagueId: League) => {
+                          const sportForTag = getLeagueSport(leagueId);
+                          return countPerTag[sportForTag as NonEmptySport]?.leagueCounts[leagueId] || 0;
+                      })
+                    : null;
+                break;
+            case SportFilter.PlayerProps:
+                leagueIdsFilter = countPerTag
+                    ? Object.keys(countPerTag.PlayerProps)
+                          .map((sportKey) =>
+                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagueCounts || '')
+                          )
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCount = countPerTag ? countPerTag.PlayerProps.total : null;
+                break;
+            case SportFilter.QuickSgp:
+                leagueIdsFilter = countPerTag
+                    ? Object.keys(countPerTag[SportFilter.QuickSgp])
+                          .map((sportKey) =>
+                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagueCounts || '')
+                          )
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCount = countPerTag ? countPerTag.QuickSgp.total : null;
+                break;
+            default:
+                gamesCount = countPerTag
+                    ? sportFilter === SportFilter.All
+                        ? countPerTag?.total || 0
+                        : countPerTag[sportFilter.toString() as NonEmptySport]?.total || 0
+                    : null;
+        }
+    }
+
+    timeLimit =
+        gamesCount !== null
+            ? gamesCount > NUM_OF_GAMES_SHORT_TIME_FILTER_THRESHOLD
+                ? TimeFilter.TWELVE_HOURS
+                : gamesCount > NUM_OF_GAMES_MEDIUM_TIME_FILTER_THRESHOLD
+                ? TimeFilter.DAY
+                : TimeFilter.ALL
+            : TimeFilter.TWELVE_HOURS;
+
+    return { leagueIdsFilter, gameIdsFilter, timeLimit };
+};

@@ -95,3 +95,6 @@ export const SPORTS_BY_TOURNAMENTS = [Sport.TENNIS, Sport.ESPORTS];
 export const COUNTRY_BASED_TOURNAMENTS = [Sport.TENNIS];
 
 export const MARKET_DURATION_IN_DAYS = 90;
+
+export const NUM_OF_GAMES_SHORT_TIME_FILTER_THRESHOLD = 200; // above this use 12H
+export const NUM_OF_GAMES_MEDIUM_TIME_FILTER_THRESHOLD = 100; // above this use 24H
