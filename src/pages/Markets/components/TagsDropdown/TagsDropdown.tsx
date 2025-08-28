@@ -1,10 +1,10 @@
 import { SportFilter } from 'enums/markets';
-import { getSportLeagueIds, League, LeagueMap, Sport } from 'overtime-utils';
+import { getLeagueSport, getSportLeagueIds, League, LeagueMap, Sport } from 'overtime-utils';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { CountPerTag, TagInfo, Tags } from 'types/markets';
+import { CountPerTag, NonEmptySport, TagInfo, Tags } from 'types/markets';
 import Tag from '../Tag';
 
 const favouritesTag = {
@@ -123,15 +123,41 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                     ? quickSgpMarketsCountPerTag[tag.id]
                                     : openMarketsCountPerTag[tag.id];
 
+                            const tournaments: any = [];
+
+                            const ObjectToUse = isPlayerPropsTag
+                                ? countPerTag?.PlayerProps
+                                : showLive
+                                ? countPerTag?.Live
+                                : countPerTag;
+
+                            const leagueSport = getLeagueSport(tag.id);
+                            if (
+                                ObjectToUse &&
+                                leagueSport &&
+                                ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments
+                            )
+                                Object.keys(
+                                    ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments
+                                ).forEach((tournamentName) => {
+                                    tournaments.push({
+                                        name: tournamentName,
+                                        leagueId: tag.id,
+                                        total:
+                                            ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments[
+                                                tournamentName
+                                            ] || 0,
+                                    });
+                                });
+
                             return (
                                 <Tag
                                     key={tag.label + '1'}
                                     setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
-                                    showLive={sport == SportFilter.Live}
                                     sport={sport}
                                     tag={tag}
                                     count={count}
-                                    countPerTag={countPerTag}
+                                    tournaments={tournaments}
                                 ></Tag>
                             );
                         })}

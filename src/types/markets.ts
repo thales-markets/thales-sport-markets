@@ -277,7 +277,7 @@ export type Team = {
 
 export type Tournament = {
     leagueId: League;
-    leageueName: string;
+    total: number;
     name: string;
 };
 

@@ -1,7 +1,6 @@
 import { SportFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
-import { League } from 'overtime-utils';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
 import {
@@ -14,7 +13,7 @@ import {
 import { getFavouriteLeagues, setFavouriteLeague } from 'redux/modules/ui';
 import styled from 'styled-components';
 import { FlexDivCentered, FlexDivRow, FlexDivRowCentered } from 'styles/common';
-import { CountPerTag, NonEmptySport, TagInfo } from 'types/markets';
+import { TagInfo, Tournament } from 'types/markets';
 import { getLeagueFlagSource } from 'utils/images';
 import { getCountryFromTournament } from 'utils/markets';
 import { getScrollMainContainerToTop } from 'utils/scroll';
@@ -24,13 +23,12 @@ import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 type TagProps = {
     setTagFilter: any;
     count: number;
-    showLive: boolean;
     sport: any;
     tag: TagInfo;
-    countPerTag: CountPerTag | undefined;
+    tournaments: Tournament[];
 };
 
-const Tag: React.FC<TagProps> = ({ setTagFilter, showLive, sport, tag, countPerTag, count }) => {
+const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMobile = useSelector(getIsMobile);
@@ -46,54 +44,9 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, showLive, sport, tag, countPerT
 
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
-    const isPlayerPropsTag = sport == SportFilter.PlayerProps;
-
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
     const label = tag.label;
     const scrollMainToTop = getScrollMainContainerToTop();
-
-    const tournamentsMemo = useMemo(() => {
-        const tournaments: any = [];
-        if (!countPerTag) return tournaments;
-        const ObjectToUse = isPlayerPropsTag ? countPerTag?.PlayerProps : showLive ? countPerTag?.Live : countPerTag;
-        if (!ObjectToUse) {
-            return tournaments;
-        }
-
-        Object.keys(ObjectToUse)
-            .filter(
-                (key) =>
-                    key !== SportFilter.All &&
-                    key !== SportFilter.Live &&
-                    key !== SportFilter.PlayerProps &&
-                    key !== SportFilter.QuickSgp &&
-                    key !== SportFilter.Boosted &&
-                    key !== SportFilter.Favourites &&
-                    key !== 'total'
-            )
-            .forEach((sportLocal: any) => {
-                Object.keys(ObjectToUse[sportLocal as NonEmptySport].leagues).forEach((key: any) => {
-                    if (tag.id === Number(key)) {
-                        if (ObjectToUse[sportLocal as NonEmptySport].leagues[key as League].tournaments) {
-                            Object.keys(
-                                ObjectToUse[sportLocal as NonEmptySport].leagues[key as League].tournaments
-                            ).forEach((tournamentName) => {
-                                tournaments.push({
-                                    name: tournamentName,
-                                    leagueId: tag.id,
-                                    total:
-                                        ObjectToUse[sportLocal as NonEmptySport].leagues[key as League].tournaments[
-                                            tournamentName
-                                        ] || 0,
-                                });
-                            });
-                        }
-                    }
-                });
-            });
-
-        return tournaments;
-    }, [countPerTag, isPlayerPropsTag, showLive, tag]);
 
     return (
         <>
@@ -146,7 +99,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, showLive, sport, tag, countPerT
                         <IncentivizedLeague league={tag.id} onlyLogo />
                     </LabelContainer>
                 </LeftContainer>
-                {tournamentsMemo.length > 0 &&
+                {tournaments.length > 0 &&
                     (isOpen ? (
                         <ArrowIcon onClick={() => setIsOpen(false)} className="icon icon--caret-down" />
                     ) : (
@@ -165,7 +118,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, showLive, sport, tag, countPerT
                 />
             </TagContainer>
             {isOpen &&
-                tournamentsMemo.map((tournament: any) => {
+                tournaments.map((tournament: any) => {
                     const tournamentCountry = getCountryFromTournament(tournament.name, tag.id);
 
                     return (
