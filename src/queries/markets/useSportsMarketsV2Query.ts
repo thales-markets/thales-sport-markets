@@ -19,7 +19,7 @@ export const marketsCache: MarketsCache = {
     [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
-type SportsMarketsFilterProps = {
+export type SportsMarketsFilterProps = {
     includeProofs: boolean;
     status: StatusFilter;
     sport?: SportFilter;
