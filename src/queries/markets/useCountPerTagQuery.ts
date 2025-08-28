@@ -11,7 +11,7 @@ const useCountPerTagQuery = (networkId: Network, options?: Omit<UseQueryOptions<
         queryFn: async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/count-per-tag`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/count-per-tag`,
                     noCacheConfig
                 );
                 const data = response.data;
