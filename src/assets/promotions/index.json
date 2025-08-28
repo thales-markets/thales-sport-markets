@@ -374,27 +374,6 @@
         }
     },
     {
-        "title": "Use OVER to boost winnings by 2% for every market added to parlay",
-        "description": "Using OVER as collateral on Overtime boosts your winnings by up to 2% per match/market added to your parlay. This makes it possible to boost your profits by a huge margin easily!",
-        "startDate": 1718187817,
-        "endDate": 0,
-        "promotionId": "overtime-v2-over-boost",
-        "promotionUrl": "/promotions/overtime-v2-over-boost",
-        "backgroundImageUrl": "/promotions/thales-new.webp",
-        "callToActionButton": "How to earn",
-        "availableOnNetworks": [10, 42161, 8453],
-        "article": {
-            "coverImageUrl": "/promotions/thales-stakers.webp",
-            "headerHtml": "<h1><span><span><span>Use OVER to boost winnings by 2% for every market added to parlay</span></span></span></h1>",
-            "ctaSection": {
-                "sectionHtml": "<p> <span> <span> <span>Using OVER as collateral on Overtime boosts your winnings by 2% per match/market added to your parlay. </p>",
-                "ctaButtonLink": "https://www.overtimemarkets.xyz/?lang=en&sport=All&status=OpenMarkets&showActive=true",
-                "ctaButtonLabel": "Play now"
-            },
-            "contentHtml": "<p>The $OVER collateral pool works by boosting your winnings in the following way: Users placing trades in Overtime with $OVER get up to an additional 2% earnings for each game they add to their parlay. The higher the odds of a bet, the higher the boost.</p> <p>For a detailed breakdown and formula of how the boost works with various odds, <a href=\"https://www.overtime.io/dao/thalesgov.eth/0xf0944660e27a00174886016dd1ea5ba514d64878cd51baa3a59217bc70d6ab8a\">check out this link</a>. Note: The OVER token underwent a rebrand and was previously known as $THALES. However, the same calculation described on the page still applies to the boost today.</p> <p>When placing a trade using $OVER, both the Safebox fee and Performance fee are instantly burned, reducing the total supply of the token.</p> <h2><strong>Don’t miss out on the other great incentives on Overtime</strong></h2> <p>Overtime regularly organizes kickbacks, dedicated rewards for the biggest sports events and leagues, and sportsbook competitions.<br /><br />You can use the <a href=\"https://www.overtimemarkets.xyz/promotions\">promotions page</a> to keep an eye out for ongoing and future goodies you can grab, as well as find out how to qualify and how your wallet is doing on the various rewards leaderboards.</p>"
-        }
-    },
-    {
         "title": "Win 2,000 ARB in pro rata awards on UFC 300",
         "description": "Compete for 2,000 ARB dedicated to UFC 300, one of the biggest events in the world of fighting! Rewards are distributed pro rata, meaning higher trading volume = higher rewards.",
         "startDate": 1712748015,
