@@ -23,29 +23,14 @@ import IncentivizedLeague from '../../../../components/IncentivizedLeague';
 
 type TagProps = {
     setTagFilter: any;
-    openMarketsCountPerTag: any;
-    liveMarketsCountPerTag: any;
-    liveMarketsCountPerSport: any;
-    playerPropsMarketsCountPerTag: any;
-    quickSgpMarketsCountPerTag: Partial<Record<League, number>>;
+    count: number;
     showLive: boolean;
     sport: any;
     tag: TagInfo;
     countPerTag: CountPerTag | undefined;
 };
 
-const Tag: React.FC<TagProps> = ({
-    setTagFilter,
-    liveMarketsCountPerSport,
-    showLive,
-    sport,
-    tag,
-    countPerTag,
-    openMarketsCountPerTag,
-    liveMarketsCountPerTag,
-    playerPropsMarketsCountPerTag,
-    quickSgpMarketsCountPerTag,
-}) => {
+const Tag: React.FC<TagProps> = ({ setTagFilter, showLive, sport, tag, countPerTag, count }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
     const isMobile = useSelector(getIsMobile);
@@ -62,7 +47,6 @@ const Tag: React.FC<TagProps> = ({
     const tagFilterIds = tagFilter.map((tag) => tag.id);
 
     const isPlayerPropsTag = sport == SportFilter.PlayerProps;
-    const isQuickSgpTag = sport == SportFilter.QuickSgp;
 
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
     const label = tag.label;
@@ -168,25 +152,8 @@ const Tag: React.FC<TagProps> = ({
                     ) : (
                         <ArrowIcon onClick={() => setIsOpen(true)} className="icon icon--caret-right" />
                     ))}
-                {tag.label === SportFilter.Favourites ? (
-                    <Count isMobile={isMobile}>{liveMarketsCountPerSport[SportFilter.Favourites]}</Count>
-                ) : showLive ? (
-                    !!liveMarketsCountPerTag[tag.id] && (
-                        <Count isMobile={isMobile}>{liveMarketsCountPerTag[tag.id]}</Count>
-                    )
-                ) : isPlayerPropsTag ? (
-                    !!playerPropsMarketsCountPerTag[tag.id] && (
-                        <Count isMobile={isMobile}>{playerPropsMarketsCountPerTag[tag.id]}</Count>
-                    )
-                ) : isQuickSgpTag ? (
-                    !!quickSgpMarketsCountPerTag[tag.id] && (
-                        <Count isMobile={isMobile}>{quickSgpMarketsCountPerTag[tag.id]}</Count>
-                    )
-                ) : (
-                    !!openMarketsCountPerTag[tag.id] && (
-                        <Count isMobile={isMobile}>{openMarketsCountPerTag[tag.id]}</Count>
-                    )
-                )}
+                <Count isMobile={isMobile}>{count}</Count>
+
                 <StarIcon
                     hidden={tag.label === SportFilter.Favourites}
                     hasMargin

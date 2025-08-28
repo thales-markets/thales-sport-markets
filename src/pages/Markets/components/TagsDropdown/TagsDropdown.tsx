@@ -112,18 +112,25 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 : isFavouriteB - isFavouriteA;
                         })
                         .map((tag: TagInfo) => {
+                            const count =
+                                tag.label === SportFilter.Favourites
+                                    ? liveMarketsCountPerSport[SportFilter.Favourites]
+                                    : showLive
+                                    ? liveMarketsCountPerTag[tag.id]
+                                    : isPlayerPropsTag
+                                    ? playerPropsMarketsCountPerTag[tag.id]
+                                    : isQuickSgpTag
+                                    ? quickSgpMarketsCountPerTag[tag.id]
+                                    : openMarketsCountPerTag[tag.id];
+
                             return (
                                 <Tag
                                     key={tag.label + '1'}
                                     setTagFilter={(tagFilter: Tags) => dispatch(setTagFilter(tagFilter))}
-                                    openMarketsCountPerTag={openMarketsCountPerTag}
-                                    liveMarketsCountPerTag={liveMarketsCountPerTag}
-                                    liveMarketsCountPerSport={liveMarketsCountPerSport}
-                                    playerPropsMarketsCountPerTag={playerPropsMarketsCountPerTag}
                                     showLive={sport == SportFilter.Live}
-                                    quickSgpMarketsCountPerTag={quickSgpMarketsCountPerTag}
                                     sport={sport}
                                     tag={tag}
+                                    count={count}
                                     countPerTag={countPerTag}
                                 ></Tag>
                             );
