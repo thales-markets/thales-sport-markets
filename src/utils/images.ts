@@ -142,6 +142,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.NPB:
         case League.JAPAN_SV_LEAGUE:
         case League.JAPAN_SV_LEAGUE_WOMEN:
+        case League.JAPAN_EMPEROR_CUP:
             return `/logos/Countries/japan.svg`;
         case League.IPL:
             return `/logos/Countries/india.svg`;
@@ -169,6 +170,7 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.BRAZIL_SERIE_B:
             return `/logos/Countries/brazil.svg`;
         case League.LIGA_MX:
+        case League.MEXICO_LMB:
             return `/logos/Countries/mexico.svg`;
         case League.SCOTLAND_PREMIERSHIP:
         case League.SCOTLAND_CHAMPIONSHIP:
@@ -461,6 +463,8 @@ export const getLeagueFlagSource = (tagId: number | any, country?: string) => {
         case League.FIVB_NATIONS_LEAGUE:
         case League.FIVB_NATIONS_LEAGUE_WOMEN:
             return `/logos/leagueLogos/volleyball-nations-league.webp`;
+        case League.FIVB_WORLD_CHAMPIONSHIP_WOMEN:
+            return `/logos/leagueLogos/fivb-world-championship-women.webp`;
         case League.CONCACAF_GOLD_CUP:
             return `/logos/leagueLogos/concacaf-gold-cup.webp`;
         case League.COSAFA_CUP:
