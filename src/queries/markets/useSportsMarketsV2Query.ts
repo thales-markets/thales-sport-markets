@@ -84,6 +84,10 @@ const useSportsMarketsV2Query = (
                 const fetchGameInfo =
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
 
+                if (!sport && !maxMaturity && !leaguedIds && !gameIds && !typeIds && !playerIds && !lines) {
+                    console.log('Fetching ALL markets without filters!');
+                }
+
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         getProtectedApiRoute(
