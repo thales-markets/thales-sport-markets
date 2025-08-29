@@ -2,6 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
+import { minutesToMilliseconds } from 'date-fns';
 import { Network } from 'enums/network';
 import { GamesCount } from 'types/markets';
 
@@ -25,6 +26,7 @@ const useGamesCountQuery = (
                 return null;
             }
         },
+        refetchInterval: minutesToMilliseconds(5),
         ...options,
     });
 };
