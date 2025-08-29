@@ -1021,11 +1021,7 @@ export const getFiltersInfo = (
                 gamesCount = countPerTag ? countPerTag.QuickSgp.total : null;
                 break;
             default:
-                gamesCount = countPerTag
-                    ? sportFilter === SportFilter.All
-                        ? countPerTag?.All.total || 0
-                        : countPerTag[sportFilter.toString() as NonEmptySport]?.total || 0
-                    : null;
+                gamesCount = countPerTag ? countPerTag[sportFilter.toString() as NonEmptySport].total : null;
         }
     }
 
