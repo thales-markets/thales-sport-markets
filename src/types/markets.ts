@@ -309,7 +309,7 @@ export type GameData = {
 
 type LeagueSummary = {
     total: number;
-    tournaments: Record<string, number>;
+    tournaments?: Record<string, number>;
 };
 
 type SportSummary = {

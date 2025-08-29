@@ -132,23 +132,17 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
                                 : gamesCount;
 
                             const leagueSport = getLeagueSport(tag.id);
-                            if (
-                                ObjectToUse &&
-                                leagueSport &&
-                                ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments
-                            )
-                                Object.keys(
-                                    ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments
-                                ).forEach((tournamentName) => {
+                            const tournamentsFromCounts =
+                                ObjectToUse && ObjectToUse[leagueSport as NonEmptySport]?.leagues[tag.id]?.tournaments;
+                            if (ObjectToUse && leagueSport && tournamentsFromCounts) {
+                                Object.keys(tournamentsFromCounts).forEach((tournamentName) => {
                                     tournaments.push({
                                         name: tournamentName,
                                         leagueId: tag.id,
-                                        total:
-                                            ObjectToUse[leagueSport as NonEmptySport].leagues[tag.id].tournaments[
-                                                tournamentName
-                                            ] || 0,
+                                        total: tournamentsFromCounts[tournamentName] || 0,
                                     });
                                 });
+                            }
 
                             return (
                                 <Tag

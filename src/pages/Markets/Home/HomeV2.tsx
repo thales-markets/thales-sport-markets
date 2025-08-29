@@ -278,15 +278,19 @@ const Home: React.FC = () => {
             wasSportTimeLimited.current = false;
         }
 
-        const gamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport].total : 0;
-        const isSportFilterTimeLimited = getTimeFilter(gamesCountPerSport) !== TimeFilter.ALL;
+        const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
+        const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport) !== TimeFilter.ALL;
+        const isSportValid =
+            Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) !==
+            undefined;
+        const isLeagueFilterRedudant = isSportValid && !isSportFilterTimeLimited;
 
         const sportMarketsFilters: SportsMarketsFilterProps = {
             status: statusFilter,
             includeProofs: false,
             sport: sportFilter,
-            leaguedIds: isSportFilterTimeLimited ? leagueIdsFilter : [],
-            gameIds: isSportFilterTimeLimited ? gameIdsFilter : [],
+            leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
+            gameIds: gameIdsFilter,
             timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
             isDisabled: !gamesCountFilter,
         };
@@ -621,7 +625,7 @@ const Home: React.FC = () => {
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
                 const sportForGamesCount = getLeagueSport(tag.id);
-                favouriteCount += gamesCount[sportForGamesCount as NonEmptySport]?.leagues[tag.id].total || 0;
+                favouriteCount += gamesCount[sportForGamesCount as NonEmptySport]?.leagues[tag.id]?.total || 0;
             });
             openMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
