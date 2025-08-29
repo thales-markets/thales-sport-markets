@@ -1027,5 +1027,5 @@ export const getFiltersInfo = (
 
     timeLimit = gamesCount === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCount);
 
-    return { leagueIdsFilter, gameIdsFilter, timeLimit };
+    return { leagueIdsFilter, gameIdsFilter, gamesCount, timeLimit };
 };

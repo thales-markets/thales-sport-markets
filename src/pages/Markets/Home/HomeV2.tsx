@@ -256,7 +256,7 @@ const Home: React.FC = () => {
 
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
-        const { leagueIdsFilter, gameIdsFilter, timeLimit } = getFiltersInfo(
+        const { leagueIdsFilter, gameIdsFilter, gamesCount, timeLimit } = getFiltersInfo(
             sportFilter,
             tagFilter,
             countPerTag,
@@ -280,10 +280,15 @@ const Home: React.FC = () => {
             leaguedIds: isSportTimeLimited ? leagueIdsFilter : [],
             gameIds: isSportTimeLimited ? gameIdsFilter : [],
             timeLimitHours: timeLimit,
+            isDisabled: !gamesCount,
         });
     }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers, dispatch]);
 
-    const sportMarketsQuery = useSportsMarketsV2Query(sportMarketsQueryFilters, { networkId });
+    const sportMarketsQuery = useSportsMarketsV2Query(
+        sportMarketsQueryFilters,
+        { networkId },
+        { enabled: !sportMarketsQueryFilters.isDisabled }
+    );
 
     const openSportMarkets = useMemo(() => {
         if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {

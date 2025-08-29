@@ -27,6 +27,7 @@ export type SportsMarketsFilterProps = {
     gameIds?: string[];
     ticket?: TicketPosition[];
     timeLimitHours?: number;
+    isDisabled?: boolean;
 };
 
 const useSportsMarketsV2Query = (
