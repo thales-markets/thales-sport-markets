@@ -297,7 +297,7 @@ const Home: React.FC = () => {
         return undefined;
     }, [sportMarketsQuery.data, sportMarketsQuery.isSuccess]);
 
-    console.log(openSportMarkets?.length);
+    console.log('Number of games', openSportMarkets?.length);
 
     const selectedSportMarketQuery = useSportsMarketsV2Query(
         {
