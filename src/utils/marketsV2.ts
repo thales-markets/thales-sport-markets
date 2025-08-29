@@ -1,9 +1,4 @@
-import {
-    LIVE_MARKETS_STALE_PAUSED_MINUTES,
-    NOT_AVAILABLE,
-    NUM_OF_GAMES_MEDIUM_TIME_FILTER_THRESHOLD,
-    NUM_OF_GAMES_SHORT_TIME_FILTER_THRESHOLD,
-} from 'constants/markets';
+import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE, TIME_FILTER_THRESHOLDS } from 'constants/markets';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
 import { TimeFilter } from 'enums/filters';
 import { MarketTypeGroup } from 'enums/marketTypes';
@@ -967,6 +962,13 @@ export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
     return sortedMarkets;
 };
 
+export const getTimeFilter = (gamesCount: number) => {
+    for (const [threshold, filter] of TIME_FILTER_THRESHOLDS) {
+        if (gamesCount > threshold) return filter;
+    }
+    return TimeFilter.ALL;
+};
+
 export const getFiltersInfo = (
     sportFilter: SportFilter,
     tagFilter: Tags,
@@ -1027,14 +1029,7 @@ export const getFiltersInfo = (
         }
     }
 
-    timeLimit =
-        gamesCount !== null
-            ? gamesCount > NUM_OF_GAMES_SHORT_TIME_FILTER_THRESHOLD
-                ? TimeFilter.TWELVE_HOURS
-                : gamesCount > NUM_OF_GAMES_MEDIUM_TIME_FILTER_THRESHOLD
-                ? TimeFilter.DAY
-                : TimeFilter.ALL
-            : TimeFilter.TWELVE_HOURS;
+    timeLimit = gamesCount === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCount);
 
     return { leagueIdsFilter, gameIdsFilter, timeLimit };
 };

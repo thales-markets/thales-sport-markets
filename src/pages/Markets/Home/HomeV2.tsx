@@ -126,7 +126,7 @@ const Home: React.FC = () => {
         sport: sportFilter,
         leaguedIds: [],
         gameIds: [],
-        timeLimitHours: datePeriodFilter,
+        timeLimitHours: TimeFilter.TWELVE_HOURS,
     });
 
     const tagsList: Tags = useMemo(
