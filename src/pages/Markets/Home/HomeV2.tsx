@@ -297,6 +297,8 @@ const Home: React.FC = () => {
         return undefined;
     }, [sportMarketsQuery.data, sportMarketsQuery.isSuccess]);
 
+    console.log(openSportMarkets?.length);
+
     const selectedSportMarketQuery = useSportsMarketsV2Query(
         {
             status: StatusFilter.OPEN_MARKETS,

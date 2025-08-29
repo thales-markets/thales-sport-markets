@@ -983,6 +983,12 @@ export const getFiltersInfo = (
 
     if (tagFilter.length > 0) {
         leagueIdsFilter = tagFilter.map((tag) => tag.id);
+        gamesCountFilter = gamesCount
+            ? sumBy(leagueIdsFilter, (leagueId: League) => {
+                  const sportForGamesCount = getLeagueSport(leagueId);
+                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+              })
+            : null;
     } else {
         switch (sportFilter) {
             case SportFilter.Boosted:
