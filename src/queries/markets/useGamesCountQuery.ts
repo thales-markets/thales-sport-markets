@@ -3,13 +3,13 @@ import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
-import { CountPerTag } from 'types/markets';
+import { GamesCount } from 'types/markets';
 
 const useGamesCountQuery = (
     networkId: Network,
-    options?: Omit<UseQueryOptions<CountPerTag | null>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<GamesCount | null>, 'queryKey' | 'queryFn'>
 ) => {
-    return useQuery<CountPerTag | null>({
+    return useQuery<GamesCount | null>({
         queryKey: QUERY_KEYS.SportMarketsCount(networkId),
         queryFn: async () => {
             try {

@@ -1,5 +1,5 @@
 import { TimeFilter } from 'enums/filters';
-import useGamesCountQuery from 'queries/markets/useCountPerTagQuery';
+import useGamesCountQuery from 'queries/markets/useGamesCountQuery';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,14 +25,14 @@ const TimeFilters: React.FC = () => {
 
     const [, setDateParam] = useQueryParam('date', '');
 
-    const countPerTagQuery = useGamesCountQuery(networkId);
+    const gamesCountQuery = useGamesCountQuery(networkId);
 
-    const countPerTag = useMemo(() => {
-        if (countPerTagQuery.isSuccess && countPerTagQuery.data) {
-            return countPerTagQuery.data;
+    const gamesCount = useMemo(() => {
+        if (gamesCountQuery.isSuccess && gamesCountQuery.data) {
+            return gamesCountQuery.data;
         }
         return undefined;
-    }, [countPerTagQuery.data, countPerTagQuery.isSuccess]);
+    }, [gamesCountQuery.data, gamesCountQuery.isSuccess]);
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
@@ -41,8 +41,8 @@ const TimeFilters: React.FC = () => {
         [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess]
     );
 
-    const { timeLimit } = getFiltersInfo(sportFilter, tagFilter, countPerTag, gameMultipliers, favouriteLeagues);
-    const isSportTimeLimited = timeLimit !== TimeFilter.ALL;
+    const { timeLimitFilter } = getFiltersInfo(sportFilter, tagFilter, gamesCount, gameMultipliers, favouriteLeagues);
+    const isSportTimeLimited = timeLimitFilter !== TimeFilter.ALL;
 
     return (
         <FilterTypeContainer isMobile={isMobile}>

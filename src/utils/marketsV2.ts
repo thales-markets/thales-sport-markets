@@ -39,7 +39,7 @@ import {
     Sport,
 } from 'overtime-utils';
 import {
-    CountPerTag,
+    GamesCount,
     LiveTradingRequest,
     LiveTradingRequestRaw,
     NonEmptySport,
@@ -972,14 +972,14 @@ export const getTimeFilter = (gamesCount: number) => {
 export const getFiltersInfo = (
     sportFilter: SportFilter,
     tagFilter: Tags,
-    countPerTag: CountPerTag | undefined,
+    gamesCount: GamesCount | undefined,
     gameMultipliers: GameMultiplier[],
     favouriteLeagues: Tags
 ) => {
     let leagueIdsFilter: League[] = [];
     let gameIdsFilter: string[] = [];
-    let gamesCount: number | null = 0;
-    let timeLimit = TimeFilter.ALL;
+    let gamesCountFilter: number | null = 0;
+    let timeLimitFilter = TimeFilter.ALL;
 
     if (tagFilter.length > 0) {
         leagueIdsFilter = tagFilter.map((tag) => tag.id);
@@ -987,45 +987,43 @@ export const getFiltersInfo = (
         switch (sportFilter) {
             case SportFilter.Boosted:
                 gameIdsFilter = gameMultipliers.map((multiplier) => multiplier.gameId);
-                gamesCount = gameIdsFilter.length;
+                gamesCountFilter = gameIdsFilter.length;
                 break;
             case SportFilter.Favourites:
                 leagueIdsFilter = favouriteLeagues.map((tag) => tag.id);
-                gamesCount = countPerTag
+                gamesCountFilter = gamesCount
                     ? sumBy(leagueIdsFilter, (leagueId: League) => {
                           const sportForTag = getLeagueSport(leagueId);
-                          return countPerTag[sportForTag as NonEmptySport]?.leagues[leagueId].total || 0;
+                          return gamesCount[sportForTag as NonEmptySport]?.leagues[leagueId].total || 0;
                       })
                     : null;
                 break;
             case SportFilter.PlayerProps:
-                leagueIdsFilter = countPerTag
-                    ? Object.keys(countPerTag.PlayerProps)
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount.PlayerProps)
                           .map((sportKey) =>
-                              Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport]?.leagues || '')
+                              Object.keys(gamesCount.PlayerProps[sportKey as NonEmptySport]?.leagues || '')
                           )
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
                     : [];
-                gamesCount = countPerTag ? countPerTag.PlayerProps.total : null;
+                gamesCountFilter = gamesCount ? gamesCount.PlayerProps.total : null;
                 break;
             case SportFilter.QuickSgp:
-                leagueIdsFilter = countPerTag
-                    ? Object.keys(countPerTag[SportFilter.QuickSgp])
-                          .map((sportKey) =>
-                              Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport]?.leagues || '')
-                          )
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount[SportFilter.QuickSgp])
+                          .map((sportKey) => Object.keys(gamesCount.QuickSgp[sportKey as NonEmptySport]?.leagues || ''))
                           .flat()
                           .map((leagueId) => Number(leagueId) as League)
                     : [];
-                gamesCount = countPerTag ? countPerTag.QuickSgp.total : null;
+                gamesCountFilter = gamesCount ? gamesCount.QuickSgp.total : null;
                 break;
             default:
-                gamesCount = countPerTag ? countPerTag[sportFilter.toString() as NonEmptySport].total : null;
+                gamesCountFilter = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport].total : null;
         }
     }
 
-    timeLimit = gamesCount === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCount);
+    timeLimitFilter = gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter);
 
-    return { leagueIdsFilter, gameIdsFilter, gamesCount, timeLimit };
+    return { leagueIdsFilter, gameIdsFilter, gamesCountFilter, timeLimitFilter };
 };

@@ -27,7 +27,7 @@ import {
     isBoxingLeague,
     isSgpBuilderMarket,
 } from 'overtime-utils';
-import useGamesCountQuery from 'queries/markets/useCountPerTagQuery';
+import useGamesCountQuery from 'queries/markets/useGamesCountQuery';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query, {
     SportsMarketsFilterProps,
@@ -247,7 +247,7 @@ const Home: React.FC = () => {
 
     const countPerTagQuery = useGamesCountQuery(networkId);
 
-    const countPerTag = useMemo(() => {
+    const gamesCount = useMemo(() => {
         if (countPerTagQuery.isSuccess && countPerTagQuery.data) {
             return countPerTagQuery.data;
         }
@@ -256,17 +256,17 @@ const Home: React.FC = () => {
 
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
-        const { leagueIdsFilter, gameIdsFilter, gamesCount, timeLimit } = getFiltersInfo(
+        const { leagueIdsFilter, gameIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
             sportFilter,
             tagFilter,
-            countPerTag,
+            gamesCount,
             gameMultipliers,
             favouriteLeagues
         );
-        const isSportTimeLimited = timeLimit !== TimeFilter.ALL;
+        const isSportTimeLimited = timeLimitFilter !== TimeFilter.ALL;
 
         if (isSportTimeLimited) {
-            dispatch(setDatePeriodFilter(timeLimit));
+            dispatch(setDatePeriodFilter(timeLimitFilter));
             wasSportTimeLimited.current = true;
         } else if (wasSportTimeLimited.current) {
             dispatch(setDatePeriodFilter(TimeFilter.ALL));
@@ -279,10 +279,10 @@ const Home: React.FC = () => {
             sport: sportFilter,
             leaguedIds: isSportTimeLimited ? leagueIdsFilter : [],
             gameIds: isSportTimeLimited ? gameIdsFilter : [],
-            timeLimitHours: timeLimit,
-            isDisabled: !gamesCount,
+            timeLimitHours: timeLimitFilter,
+            isDisabled: !gamesCountFilter,
         });
-    }, [statusFilter, sportFilter, tagFilter, countPerTag, favouriteLeagues, gameMultipliers, dispatch]);
+    }, [statusFilter, sportFilter, tagFilter, gamesCount, favouriteLeagues, gameMultipliers, dispatch]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(
         sportMarketsQueryFilters,
@@ -529,121 +529,121 @@ const Home: React.FC = () => {
 
     const openMarketsCountPerTag = useMemo(() => {
         const openMarketsCount: any = {};
-        if (countPerTag) {
-            Object.keys(countPerTag)
+        if (gamesCount) {
+            Object.keys(gamesCount)
                 .filter(
                     (sport) => sport !== 'All' && sport !== 'Live' && sport !== 'PlayerProps' && sport !== 'QuickSgp'
                 )
                 .forEach((sport) => {
-                    Object.keys(countPerTag[sport as NonEmptySport]?.leagues).forEach((key: any) => {
+                    Object.keys(gamesCount[sport as NonEmptySport]?.leagues).forEach((key: any) => {
                         openMarketsCount[key as League] =
-                            countPerTag[sport as NonEmptySport]?.leagues[key as League].total || 0;
+                            gamesCount[sport as NonEmptySport]?.leagues[key as League].total || 0;
                     });
                 });
         }
 
         return openMarketsCount;
-    }, [countPerTag]);
+    }, [gamesCount]);
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveMarketsCountPerTag: any = {};
-        if (countPerTag) {
-            Object.keys(countPerTag.Live)
+        if (gamesCount) {
+            Object.keys(gamesCount.Live)
                 .filter((sport) => sport !== 'total')
                 .forEach((sportKey) => {
-                    Object.keys(countPerTag.Live[sportKey as NonEmptySport].leagues).forEach((key: any) => {
+                    Object.keys(gamesCount.Live[sportKey as NonEmptySport].leagues).forEach((key: any) => {
                         if (isBoxingLeague(Number(key))) {
                             liveMarketsCountPerTag[BOXING_LEAGUES[0].toString()] =
-                                countPerTag.Live[sportKey as NonEmptySport].leagues[BOXING_LEAGUES[0] as League].total;
+                                gamesCount.Live[sportKey as NonEmptySport].leagues[BOXING_LEAGUES[0] as League].total;
                         } else {
                             liveMarketsCountPerTag[key] =
-                                countPerTag.Live[sportKey as NonEmptySport].leagues[key as League].total;
+                                gamesCount.Live[sportKey as NonEmptySport].leagues[key as League].total;
                         }
                     });
                 });
         }
 
         return liveMarketsCountPerTag;
-    }, [countPerTag]);
+    }, [gamesCount]);
 
     const quickSgpCountPerTag = useMemo(() => {
         const quickSgpCountPerTag: any = {};
-        if (countPerTag) {
-            Object.keys(countPerTag['QuickSgp'])
+        if (gamesCount) {
+            Object.keys(gamesCount['QuickSgp'])
                 .filter((sport) => sport !== 'total')
                 .forEach((sportKey) => {
-                    Object.keys(countPerTag.QuickSgp[sportKey as NonEmptySport].leagues).forEach((key: any) => {
+                    Object.keys(gamesCount.QuickSgp[sportKey as NonEmptySport].leagues).forEach((key: any) => {
                         if (isBoxingLeague(Number(key))) {
                             quickSgpCountPerTag[BOXING_LEAGUES[0].toString()] =
-                                countPerTag.QuickSgp[sportKey as NonEmptySport].leagues[key as League].total;
+                                gamesCount.QuickSgp[sportKey as NonEmptySport].leagues[key as League].total;
                         } else {
                             quickSgpCountPerTag[key as League] =
-                                countPerTag.QuickSgp[sportKey as NonEmptySport].leagues[key as League].total;
+                                gamesCount.QuickSgp[sportKey as NonEmptySport].leagues[key as League].total;
                         }
                     });
                 });
         }
 
         return quickSgpCountPerTag;
-    }, [countPerTag]);
+    }, [gamesCount]);
 
     const openMarketsCountPerSport = useMemo(() => {
         const openMarketsCount: any = {};
-        if (countPerTag) {
-            (Object.keys(countPerTag) as Array<string>).forEach((key) => {
-                openMarketsCount[key] = (countPerTag as any)[key]?.total ?? 0;
+        if (gamesCount) {
+            (Object.keys(gamesCount) as Array<string>).forEach((key) => {
+                openMarketsCount[key] = (gamesCount as any)[key]?.total ?? 0;
             });
-            openMarketsCount[SportFilter.All] = countPerTag.All.total;
+            openMarketsCount[SportFilter.All] = gamesCount.All.total;
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
                 const sportForTag = getLeagueSport(tag.id);
-                favouriteCount += countPerTag[sportForTag as NonEmptySport]?.leagues[tag.id].total || 0;
+                favouriteCount += gamesCount[sportForTag as NonEmptySport]?.leagues[tag.id].total || 0;
             });
             openMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
 
         return openMarketsCount;
-    }, [countPerTag, favouriteLeagues]);
+    }, [gamesCount, favouriteLeagues]);
 
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
-        if (countPerTag) {
-            liveMarketsCount[SportFilter.Live] = countPerTag.Live.total;
+        if (gamesCount) {
+            liveMarketsCount[SportFilter.Live] = gamesCount.Live.total;
 
-            Object.keys(countPerTag.Live).forEach((key) => {
-                liveMarketsCount[key] = countPerTag.Live[key as NonEmptySport]?.total;
+            Object.keys(gamesCount.Live).forEach((key) => {
+                liveMarketsCount[key] = gamesCount.Live[key as NonEmptySport]?.total;
             });
 
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
                 const sportForTag = getLeagueSport(tag.id);
-                favouriteCount += countPerTag.Live[sportForTag as NonEmptySport]?.leagues[tag.id]?.total || 0;
+                favouriteCount += gamesCount.Live[sportForTag as NonEmptySport]?.leagues[tag.id]?.total || 0;
             });
             liveMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
         return liveMarketsCount;
-    }, [countPerTag, favouriteLeagues]);
+    }, [gamesCount, favouriteLeagues]);
 
     const playerPropsCountPerTag = useMemo(() => {
         const playerPropsCountPerTag: any = {};
-        if (countPerTag) {
-            Object.keys(countPerTag.PlayerProps)
+        if (gamesCount) {
+            Object.keys(gamesCount.PlayerProps)
                 .filter((sport) => sport !== 'total' && sport !== 'tournaments')
                 .forEach((sportKey: string) => {
-                    Object.keys(countPerTag.PlayerProps[sportKey as NonEmptySport].leagues).forEach((key: any) => {
+                    Object.keys(gamesCount.PlayerProps[sportKey as NonEmptySport].leagues).forEach((key: any) => {
                         if (isBoxingLeague(Number(key))) {
                             playerPropsCountPerTag[BOXING_LEAGUES[0].toString()] =
-                                countPerTag.PlayerProps[sportKey as NonEmptySport].leagues[key as League].total;
+                                gamesCount.PlayerProps[sportKey as NonEmptySport].leagues[key as League].total;
                         } else {
                             playerPropsCountPerTag[key as League] =
-                                countPerTag.PlayerProps[sportKey as NonEmptySport].leagues[key as League].total;
+                                gamesCount.PlayerProps[sportKey as NonEmptySport].leagues[key as League].total;
                         }
                     });
                 });
         }
 
         return playerPropsCountPerTag;
-    }, [countPerTag]);
+    }, [gamesCount]);
 
     const boostedMarketsCount = 0;
 
@@ -804,7 +804,7 @@ const Home: React.FC = () => {
                             liveMarketsCountPerSport={liveMarketsCountPerSport}
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                             quickSgpMarketsCountPerTag={quickSgpCountPerTag}
-                            countPerTag={countPerTag}
+                            gamesCount={gamesCount}
                         />
                     );
                 })}

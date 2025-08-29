@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportFilter, getTagFilter, setTagFilter } from 'redux/modules/market';
-import { CountPerTag, Tags } from 'types/markets';
+import { GamesCount, Tags } from 'types/markets';
 import SportFilterDetails from '../SportFilter';
 import TagsDropdown from '../TagsDropdown';
 
@@ -19,7 +19,7 @@ type SportTagsProps = {
     liveMarketsCountPerSport: any;
     playerPropsMarketsCountPerTag: any;
     quickSgpMarketsCountPerTag: Partial<Record<League, number>>;
-    countPerTag: CountPerTag | undefined;
+    gamesCount: GamesCount | undefined;
 };
 
 const SportTags: React.FC<SportTagsProps> = ({
@@ -33,7 +33,7 @@ const SportTags: React.FC<SportTagsProps> = ({
     playerPropsMarketsCountPerTag,
     quickSgpMarketsCountPerTag,
     liveMarketsCountPerSport,
-    countPerTag,
+    gamesCount,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -76,7 +76,7 @@ const SportTags: React.FC<SportTagsProps> = ({
                 showActive={showActive}
                 showLive={sport == SportFilter.Live}
                 sport={sport}
-                countPerTag={countPerTag}
+                gamesCount={gamesCount}
             ></TagsDropdown>
         </React.Fragment>
     );
