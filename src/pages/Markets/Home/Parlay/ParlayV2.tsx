@@ -102,6 +102,13 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         { enabled: !!ticket.length }
     );
 
+    const openSportMarketsProofs = useMemo(() => {
+        if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
+            return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
+        }
+        return undefined;
+    }, [sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess]);
+
     const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
 
     const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
@@ -293,15 +300,18 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
     const sportMarkets = useMemo(() => {
-        if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
-            return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
+        if (!ticket.length) {
+            return [];
+        }
+        if (openSportMarketsProofs) {
+            return openSportMarketsProofs;
         }
         if (openMarkets) {
             return openMarkets;
         }
 
         return undefined;
-    }, [sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess, openMarkets]);
+    }, [ticket, openSportMarketsProofs, openMarkets]);
 
     // Non-Live matches
     useEffect(() => {

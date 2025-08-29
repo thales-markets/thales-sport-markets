@@ -32,7 +32,7 @@ export type SportsMarketsFilterProps = {
 const useSportsMarketsV2Query = (
     filters: SportsMarketsFilterProps,
     networkConfig: NetworkConfig,
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<MarketsCache>, 'queryKey' | 'queryFn'>
 ) => {
     const {
         status: statusFilter,

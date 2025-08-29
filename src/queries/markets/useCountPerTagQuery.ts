@@ -5,8 +5,11 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { CountPerTag } from 'types/markets';
 
-const useCountPerTagQuery = (networkId: Network, options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>) => {
-    return useQuery<CountPerTag | undefined>({
+const useCountPerTagQuery = (
+    networkId: Network,
+    options?: Omit<UseQueryOptions<CountPerTag | null>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<CountPerTag | null>({
         queryKey: QUERY_KEYS.SportMarketsCount(networkId),
         queryFn: async () => {
             try {
@@ -19,7 +22,7 @@ const useCountPerTagQuery = (networkId: Network, options?: Omit<UseQueryOptions<
                 return data;
             } catch (e) {
                 console.log(e);
-                return undefined;
+                return null;
             }
         },
         ...options,
