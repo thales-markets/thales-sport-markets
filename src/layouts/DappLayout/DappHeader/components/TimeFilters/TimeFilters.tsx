@@ -1,5 +1,5 @@
 import { TimeFilter } from 'enums/filters';
-import useCountPerTagQuery from 'queries/markets/useCountPerTagQuery';
+import useGamesCountQuery from 'queries/markets/useCountPerTagQuery';
 import useGameMultipliersQuery from 'queries/overdrop/useGameMultipliersQuery';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +25,7 @@ const TimeFilters: React.FC = () => {
 
     const [, setDateParam] = useQueryParam('date', '');
 
-    const countPerTagQuery = useCountPerTagQuery(networkId);
+    const countPerTagQuery = useGamesCountQuery(networkId);
 
     const countPerTag = useMemo(() => {
         if (countPerTagQuery.isSuccess && countPerTagQuery.data) {

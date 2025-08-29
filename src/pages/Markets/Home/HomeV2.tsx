@@ -27,7 +27,7 @@ import {
     isBoxingLeague,
     isSgpBuilderMarket,
 } from 'overtime-utils';
-import useCountPerTagQuery from 'queries/markets/useCountPerTagQuery';
+import useGamesCountQuery from 'queries/markets/useCountPerTagQuery';
 import useLiveSportsMarketsQuery from 'queries/markets/useLiveSportsMarketsQuery';
 import useSportsMarketsV2Query, {
     SportsMarketsFilterProps,
@@ -245,7 +245,7 @@ const Home: React.FC = () => {
         [gameMultipliersQuery.data, gameMultipliersQuery.isSuccess]
     );
 
-    const countPerTagQuery = useCountPerTagQuery(networkId);
+    const countPerTagQuery = useGamesCountQuery(networkId);
 
     const countPerTag = useMemo(() => {
         if (countPerTagQuery.isSuccess && countPerTagQuery.data) {

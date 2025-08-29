@@ -5,7 +5,7 @@ import QUERY_KEYS from 'constants/queryKeys';
 import { Network } from 'enums/network';
 import { CountPerTag } from 'types/markets';
 
-const useCountPerTagQuery = (
+const useGamesCountQuery = (
     networkId: Network,
     options?: Omit<UseQueryOptions<CountPerTag | null>, 'queryKey' | 'queryFn'>
 ) => {
@@ -14,7 +14,7 @@ const useCountPerTagQuery = (
         queryFn: async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/count-per-tag`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/games-count`,
                     noCacheConfig
                 );
                 const data = response.data;
@@ -29,4 +29,4 @@ const useCountPerTagQuery = (
     });
 };
 
-export default useCountPerTagQuery;
+export default useGamesCountQuery;
