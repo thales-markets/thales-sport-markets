@@ -139,7 +139,15 @@ const Filters: React.FC<FiltersProps> = ({ isMainPageView, isTimeLimited }) => {
                     }}
                 >
                     <SettingsWrapper>
-                        <Tooltip overlay={isMobile ? '' : t('common.filter.tooltip.date')}>
+                        <Tooltip
+                            overlay={
+                                isMobile
+                                    ? ''
+                                    : isTimeLimited
+                                    ? t('common.filter.tooltip.date-limited')
+                                    : t('common.filter.tooltip.date')
+                            }
+                        >
                             <FlexDivCentered gap={2}>
                                 <HeaderIcon
                                     iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}

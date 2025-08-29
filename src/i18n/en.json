@@ -47,6 +47,7 @@
                 "column-view": "Switch to three column view",
                 "sorting": "Select games sorting",
                 "date": "Select date range",
+                "date-limited": "Date range is limited for this sport filter!",
                 "odds": "Select odds format"
             }
         },
