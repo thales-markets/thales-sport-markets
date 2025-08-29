@@ -285,6 +285,13 @@ const Home: React.FC = () => {
 
     const sportMarketsQuery = useSportsMarketsV2Query(sportMarketsQueryFilters, { networkId });
 
+    const openSportMarkets = useMemo(() => {
+        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
+            return sportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
+        }
+        return undefined;
+    }, [sportMarketsQuery.data, sportMarketsQuery.isSuccess]);
+
     const selectedSportMarketQuery = useSportsMarketsV2Query(
         {
             status: StatusFilter.OPEN_MARKETS,
@@ -970,7 +977,7 @@ const Home: React.FC = () => {
                 {/* RIGHT PART */}
                 <RightSidebarContainer>
                     <Suspense fallback={<Loader />}>
-                        <Parlay />
+                        <Parlay openMarkets={openSportMarkets} />
                     </Suspense>
                 </RightSidebarContainer>
             </RowContainer>
@@ -978,6 +985,7 @@ const Home: React.FC = () => {
                 <TicketMobileModal
                     onClose={() => setShowTicketMobileModal(false)}
                     isOpen={isMobile && showTicketMobileModal}
+                    openMarkets={openSportMarkets}
                 />
             </Suspense>
             {isMobile && (

@@ -6,15 +6,17 @@ import { useSelector } from 'react-redux';
 import { getTicket } from 'redux/modules/ticket';
 import styled, { useTheme } from 'styled-components';
 import { FlexDivCentered, FlexDivColumnCentered, FlexDivRow } from 'styles/common';
+import { SportMarkets } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import Parlay from '../../ParlayV2';
 
 type TicketMobileModalProps = {
     onClose: () => void;
     isOpen: boolean;
+    openMarkets?: SportMarkets;
 };
 
-const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen }) => {
+const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen, openMarkets }) => {
     const { t } = useTranslation();
     const theme: ThemeInterface = useTheme();
     const ticket = useSelector(getTicket);
@@ -35,7 +37,7 @@ const TicketMobileModal: React.FC<TicketMobileModalProps> = ({ onClose, isOpen }
                 </Header>
                 <CloseIcon className="icon icon--close" onClick={onClose} />
                 <Scroll height="calc(100vh)">
-                    <Parlay onSuccess={onClose} />
+                    <Parlay onSuccess={onClose} openMarkets={openMarkets} />
                 </Scroll>
                 <BackButtonContainer onClick={onClose}>
                     <i className="icon-homepage icon--arrow-left" />

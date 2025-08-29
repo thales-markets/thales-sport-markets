@@ -45,7 +45,7 @@ import styled from 'styled-components';
 import { FlexDivCentered, FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { Coins, formatCurrencyWithSign } from 'thales-utils';
 import { Rates } from 'types/collateral';
-import { SportMarket, TicketMarket, TicketPosition } from 'types/markets';
+import { SportMarket, SportMarkets, TicketMarket, TicketPosition } from 'types/markets';
 import { SgpParams, SportsbookData } from 'types/sgp';
 import { isStableCurrency, sortCollateralBalances } from 'utils/collaterals';
 import { isSameMarket } from 'utils/marketsV2';
@@ -58,9 +58,10 @@ import ValidationModal from './components/ValidationModal';
 
 type ParlayProps = {
     onSuccess?: () => void;
+    openMarkets?: SportMarkets;
 };
 
-const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
+const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const isMobile = useSelector(getIsMobile);
@@ -292,15 +293,15 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess }) => {
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
     const sportMarkets = useMemo(() => {
-        if (!ticket.length) {
-            return [];
-        }
         if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
             return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
         }
+        if (openMarkets) {
+            return openMarkets;
+        }
 
         return undefined;
-    }, [ticket, sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess]);
+    }, [sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess, openMarkets]);
 
     // Non-Live matches
     useEffect(() => {
