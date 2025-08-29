@@ -993,8 +993,8 @@ export const getFiltersInfo = (
                 leagueIdsFilter = favouriteLeagues.map((tag) => tag.id);
                 gamesCountFilter = gamesCount
                     ? sumBy(leagueIdsFilter, (leagueId: League) => {
-                          const sportForTag = getLeagueSport(leagueId);
-                          return gamesCount[sportForTag as NonEmptySport]?.leagues[leagueId].total || 0;
+                          const sportForGamesCount = getLeagueSport(leagueId);
+                          return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
                       })
                     : null;
                 break;

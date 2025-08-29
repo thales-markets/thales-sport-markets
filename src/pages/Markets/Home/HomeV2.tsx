@@ -596,8 +596,8 @@ const Home: React.FC = () => {
             openMarketsCount[SportFilter.All] = gamesCount.All.total;
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
-                const sportForTag = getLeagueSport(tag.id);
-                favouriteCount += gamesCount[sportForTag as NonEmptySport]?.leagues[tag.id].total || 0;
+                const sportForGamesCount = getLeagueSport(tag.id);
+                favouriteCount += gamesCount[sportForGamesCount as NonEmptySport]?.leagues[tag.id].total || 0;
             });
             openMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
@@ -616,8 +616,8 @@ const Home: React.FC = () => {
 
             let favouriteCount = 0;
             favouriteLeagues.forEach((tag: TagInfo) => {
-                const sportForTag = getLeagueSport(tag.id);
-                favouriteCount += gamesCount.Live[sportForTag as NonEmptySport]?.leagues[tag.id]?.total || 0;
+                const sportForGamesCount = getLeagueSport(tag.id);
+                favouriteCount += gamesCount.Live[sportForGamesCount as NonEmptySport]?.leagues[tag.id]?.total || 0;
             });
             liveMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
