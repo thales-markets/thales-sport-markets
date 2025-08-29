@@ -66,7 +66,7 @@ import { addHoursToCurrentDate } from 'thales-utils';
 import { MarketsCache, NonEmptySport, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { getFiltersInfo, isStalePausedMarket } from 'utils/marketsV2';
+import { getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -128,6 +128,7 @@ const Home: React.FC = () => {
         gameIds: [],
         timeLimitHours: TimeFilter.TWELVE_HOURS,
     });
+    const [isFilterTimeLimited, setIsFilterTimeLimited] = useState(false);
 
     const tagsList: Tags = useMemo(
         () =>
@@ -263,26 +264,47 @@ const Home: React.FC = () => {
             gameMultipliers,
             favouriteLeagues
         );
-        const isSportTimeLimited = timeLimitFilter !== TimeFilter.ALL;
 
-        if (isSportTimeLimited) {
+        const isFilterTimeLimited = timeLimitFilter !== TimeFilter.ALL;
+        setIsFilterTimeLimited(isFilterTimeLimited);
+
+        if (isFilterTimeLimited) {
             dispatch(setDatePeriodFilter(timeLimitFilter));
+            setDateParam(`${timeLimitFilter}hours`);
             wasSportTimeLimited.current = true;
         } else if (wasSportTimeLimited.current) {
             dispatch(setDatePeriodFilter(TimeFilter.ALL));
+            setDateParam('');
             wasSportTimeLimited.current = false;
         }
 
-        setSportMarketsQueryFilters({
+        const gamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport].total : 0;
+        const isSportFilterTimeLimited = getTimeFilter(gamesCountPerSport) !== TimeFilter.ALL;
+
+        const sportMarketsFilters: SportsMarketsFilterProps = {
             status: statusFilter,
             includeProofs: false,
             sport: sportFilter,
-            leaguedIds: isSportTimeLimited ? leagueIdsFilter : [],
-            gameIds: isSportTimeLimited ? gameIdsFilter : [],
+            leaguedIds: isSportFilterTimeLimited ? leagueIdsFilter : [],
+            gameIds: isSportFilterTimeLimited ? gameIdsFilter : [],
             timeLimitHours: timeLimitFilter,
             isDisabled: !gamesCountFilter,
-        });
-    }, [statusFilter, sportFilter, tagFilter, gamesCount, favouriteLeagues, gameMultipliers, dispatch]);
+        };
+
+        if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+            setSportMarketsQueryFilters(sportMarketsFilters);
+        }
+    }, [
+        statusFilter,
+        sportFilter,
+        tagFilter,
+        gamesCount,
+        favouriteLeagues,
+        gameMultipliers,
+        dispatch,
+        setDateParam,
+        sportMarketsQueryFilters,
+    ]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(
         sportMarketsQueryFilters,
@@ -833,7 +855,7 @@ const Home: React.FC = () => {
                     <SportFiltersContainer>
                         {getSportFilters()}
                         {getStatusFilters()}
-                        <TimeFilters />
+                        <TimeFilters isTimeLimited={isFilterTimeLimited} />
                     </SportFiltersContainer>
                     <Button
                         onClick={() => setShowBurger(false)}
@@ -897,7 +919,7 @@ const Home: React.FC = () => {
                                         unfilteredPlayerPropsMarkets={unfilteredPlayerPropsMarkets}
                                     />
                                 )}
-                            <Filters isMainPageView />
+                            <Filters isMainPageView isTimeLimited={isFilterTimeLimited} />
                             <FilterTagsMobile />
                         </>
                     )}
@@ -910,7 +932,7 @@ const Home: React.FC = () => {
                             {!isMobile && (
                                 <FiltersContainer>
                                     <Breadcrumbs />
-                                    <Filters isMainPageView />
+                                    <Filters isMainPageView isTimeLimited={isFilterTimeLimited} />
                                 </FiltersContainer>
                             )}
                             {finalMarkets.length === 0 ? (

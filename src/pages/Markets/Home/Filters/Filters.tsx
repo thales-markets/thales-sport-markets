@@ -41,9 +41,10 @@ import {
 
 type FiltersProps = {
     isMainPageView?: boolean;
+    isTimeLimited?: boolean;
 };
 
-const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
+const Filters: React.FC<FiltersProps> = ({ isMainPageView, isTimeLimited }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -151,7 +152,7 @@ const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
                         {timeFiltersOpen && (
                             <TimeFiltersDropdown>
                                 <DropDown>
-                                    <TimeFilters />
+                                    <TimeFilters isTimeLimited={isTimeLimited} />
                                 </DropDown>
                             </TimeFiltersDropdown>
                         )}
