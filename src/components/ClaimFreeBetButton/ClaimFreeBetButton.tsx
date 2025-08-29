@@ -27,14 +27,13 @@ const ClaimFreeBetButton: React.FC<ClaimFreeBetButtonProps> = ({ pulsate, onClai
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
-    const { switchChain } = useSwitchChain();
-
     const networkId = useChainId();
     const { address } = useAccount();
     const { smartAddress } = useBiconomy();
     const history = useHistory();
     const theme = useTheme();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
+    const { switchChain } = useSwitchChain();
 
     const [freeBet, setFreeBet] = useLocalStorage<FreeBet | undefined>(LOCAL_STORAGE_KEYS.FREE_BET_ID, undefined);
 
@@ -51,9 +50,13 @@ const ClaimFreeBetButton: React.FC<ClaimFreeBetButtonProps> = ({ pulsate, onClai
     );
 
     const onClaimFreeBet = useCallback(async () => {
-        await claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history, switchChain);
+        await claimFreeBet(walletAddress, freeBetId, networkId, setFreeBet, history);
+        freeBetFromServer &&
+            switchChain?.({
+                chainId: freeBetFromServer.network,
+            });
         onClaim?.();
-    }, [walletAddress, freeBetId, networkId, setFreeBet, history, switchChain, onClaim]);
+    }, [walletAddress, freeBetId, networkId, setFreeBet, history, onClaim, switchChain, freeBetFromServer]);
 
     useEffect(() => {
         if (queryParams.freeBet) {
@@ -101,9 +104,9 @@ const ClaimBetButton = styled(Button)`
     font-size: 15px;
     padding: 3px 15px;
     &.pulse {
-        animation: pulsing 1.5s ease-in;
+        animation: pulsing2 1.5s ease-in;
         animation-iteration-count: infinite;
-        @keyframes pulsing {
+        @keyframes pulsing2 {
             0% {
                 box-shadow: 0 0 0 0px rgba(237, 185, 41, 0.6);
             }

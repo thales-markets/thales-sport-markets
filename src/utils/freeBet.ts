@@ -13,17 +13,17 @@ export const claimFreeBet = async (
     freeBet: string | undefined,
     networkId: Network,
     setFreeBet: (freeBet: FreeBet | undefined) => void,
-    history: any,
-    switchChain: (chainConfig: { chainId: Network.Arbitrum | Network.OptimismMainnet | Network.Base }) => void
+    history: any
 ) => {
     const toastId = toast.loading(t('market.toast-message.transaction-pending'));
 
     if (walletAddress && freeBet) {
         try {
             const response = await axios.post(
-                // hardcode optimism for now
                 `${generalConfig.API_URL}/overtime-v2/networks/${
-                    networkId !== Network.OptimismMainnet && networkId !== Network.OptimismSepolia
+                    networkId !== Network.OptimismMainnet &&
+                    networkId !== Network.OptimismSepolia &&
+                    networkId !== Network.Base
                         ? Network.OptimismMainnet
                         : networkId
                 }/claim-free-bet`,
@@ -43,7 +43,6 @@ export const claimFreeBet = async (
                         search: queryParams.toString(),
                     });
                 }
-                switchChain({ chainId: Network.OptimismMainnet });
                 refetchGetFreeBet(freeBet, networkId);
                 setTimeout(() => {
                     refetchFreeBetBalance(walletAddress, networkId);
