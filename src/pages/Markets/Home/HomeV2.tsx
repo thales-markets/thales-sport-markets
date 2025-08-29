@@ -265,7 +265,7 @@ const Home: React.FC = () => {
             favouriteLeagues
         );
 
-        const isFilterTimeLimited = timeLimitFilter !== TimeFilter.ALL;
+        const isFilterTimeLimited = statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
         setIsFilterTimeLimited(isFilterTimeLimited);
 
         if (isFilterTimeLimited) {
@@ -287,7 +287,7 @@ const Home: React.FC = () => {
             sport: sportFilter,
             leaguedIds: isSportFilterTimeLimited ? leagueIdsFilter : [],
             gameIds: isSportFilterTimeLimited ? gameIdsFilter : [],
-            timeLimitHours: timeLimitFilter,
+            timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
             isDisabled: !gamesCountFilter,
         };
 
