@@ -320,6 +320,7 @@ type SportSummary = {
 export type NonEmptySport = Exclude<Sport, Sport.EMPTY>;
 
 export type GamesCount = {
+    Promo: Record<NonEmptySport, SportSummary> & { total: number };
     Live: Record<NonEmptySport, SportSummary> & { total: number };
     PlayerProps: Record<NonEmptySport, SportSummary> & { total: number };
     QuickSgp: Record<NonEmptySport, SportSummary> & { total: number };

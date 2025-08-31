@@ -53,7 +53,6 @@ import {
     TicketPosition,
     TradeData,
 } from 'types/markets';
-import { GameMultiplier } from 'types/overdrop';
 import { parseEther } from 'viem';
 import { MarketTypePlayerPropsGroupsBySport } from '../constants/marketTypes';
 import {
@@ -973,11 +972,9 @@ export const getFiltersInfo = (
     sportFilter: SportFilter,
     tagFilter: Tags,
     gamesCount: GamesCount | undefined,
-    gameMultipliers: GameMultiplier[],
     favouriteLeagues: Tags
 ) => {
     let leagueIdsFilter: League[] = [];
-    let gameIdsFilter: string[] = [];
     let gamesCountFilter: number | null = 0;
     let timeLimitFilter = TimeFilter.ALL;
 
@@ -992,8 +989,13 @@ export const getFiltersInfo = (
     } else {
         switch (sportFilter) {
             case SportFilter.Boosted:
-                gameIdsFilter = gameMultipliers.map((multiplier) => multiplier.gameId);
-                gamesCountFilter = gameIdsFilter.length;
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount.Promo)
+                          .map((sportKey) => Object.keys(gamesCount.Promo[sportKey as NonEmptySport]?.leagues || ''))
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCountFilter = gamesCount ? gamesCount.Promo.total : null;
                 break;
             case SportFilter.Favourites:
                 leagueIdsFilter = favouriteLeagues.map((tag) => tag.id);
@@ -1031,5 +1033,5 @@ export const getFiltersInfo = (
 
     timeLimitFilter = gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter);
 
-    return { leagueIdsFilter, gameIdsFilter, gamesCountFilter, timeLimitFilter };
+    return { leagueIdsFilter, gamesCountFilter, timeLimitFilter };
 };

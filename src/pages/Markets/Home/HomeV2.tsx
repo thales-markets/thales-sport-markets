@@ -237,7 +237,15 @@ const Home: React.FC = () => {
         []
     );
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(sportFilter === SportFilter.Live, { networkId });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery(
+        { networkId },
+        { enabled: sportFilter === SportFilter.Live }
+    );
+
+    const liveMarkets: SportMarkets = useMemo(
+        () => (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : []),
+        [liveSportMarketsQuery.isSuccess, liveSportMarketsQuery.data]
+    );
 
     const gameMultipliersQuery = useGameMultipliersQuery();
 
@@ -255,13 +263,13 @@ const Home: React.FC = () => {
         return undefined;
     }, [countPerTagQuery.data, countPerTagQuery.isSuccess]);
 
+    // set sport market filters
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
-        const { leagueIdsFilter, gameIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
+        const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
             sportFilter,
             tagFilter,
             gamesCount,
-            gameMultipliers,
             favouriteLeagues
         );
 
@@ -290,7 +298,6 @@ const Home: React.FC = () => {
             includeProofs: false,
             sport: sportFilter,
             leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
-            gameIds: gameIdsFilter,
             timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
             isDisabled: !gamesCountFilter,
         };
@@ -313,7 +320,7 @@ const Home: React.FC = () => {
     const sportMarketsQuery = useSportsMarketsV2Query(
         sportMarketsQueryFilters,
         { networkId },
-        { enabled: !sportMarketsQueryFilters.isDisabled }
+        { enabled: !sportMarketsQueryFilters.isDisabled && sportFilter !== SportFilter.Live }
     );
 
     const openSportMarkets = useMemo(() => {
@@ -325,16 +332,6 @@ const Home: React.FC = () => {
 
     console.log('Number of games', openSportMarkets?.length);
 
-    const selectedSportMarketQuery = useSportsMarketsV2Query(
-        {
-            status: StatusFilter.OPEN_MARKETS,
-            includeProofs: false,
-            gameIds: selectedMarket ? [selectedMarket.gameId] : [],
-        },
-        { networkId },
-        { enabled: !!selectedMarket && !selectedMarket.live }
-    );
-
     const finalMarkets = useMemo(() => {
         if (showBurger) {
             return [];
@@ -343,25 +340,22 @@ const Home: React.FC = () => {
             sportMarketsQuery.isSuccess && sportMarketsQuery.data ? sportMarketsQuery.data : marketsCache;
 
         const marketTypes = new Set<MarketType>();
-        const allLiveMarkets =
-            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                ? liveSportMarketsQuery.data.live.filter((market) => {
-                      let keepMarket = true;
-                      switch (statusFilter) {
-                          // for now all status filters for live are showing all markets which are not stale paused
-                          case StatusFilter.OPEN_MARKETS:
-                          case StatusFilter.ONGOING_MARKETS:
-                          case StatusFilter.RESOLVED_MARKETS:
-                          case StatusFilter.CANCELLED_MARKETS:
-                              keepMarket = !isStalePausedMarket(market);
-                              break;
-                          case StatusFilter.PAUSED_MARKETS:
-                              keepMarket = market.isPaused;
-                              break;
-                      }
-                      return keepMarket;
-                  })
-                : [];
+        const allLiveMarkets = liveMarkets.filter((market) => {
+            let keepMarket = true;
+            switch (statusFilter) {
+                // for now all status filters for live are showing all markets which are not stale paused
+                case StatusFilter.OPEN_MARKETS:
+                case StatusFilter.ONGOING_MARKETS:
+                case StatusFilter.RESOLVED_MARKETS:
+                case StatusFilter.CANCELLED_MARKETS:
+                    keepMarket = !isStalePausedMarket(market);
+                    break;
+                case StatusFilter.PAUSED_MARKETS:
+                    keepMarket = market.isPaused;
+                    break;
+            }
+            return keepMarket;
+        });
 
         let marketsToFilter = [];
 
@@ -529,8 +523,7 @@ const Home: React.FC = () => {
     }, [
         sportMarketsQuery.isSuccess,
         sportMarketsQuery.data,
-        liveSportMarketsQuery.isSuccess,
-        liveSportMarketsQuery.data,
+        liveMarkets,
         gameMultipliers,
         sportFilter,
         statusFilter,
@@ -673,35 +666,20 @@ const Home: React.FC = () => {
         return playerPropsCountPerTag;
     }, [gamesCount]);
 
-    const boostedMarketsCount = 0;
+    const boostedMarketsCount = useMemo(() => gamesCount?.Promo.total || 0, [gamesCount]);
 
     const selectedMarketData = useMemo(() => {
         if (selectedMarket) {
             if (selectedMarket.live) {
-                const liveMarkets: SportMarkets =
-                    liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
-                        ? liveSportMarketsQuery.data.live
-                        : [];
                 return liveMarkets.find(
                     (market) => market.gameId.toLowerCase() === selectedMarket.gameId.toLowerCase()
                 );
             } else {
                 // Non-live
-                const selectedMarket: SportMarkets =
-                    selectedSportMarketQuery.isSuccess && selectedSportMarketQuery.data
-                        ? selectedSportMarketQuery.data[StatusFilter.OPEN_MARKETS]
-                        : [];
-
-                return selectedMarket.length > 0 ? selectedMarket[0] : undefined;
+                return openSportMarkets?.find((market) => market.gameId === selectedMarket.gameId);
             }
         }
-    }, [
-        selectedSportMarketQuery.data,
-        selectedSportMarketQuery.isSuccess,
-        liveSportMarketsQuery.data,
-        liveSportMarketsQuery.isSuccess,
-        selectedMarket,
-    ]);
+    }, [liveMarkets, openSportMarkets, selectedMarket]);
 
     const resetFilters = useCallback(() => {
         dispatch(setStatusFilter(StatusFilter.OPEN_MARKETS));

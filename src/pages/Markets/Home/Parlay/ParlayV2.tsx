@@ -99,7 +99,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const sportMarketsProofsQuery = useSportsMarketsV2Query(
         { status: StatusFilter.OPEN_MARKETS, includeProofs: true, ticket },
         { networkId },
-        { enabled: !!ticket.length }
+        { enabled: !!ticket.length && !isLive }
     );
 
     const openSportMarketsProofs = useMemo(() => {
@@ -109,7 +109,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         return undefined;
     }, [sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess]);
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery({ networkId }, { enabled: isLive });
 
     const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
         ticket[0]?.leagueId || 0,
