@@ -54,7 +54,7 @@ const QUERY_KEYS = {
         networkId,
         isLive,
     ],
-    SportMarketsCount: (networkId: Network) => ['sportMarketsCount', networkId],
+    GamesCount: (networkId: Network) => ['gamesCount', networkId],
     Prices: {
         PythPrices: (priceId: string, publishTime: number) => ['prices', 'pythPrices', priceId, publishTime],
         PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [

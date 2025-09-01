@@ -1027,7 +1027,7 @@ export const getFiltersInfo = (
                 gamesCountFilter = gamesCount ? gamesCount.QuickSgp.total : null;
                 break;
             default:
-                gamesCountFilter = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport].total : null;
+                gamesCountFilter = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total || 0 : null;
         }
     }
 

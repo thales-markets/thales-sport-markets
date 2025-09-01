@@ -11,7 +11,7 @@ const useGamesCountQuery = (
     options?: Omit<UseQueryOptions<GamesCount | null>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<GamesCount | null>({
-        queryKey: QUERY_KEYS.SportMarketsCount(networkId),
+        queryKey: QUERY_KEYS.GamesCount(networkId),
         queryFn: async () => {
             try {
                 const response = await axios.get(
