@@ -333,7 +333,7 @@ const Home: React.FC = () => {
         return undefined;
     }, [sportMarketsQuery.data, sportMarketsQuery.isSuccess]);
 
-    console.log('Number of games', openSportMarkets?.length);
+    openSportMarkets && console.log('Number of games', openSportMarkets.length);
 
     const finalMarkets = useMemo(() => {
         if (showBurger) {
