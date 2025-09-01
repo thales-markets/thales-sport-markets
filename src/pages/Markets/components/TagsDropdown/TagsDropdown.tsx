@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled from 'styled-components';
-import { GamesCount, NonEmptySport, TagInfo, Tags } from 'types/markets';
+import { GamesCount, NonEmptySport, TagInfo, Tags, Tournament } from 'types/markets';
 import Tag from '../Tag';
 
 const favouritesTag = {
@@ -25,6 +25,7 @@ type TagsDropdownProps = {
     showLive: boolean;
     sport: SportFilter;
     gamesCount: GamesCount | undefined;
+    liveTournaments: Tournament[];
 };
 
 const TagsDropdown: React.FC<TagsDropdownProps> = ({
@@ -40,6 +41,7 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
     showLive,
     sport,
     gamesCount,
+    liveTournaments,
 }) => {
     const dispatch = useDispatch();
     const favouriteLeagues = useSelector(getFavouriteLeagues);
@@ -125,23 +127,33 @@ const TagsDropdown: React.FC<TagsDropdownProps> = ({
 
                             const tournaments: any = [];
 
-                            const ObjectToUse = isPlayerPropsTag
-                                ? gamesCount?.PlayerProps
-                                : showLive
-                                ? gamesCount?.Live
-                                : gamesCount;
-
-                            const leagueSport = getLeagueSport(tag.id);
-                            const tournamentsFromCounts =
-                                ObjectToUse && ObjectToUse[leagueSport as NonEmptySport]?.leagues[tag.id]?.tournaments;
-                            if (ObjectToUse && leagueSport && tournamentsFromCounts) {
-                                Object.keys(tournamentsFromCounts).forEach((tournamentName) => {
-                                    tournaments.push({
-                                        name: tournamentName,
-                                        leagueId: tag.id,
-                                        total: tournamentsFromCounts[tournamentName] || 0,
-                                    });
+                            if (showLive) {
+                                liveTournaments.forEach((tournament) => {
+                                    if (tournament.leagueId === tag.id) {
+                                        tournaments.push({
+                                            name: tournament.name,
+                                            leagueId: tournament.leagueId,
+                                            total: tournament.total,
+                                        });
+                                    }
                                 });
+                            } else {
+                                const ObjectToUse = isPlayerPropsTag ? gamesCount?.PlayerProps : gamesCount;
+
+                                const leagueSport = getLeagueSport(tag.id);
+
+                                const tournamentsFromCounts =
+                                    ObjectToUse &&
+                                    ObjectToUse[leagueSport as NonEmptySport]?.leagues[tag.id]?.tournaments;
+                                if (ObjectToUse && leagueSport && tournamentsFromCounts) {
+                                    Object.keys(tournamentsFromCounts).forEach((tournamentName) => {
+                                        tournaments.push({
+                                            name: tournamentName,
+                                            leagueId: tag.id,
+                                            total: tournamentsFromCounts[tournamentName] || 0,
+                                        });
+                                    });
+                                }
                             }
 
                             return (

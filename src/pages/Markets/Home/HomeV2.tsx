@@ -7,6 +7,7 @@ import Search from 'components/Search';
 import SimpleLoader from 'components/SimpleLoader';
 import Checkbox from 'components/fields/Checkbox/Checkbox';
 import { MarketTypePlayerPropsGroupsBySport } from 'constants/marketTypes';
+import { SPORTS_BY_TOURNAMENTS } from 'constants/markets';
 import { RESET_STATE } from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { MAIN_VIEW_RIGHT_CONTAINER_WIDTH_LARGE, MAIN_VIEW_RIGHT_CONTAINER_WIDTH_MEDIUM } from 'constants/ui';
@@ -63,7 +64,7 @@ import { getFavouriteLeagues } from 'redux/modules/ui';
 import styled, { CSSProperties, useTheme } from 'styled-components';
 import { FlexDivColumn, FlexDivColumnCentered, FlexDivRow, FlexDivSpaceBetween } from 'styles/common';
 import { addHoursToCurrentDate } from 'thales-utils';
-import { MarketsCache, NonEmptySport, SportMarket, SportMarkets, TagInfo, Tags } from 'types/markets';
+import { MarketsCache, NonEmptySport, SportMarket, SportMarkets, TagInfo, Tags, Tournament } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
@@ -692,6 +693,35 @@ const Home: React.FC = () => {
 
     const boostedMarketsCount = useMemo(() => gamesCount?.Promo.total || 0, [gamesCount]);
 
+    const { tournamentsLiveMarkets } = useMemo(() => {
+        if (liveMarkets) {
+            const tournaments: Tournament[] = [];
+            const marketsCountPerTournament: any = {};
+            liveMarkets.forEach((market) => {
+                if (market.tournamentName && SPORTS_BY_TOURNAMENTS.includes(market.sport)) {
+                    if (marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`]) {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] += 1;
+                    } else {
+                        marketsCountPerTournament[`${market.leagueId}-${market.tournamentName}`] = 1;
+                    }
+                }
+            });
+
+            Object.keys(marketsCountPerTournament).forEach((key) => {
+                tournaments.push({
+                    leagueId: Number(key.split('-')[0]),
+                    name: key.split('-')[1],
+                    total: marketsCountPerTournament[key],
+                });
+            });
+
+            return {
+                tournamentsLiveMarkets: tournaments,
+            };
+        }
+        return { tournamentsLiveMarkets: [] };
+    }, [liveMarkets]);
+
     const selectedMarketData = useMemo(() => {
         if (selectedMarket) {
             if (selectedMarket.live) {
@@ -835,6 +865,7 @@ const Home: React.FC = () => {
                             playerPropsMarketsCountPerTag={playerPropsCountPerTag}
                             quickSgpMarketsCountPerTag={quickSgpCountPerTag}
                             gamesCount={gamesCount}
+                            liveTournaments={tournamentsLiveMarkets}
                         />
                     );
                 })}
