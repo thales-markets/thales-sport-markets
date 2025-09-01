@@ -15,7 +15,7 @@ const useGamesCountQuery = (
         queryFn: async () => {
             try {
                 const response = await axios.get(
-                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/markets/games-count`,
+                    `${generalConfig.API_URL}/overtime-v2/networks/${networkId}/games-count`,
                     noCacheConfig
                 );
                 const data = response.data;

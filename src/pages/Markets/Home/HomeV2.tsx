@@ -15,7 +15,7 @@ import { SportFilter, StatusFilter } from 'enums/markets';
 import { ScreenSizeBreakpoint } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import i18n from 'i18n';
-import { isEqual, orderBy } from 'lodash';
+import { groupBy, isEqual, orderBy } from 'lodash';
 import {
     BOXING_LEAGUES,
     League,
@@ -243,7 +243,10 @@ const Home: React.FC = () => {
     );
 
     const liveMarkets: SportMarkets = useMemo(
-        () => (liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data ? liveSportMarketsQuery.data.live : []),
+        () =>
+            liveSportMarketsQuery.isSuccess && liveSportMarketsQuery.data
+                ? liveSportMarketsQuery.data.live.filter((market) => !isStalePausedMarket(market))
+                : [],
         [liveSportMarketsQuery.isSuccess, liveSportMarketsQuery.data]
     );
 
@@ -552,9 +555,7 @@ const Home: React.FC = () => {
         const openMarketsCount: any = {};
         if (gamesCount) {
             Object.keys(gamesCount)
-                .filter(
-                    (sport) => sport !== 'All' && sport !== 'Live' && sport !== 'PlayerProps' && sport !== 'QuickSgp'
-                )
+                .filter((sport) => !['All', 'Live', 'PlayerProps', 'QuickSgp', 'Promo'].includes(sport))
                 .forEach((sport) => {
                     Object.keys(gamesCount[sport as NonEmptySport]?.leagues).forEach((key: any) => {
                         openMarketsCount[key as League] =
@@ -568,7 +569,17 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerTag = useMemo(() => {
         const liveMarketsCountPerTag: any = {};
-        if (gamesCount) {
+        if (liveMarkets.length > 0) {
+            const groupedMarkets = groupBy(liveMarkets, (market) => market.leagueId);
+
+            Object.keys(groupedMarkets).forEach((key: string) => {
+                if (isBoxingLeague(Number(key))) {
+                    liveMarketsCountPerTag[BOXING_LEAGUES[0].toString()] = groupedMarkets[key].length;
+                } else {
+                    liveMarketsCountPerTag[key] = groupedMarkets[key].length;
+                }
+            });
+        } else if (gamesCount) {
             Object.keys(gamesCount.Live)
                 .filter((sport) => sport !== 'total')
                 .forEach((sportKey) => {
@@ -585,7 +596,7 @@ const Home: React.FC = () => {
         }
 
         return liveMarketsCountPerTag;
-    }, [gamesCount]);
+    }, [gamesCount, liveMarkets]);
 
     const quickSgpCountPerTag = useMemo(() => {
         const quickSgpCountPerTag: any = {};
@@ -628,7 +639,20 @@ const Home: React.FC = () => {
 
     const liveMarketsCountPerSport = useMemo(() => {
         const liveMarketsCount: any = {};
-        if (gamesCount) {
+        if (liveMarkets.length > 0) {
+            let totalCount = 0;
+            Object.keys(liveMarketsCountPerTag).forEach((key) => {
+                totalCount += liveMarketsCountPerTag[Number(key)];
+            });
+
+            liveMarketsCount[SportFilter.Live] = totalCount;
+
+            let favouriteCount = 0;
+            favouriteLeagues.forEach((tag: TagInfo) => {
+                favouriteCount += liveMarketsCountPerTag[tag.id] || 0;
+            });
+            liveMarketsCount[SportFilter.Favourites] = favouriteCount;
+        } else if (gamesCount) {
             liveMarketsCount[SportFilter.Live] = gamesCount.Live.total;
 
             Object.keys(gamesCount.Live).forEach((key) => {
@@ -643,7 +667,7 @@ const Home: React.FC = () => {
             liveMarketsCount[SportFilter.Favourites] = favouriteCount;
         }
         return liveMarketsCount;
-    }, [gamesCount, favouriteLeagues]);
+    }, [liveMarkets, liveMarketsCountPerTag, gamesCount, favouriteLeagues]);
 
     const playerPropsCountPerTag = useMemo(() => {
         const playerPropsCountPerTag: any = {};
