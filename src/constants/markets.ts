@@ -98,6 +98,6 @@ export const COUNTRY_BASED_TOURNAMENTS = [Sport.TENNIS];
 export const MARKET_DURATION_IN_DAYS = 90;
 
 export const TIME_FILTER_THRESHOLDS: [number, TimeFilter][] = [
-    [200, TimeFilter.TWELVE_HOURS], // above 200 games use 12H
-    [100, TimeFilter.DAY], // above 100 games use 24H
+    [300, TimeFilter.TWELVE_HOURS], // above 300 games use 12H
+    [150, TimeFilter.DAY], // above 150 games use 12H
 ];
