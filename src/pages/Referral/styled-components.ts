@@ -535,3 +535,10 @@ export const HintText = styled.p`
         }
     }
 `;
+
+export const StyledLink = styled.a`
+    color: ${(props) => props.theme.link.textColor.secondary};
+    :hover {
+        text-decoration: underline;
+    }
+`;

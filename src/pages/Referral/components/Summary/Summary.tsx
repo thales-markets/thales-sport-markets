@@ -1,19 +1,19 @@
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import { getTableProps } from 'pages/Referral/styled-components';
+import { getTableProps, StyledLink } from 'pages/Referral/styled-components';
 import useAffiliateSummaryQuery from 'queries/overdrop/useAffiliateSummaryQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { formatCurrency, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
+import { formatCurrency, formatCurrencyWithSign, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 const Summary: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
-
+    const networkId = useChainId();
     const { address } = useAccount();
 
     const activityQuery = useAffiliateSummaryQuery(address || '');
@@ -30,7 +30,15 @@ const Summary: React.FC = () => {
                         {
                             header: <>{t('referral.activity.table-headers.user')}</>,
                             accessorKey: 'user',
-                            cell: (cellProps: any) => <>{truncateAddress(cellProps.cell.getValue(), 4, 4)}</>,
+                            cell: (cellProps: any) => (
+                                <StyledLink
+                                    href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {truncateAddress(cellProps.cell.getValue(), 4, 4)}
+                                </StyledLink>
+                            ),
                         },
                         {
                             header: <>{t('referral.activity.table-headers.date-joined')}</>,
