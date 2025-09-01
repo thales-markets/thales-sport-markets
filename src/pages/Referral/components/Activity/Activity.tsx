@@ -1,19 +1,19 @@
 import SPAAnchor from 'components/SPAAnchor';
 import Table from 'components/Table';
-import { ExternalArrow, getTableProps } from 'pages/Referral/styled-components';
+import { ExternalArrow, getTableProps, StyledLink } from 'pages/Referral/styled-components';
 import useAffiliateActivityQuery from 'queries/overdrop/useAffiliateActivityQuery';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { formatCurrency, getEtherscanTxLink, truncateAddress } from 'thales-utils';
+import { formatCurrency, getEtherscanAddressLink, getEtherscanTxLink, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 const Activity: React.FC = () => {
     const { t } = useTranslation();
     const noResultsMessage = t('referral.no-result');
-
+    const networkId = useChainId();
     const { address } = useAccount();
 
     const activityQuery = useAffiliateActivityQuery(address || '');
@@ -30,7 +30,15 @@ const Activity: React.FC = () => {
                         {
                             header: <>{t('referral.bets.table-headers.user')}</>,
                             accessorKey: 'user',
-                            cell: (cellProps: any) => <>{truncateAddress(cellProps.cell.getValue(), 4, 4)}</>,
+                            cell: (cellProps: any) => (
+                                <StyledLink
+                                    href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {truncateAddress(cellProps.cell.getValue(), 4, 4)}
+                                </StyledLink>
+                            ),
                         },
                         {
                             header: <>{t('referral.bets.table-headers.timestamp')}</>,
