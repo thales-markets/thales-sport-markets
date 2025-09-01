@@ -51,7 +51,7 @@
         "displayCountdown": true,
         "promotionId": "refer-and-earn",
         "promotionUrl": "/promotions/refer-and-earn",
-        "backgroundImageUrl": "/promotions/gift-red-small.webp.webp",
+        "backgroundImageUrl": "/promotions/big-leagues-small.webp",
         "callToActionButton": "Learn more",
         "availableOnNetworks": [10, 42161, 8453],
         "article": {
