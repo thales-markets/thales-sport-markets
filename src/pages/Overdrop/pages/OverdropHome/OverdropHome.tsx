@@ -1,4 +1,5 @@
 import { OverdropTab } from 'enums/ui';
+import BadgeHistory from 'pages/Overdrop/components/BadgeHistory';
 import BadgeOverview from 'pages/Overdrop/components/BadgeOverview';
 import DailyQuest from 'pages/Overdrop/components/DailyQuest';
 import DailyRecap from 'pages/Overdrop/components/DailyRecap';
@@ -27,6 +28,7 @@ const OverdropHome: React.FC<OverdropHomeProps> = ({ setSelectedTab }) => {
                 <EstimateRewards />
                 <DailyRecap />
             </LevelDetailsWrapper>
+            <BadgeHistory />
         </Wrapper>
     );
 };

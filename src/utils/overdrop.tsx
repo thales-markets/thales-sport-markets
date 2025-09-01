@@ -3,16 +3,16 @@ import { OVERDROP_LEVELS, OVERDROP_REWARDS_NETWORKS, SEASON_2 } from 'constants/
 import { Network } from 'enums/network';
 import { MultiplierType } from 'enums/overdrop';
 import { OverdropIcon } from 'pages/Overdrop/components/styled-components';
-import { floorNumberToDecimals, formatCurrencyWithKey } from 'thales-utils';
+import { floorNumberToDecimals, formatCurrency, formatCurrencyWithKey } from 'thales-utils';
 import { OverdropMultiplier, OverdropUserData } from 'types/overdrop';
 import { OverdropLevel } from 'types/ui';
 import { getDayOfYearUTC } from './date';
 
-export const formatPoints = (amount: number) => {
+export const formatPoints = (amount: number, omitXP?: boolean) => {
     if (amount > 9 * ONE_HUNDRED_K) {
         return `${floorNumberToDecimals(amount / ONE_MILLION)}M XP`;
     }
-    return formatCurrencyWithKey('XP', amount, undefined, true);
+    return omitXP ? formatCurrency(amount, undefined, true) : formatCurrencyWithKey('XP', amount, undefined, true);
 };
 
 export const getMultiplierLabel = (multiplier: OverdropMultiplier) => {
@@ -154,4 +154,23 @@ export const getCurrentSeasonAndMiniSeason = () => {
     const current = SEASON_2.find((episode) => episode.month === month && episode.year === year);
 
     return { season: 2, miniSeason: current ? SEASON_2.indexOf(current) + 1 : 1 };
+};
+
+export const getMonthName = (month: number) => {
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+
+    return months[month - 1] || null;
 };
