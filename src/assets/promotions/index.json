@@ -44,6 +44,28 @@
         }
     },
     {
+        "title": "Earn more XP and bigger airdrops with your Overtime Referral Link",
+        "description": "Spread your unique affiliate link, onboard new users to Overtime, track your ETH, Free Bet and Protocol Fee rewards, and climb the leaderboard!",
+        "startDate": 1754053954,
+        "endDate": 1788095554,
+        "displayCountdown": true,
+        "promotionId": "refer-and-earn",
+        "promotionUrl": "/promotions/refer-and-earn",
+        "backgroundImageUrl": "/promotions/gift-red-big.webp.webp",
+        "callToActionButton": "Learn more",
+        "availableOnNetworks": [10, 42161, 8453],
+        "article": {
+            "coverImageUrl": "/promotions/gift-red-big.webp",
+            "headerHtml": "<h1><span><span><span>Earn more XP and bigger airdrops with your Overtime Referral Link",
+            "ctaSection": {
+                "sectionHtml": "Spread your affiliate link, onboard new users, track your ETH, Free Bet and Protocol Fee rewards, and climb the leaderboard!",
+                "ctaButtonLink": "/referral",
+                "ctaButtonLabel": "Start now"
+            },
+            "contentHtml": "<p>Refer users to Overtime to earn 12.5% of protocol fees and 20% of the XP they generate on bets. Spread your unique affiliate link, onboard new users to Overtime, track your ETH, Free Bet and Protocol Fee rewards, and climb the leaderboard! By Overtime's discretion, successful affiliates can be upgraded to earn 50% of Protocol Fees.</p> <p>Here's how the Affiliate Program Works</p> <ol> <li>Create Your Affiliate ID - generate your unique affiliate link to share with potential new Overtime users.</li> <li>Share Your Link - each new user who signs up using your link becomes connected to your account.</li> <li>Earn Fees and XP Rewards- receive 12.5% protocol fees and 20% of the XP that your referred users earn from their bets. The more they bet, the more you earn!</li> </ol> <h2>FAQs</h2> <h2>How does the Overtime Affiliate Program work?</h2> <p>Overtime Affiliate Program is an onchain incentivized user acquisition and onboarding tool. This program allows you to generate your own unique Referral Link and share it with potential new users that you'd like to introduce to Overtime. If someone starts using Overtime from your unique Referral Link, then you get 12.5% of their trading fees paid directly in your wallet and 20% of XP they generate for Overdrop League Season 2, allowing you to passively earn ETH rewards and Free Bets.</p> <h2>What do I get from earning XP from my referrers?</h2> <p>These XP rewards are a part of Overdrop League Season 2, which has monthly ETH rewards based on your total XP and occasional Free Bet reward on specific XP level ups! Learn more about Overdrop and XP system here.</p> <h2>Are there any limitations when sharing my ref link?</h2> <p>There are absolutely no limitations on your unique ref link or the rewards you get through it. You can share it with as many people as you can, and get as many rewards as you can from their respective volume.</p> <h2>How can I track the performance of my unique affiliate link and its referrers?</h2> <p>You can track all your referrers and their respective activity on the Referred Users Leaderboard and Referred Bets sections <a href=\"https://www.overtimemarkets.xyz/referral\">of the referral page</a>.</p>"
+        }
+    },
+    {
         "title": "Overtime's NFL Playoff Galore",
         "description": "Enjoy a thrilling NFL playoffs! Drive NFL volume on Overtime, accrue NFL XP, and earn massive Free Bets when the playoffs end! Super Bowl included! ",
         "startDate": 1734689381,
