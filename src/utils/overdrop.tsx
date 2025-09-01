@@ -148,8 +148,8 @@ export const hasUserDoneDailyQuests = (userData: OverdropUserData | undefined) =
 
 export const getCurrentSeasonAndMiniSeason = () => {
     const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1; // getMonth() returns 0-11
+    const year = currentDate.getUTCFullYear();
+    const month = currentDate.getUTCMonth() + 1;
 
     const current = SEASON_2.find((episode) => episode.month === month && episode.year === year);
 
