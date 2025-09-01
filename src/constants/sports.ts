@@ -8,6 +8,7 @@ export const PLAYER_PROPS_COMBINING_ENABLED_LEAGUES: League[] = [
     League.NCAAB,
     League.WNBA,
     League.EUROLEAGUE,
+    League.FIBA_EUROBASKET,
 ];
 
 export const PLAYER_PROPS_MARKETS_PER_SPORT_MAP: Record<Sport, MarketType[]> = {
