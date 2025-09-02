@@ -85,6 +85,7 @@ const useSportsMarketsV2Query = (
                 const fetchGameInfo =
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
 
+                // TODO: delete after testing
                 if (!sport && !maxMaturity && !leaguedIds && !gameIds && !typeIds && !playerIds && !lines) {
                     console.log('Fetching ALL markets without filters!');
                 }
