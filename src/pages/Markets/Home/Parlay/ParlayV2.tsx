@@ -322,7 +322,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     // Non-Live matches
     useEffect(() => {
         if (!isLiveFilterSelected) {
-            const sportOpenMarkets = (openSportMarketsProofs || ticketMarkets).reduce(
+            const sportOpenMarkets = (openSportMarketsProofs || [...ticketMarkets, ...(openMarkets || [])]).reduce(
                 (acc: SportMarket[], market: SportMarket) => {
                     acc.push(market);
                     market.childMarkets.forEach((childMarket: SportMarket) => {
@@ -375,7 +375,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 previousTicketOdds.current = ticketOdds;
             }
         }
-    }, [openSportMarketsProofs, ticket, ticketMarkets, isLiveFilterSelected]);
+    }, [openSportMarketsProofs, ticket, ticketMarkets, isLiveFilterSelected, openMarkets]);
 
     useEffect(() => {
         if (isLive !== isLiveFilterSelected) {
