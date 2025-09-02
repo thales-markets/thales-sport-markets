@@ -984,7 +984,7 @@ export const getFiltersInfo = (
     let gamesCountFilter: number | null = 0;
     let timeLimitFilter = TimeFilter.ALL;
 
-    if (tagFilter.length > 0) {
+    if (tagFilter.length > 0 && sportFilter !== SportFilter.Boosted) {
         leagueIdsFilter = tagFilter.map((tag) => tag.id);
         gamesCountFilter = gamesCount
             ? sumBy(leagueIdsFilter, (leagueId: League) => {
