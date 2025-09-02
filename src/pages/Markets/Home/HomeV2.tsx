@@ -747,11 +747,9 @@ const Home: React.FC = () => {
                         const leagueId = Number(key) as League;
                         if (isBoxingLeague(Number(key))) {
                             playerPropsCountPerTag[BOXING_LEAGUES[0].toString()] =
-                                openSportMarketsCountMap.leagues.get(leagueId) ||
                                 gamesCount.PlayerProps[sportKey as NonEmptySport].leagues[leagueId].total;
                         } else {
                             playerPropsCountPerTag[leagueId] =
-                                openSportMarketsCountMap.leagues.get(leagueId) ||
                                 gamesCount.PlayerProps[sportKey as NonEmptySport].leagues[leagueId].total;
                         }
                     });
@@ -759,7 +757,7 @@ const Home: React.FC = () => {
         }
 
         return playerPropsCountPerTag;
-    }, [gamesCount, openSportMarketsCountMap]);
+    }, [gamesCount]);
 
     const boostedMarketsCount = useMemo(() => gamesCount?.Promo.total || 0, [gamesCount]);
 

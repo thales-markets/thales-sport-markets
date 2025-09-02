@@ -28,7 +28,7 @@ const getDefaultStatusFilter = (): StatusFilter => {
 
 const getDefaultSportFilter = (): SportFilter => {
     const lsSportFilter = localStore.get(LOCAL_STORAGE_KEYS.FILTER_SPORT);
-    return lsSportFilter !== undefined ? (lsSportFilter as SportFilter) : SportFilter.All;
+    return lsSportFilter !== undefined ? (lsSportFilter as SportFilter) : SportFilter.Boosted;
 };
 
 const getDefaultTagFilter = (): Tags => {
