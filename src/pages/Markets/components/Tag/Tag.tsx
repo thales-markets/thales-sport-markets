@@ -47,6 +47,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
     const isFavourite = !!favouriteLeagues.find((favourite: TagInfo) => favourite.id == tag.id);
     const label = tag.label;
     const scrollMainToTop = getScrollMainContainerToTop();
+    const hasSelectedTournament = tournamentFilter.some((tournament) => tournaments.some((t) => t.name === tournament));
 
     return (
         <>
@@ -65,6 +66,9 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
                                     setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                     setIsOpen(true);
                                 } else {
+                                    if (hasSelectedTournament) {
+                                        return;
+                                    }
                                     const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
                                     setTagFilter(newTagFilters);
                                     const newTagParam = newTagFilters.map((tagInfo) => tagInfo.label).toString();
