@@ -260,7 +260,7 @@ const Home: React.FC = () => {
         [liveSportMarketsQuery.isSuccess, liveSportMarketsQuery.data]
     );
 
-    const gameMultipliersQuery = useGameMultipliersQuery();
+    const gameMultipliersQuery = useGameMultipliersQuery({ enabled: sportFilter === SportFilter.Boosted });
 
     const gameMultipliers = useMemo(
         () => (gameMultipliersQuery.isSuccess && gameMultipliersQuery.data ? gameMultipliersQuery.data : []),
