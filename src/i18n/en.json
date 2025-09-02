@@ -1460,6 +1460,13 @@
             "affiliate-cta": "Get even more XP by referring users to Overtime.",
             "affiliate-cta-link": "Check Affiliate page for more details."
         },
+        "badge-history": {
+            "month": "Month",
+            "rank": "Rank",
+            "eth-rewards": "ETH rewards",
+            "total-xp": "Total XP",
+            "loyalty-bonus": "Loyalty bonus"
+        },
         "leveling-tree": {
             "heading": "The overdrop farming league",
             "explainer": {

@@ -196,6 +196,7 @@ const QUERY_KEYS = {
         AffiliateActivity: (walletAddress: string) => ['affiliateActivity', walletAddress],
         AffiliateSummary: (walletAddress: string) => ['affiliateActivity', walletAddress],
         UserRewards: (networkId: Network, walletAddress: string) => ['userRewards', networkId, walletAddress],
+        BadgeHistory: (walletAddress: string) => ['badgeHistory', walletAddress],
     },
     FreeBet: (freeBetId: string, networkId: Network) => ['freeBet', freeBetId, networkId],
     IsWhitelistedForFreeBets: (walletAddress: string, networkId: Network) => [
