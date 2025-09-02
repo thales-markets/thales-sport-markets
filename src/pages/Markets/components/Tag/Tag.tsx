@@ -7,6 +7,8 @@ import {
     getSportFilter,
     getTagFilter,
     getTournamentFilter,
+    setMarketTypeFilter,
+    setMarketTypeGroupFilter,
     setSportFilter,
     setTournamentFilter,
 } from 'redux/modules/market';
@@ -48,7 +50,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
     const label = tag.label;
     const scrollMainToTop = getScrollMainContainerToTop();
     const hasSelectedTournament = tournamentFilter.some((tournament) => tournaments.some((t) => t.name === tournament));
-
+    const isPlayerPropsTag = sport == SportFilter.PlayerProps;
     return (
         <>
             <TagContainer key={tag.id} isMobile={isMobile}>
@@ -66,7 +68,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
                                     setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
                                     setIsOpen(true);
                                 } else {
-                                    if (hasSelectedTournament) {
+                                    if (isPlayerPropsTag || hasSelectedTournament) {
                                         return;
                                     }
                                     const newTagFilters = tagFilter.filter((tagInfo) => tagInfo.id != tag.id);
@@ -78,18 +80,29 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
 
                                 scrollMainToTop();
                             } else {
-                                if (sportFilter !== sport) {
-                                    dispatch(setSportFilter(sport));
-                                    setSportParam(sport);
+                                if (isPlayerPropsTag) {
+                                    if (sportFilter !== sport) {
+                                        dispatch(setSportFilter(sport));
+                                    }
+                                    dispatch(setMarketTypeFilter(undefined));
+                                    dispatch(setMarketTypeGroupFilter(undefined));
                                     setTagFilter([tag]);
-                                    setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
-                                    setIsOpen(true);
+                                    setTagParam([tag.label].toString());
                                 } else {
-                                    dispatch(setSportFilter(sport));
-                                    setTagFilter([...tagFilter, tag]);
-                                    setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
-                                    setIsOpen(true);
+                                    if (sportFilter !== sport) {
+                                        dispatch(setSportFilter(sport));
+                                        setSportParam(sport);
+                                        setTagFilter([tag]);
+                                        setTagParam([tag].map((tagInfo) => tagInfo.label).toString());
+                                        setIsOpen(true);
+                                    } else {
+                                        dispatch(setSportFilter(sport));
+                                        setTagFilter([...tagFilter, tag]);
+                                        setTagParam([...tagFilter, tag].map((tagInfo) => tagInfo.label).toString());
+                                        setIsOpen(true);
+                                    }
                                 }
+
                                 scrollMainToTop();
                             }
                         }}

@@ -76,7 +76,7 @@ import {
 } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague, getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -210,7 +210,11 @@ const Home: React.FC = () => {
                 const filteredTags = availableTags.filter((tag) => tagParamsSplitted.includes(tag.label));
                 filteredTags.length > 0 ? dispatch(setTagFilter(filteredTags)) : dispatch(setTagFilter([]));
             } else {
-                setTagParam(tagFilter.map((tag) => tag.label).toString());
+                if (sportFilter == SportFilter.PlayerProps) {
+                    setTagParam(LeagueMap[League.NFL].label);
+                } else {
+                    setTagParam(tagFilter.map((tag) => tag.label).toString());
+                }
             }
 
             if (tournamentParam != '') {
@@ -882,11 +886,21 @@ const Home: React.FC = () => {
                                     scrollMainToTop();
                                     dispatch(setSportFilter(filterItem));
                                     setSportParam(filterItem);
-                                    dispatch(setTagFilter([]));
-                                    setTagParam('');
+                                    dispatch(
+                                        setTagFilter(
+                                            filterItem === SportFilter.PlayerProps
+                                                ? [LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)]]
+                                                : []
+                                        )
+                                    );
+                                    setTagParam(
+                                        filterItem === SportFilter.PlayerProps
+                                            ? LeagueMap[getDefaultPlayerPropsLeague(playerPropsCountPerTag)].label
+                                            : ''
+                                    );
                                     dispatch(setTournamentFilter([]));
                                     setTournamentParam('');
-                                    if (filterItem === SportFilter.All) {
+                                    if (filterItem === SportFilter.All || filterItem === SportFilter.PlayerProps) {
                                         dispatch(setDatePeriodFilter(TimeFilter.ALL));
                                         setDateParam('');
                                         setAvailableTags(tagsList);
@@ -914,6 +928,13 @@ const Home: React.FC = () => {
                                         } else {
                                             setAvailableTags([]);
                                         }
+                                    }
+                                } else {
+                                    if (filterItem !== SportFilter.PlayerProps) {
+                                        dispatch(setTagFilter([]));
+                                        setTagParam('');
+                                        dispatch(setTournamentFilter([]));
+                                        setTournamentParam('');
                                     }
                                 }
                             }}
