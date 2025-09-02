@@ -81,7 +81,27 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
+    const openTicketMarkets: TicketMarket[] = openMarkets
+        ? ticket
+              .filter((ticketPosition) =>
+                  openMarkets.some(
+                      (market: SportMarket) =>
+                          isSameMarket(market, ticketPosition) && market.odds[ticketPosition.position] !== 0
+                  )
+              )
+              .map((ticketPosition) => {
+                  const openMarket: SportMarket = openMarkets.filter((market: SportMarket) =>
+                      isSameMarket(market, ticketPosition)
+                  )[0];
+                  return {
+                      ...openMarket,
+                      position: ticketPosition.position,
+                      odd: openMarket.odds[ticketPosition.position],
+                  };
+              })
+        : [];
+
+    const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>(openTicketMarkets);
     const [unavailableMarkets, setUnavailableMarkets] = useState<TicketPosition[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
@@ -299,30 +319,19 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
-    const sportMarkets = useMemo(() => {
-        if (!ticket.length) {
-            return [];
-        }
-        if (openSportMarketsProofs) {
-            return openSportMarketsProofs;
-        }
-        if (openMarkets) {
-            return openMarkets;
-        }
-
-        return undefined;
-    }, [ticket, openSportMarketsProofs, openMarkets]);
-
     // Non-Live matches
     useEffect(() => {
-        if (sportMarkets && !isLiveFilterSelected) {
-            const sportOpenMarkets = sportMarkets.reduce((acc: SportMarket[], market: SportMarket) => {
-                acc.push(market);
-                market.childMarkets.forEach((childMarket: SportMarket) => {
-                    acc.push(childMarket);
-                });
-                return acc;
-            }, []);
+        if (!isLiveFilterSelected) {
+            const sportOpenMarkets = (openSportMarketsProofs || ticketMarkets).reduce(
+                (acc: SportMarket[], market: SportMarket) => {
+                    acc.push(market);
+                    market.childMarkets.forEach((childMarket: SportMarket) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
 
             const openTicketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
@@ -342,7 +351,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     };
                 });
 
-            if (ticket.length > openTicketMarkets.length) {
+            if (openSportMarketsProofs && ticket.length > openTicketMarkets.length) {
                 const notOpenedMarkets = ticket.filter((ticketPosition) =>
                     openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
                 );
@@ -366,7 +375,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 previousTicketOdds.current = ticketOdds;
             }
         }
-    }, [sportMarkets, ticket, dispatch, isLiveFilterSelected]);
+    }, [openSportMarketsProofs, ticket, ticketMarkets, isLiveFilterSelected]);
 
     useEffect(() => {
         if (isLive !== isLiveFilterSelected) {

@@ -395,9 +395,6 @@ const Home: React.FC = () => {
         return { sports: countsPerSportFilter, leagues: countsPerLeague };
     }, [openSportMarkets, isFilterTimeLimited, sportFilter, sportMarketsQueryFilters, gameMultipliers]);
 
-    // TODO: delete after testing
-    openSportMarkets && console.log(`Number of games for ${sportFilter}`, openSportMarkets.length);
-
     const finalMarkets = useMemo(() => {
         if (showBurger) {
             return [];
