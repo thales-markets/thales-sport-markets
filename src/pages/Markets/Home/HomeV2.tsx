@@ -300,7 +300,7 @@ const Home: React.FC = () => {
         }
 
         const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
-        const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport) !== TimeFilter.ALL;
+        const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
         const isSportValid =
             Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) !==
             undefined;

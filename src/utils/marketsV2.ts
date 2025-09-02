@@ -961,7 +961,13 @@ export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
     return sortedMarkets;
 };
 
-export const getTimeFilter = (gamesCount: number) => {
+export const getTimeFilter = (gamesCount: number, sportFilter: SportFilter) => {
+    if (sportFilter === SportFilter.All) {
+        return TimeFilter.DAY;
+    } else {
+        return TimeFilter.ALL;
+    }
+    // TODO: for now not in use
     for (const [threshold, filter] of TIME_FILTER_THRESHOLDS) {
         if (gamesCount > threshold) return filter;
     }
@@ -1031,7 +1037,8 @@ export const getFiltersInfo = (
         }
     }
 
-    timeLimitFilter = gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter);
+    timeLimitFilter =
+        gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter, sportFilter);
 
     return { leagueIdsFilter, gamesCountFilter, timeLimitFilter };
 };
