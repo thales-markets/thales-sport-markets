@@ -924,7 +924,7 @@ export const getPlayerPropsMarketsOverviewLength = (market: SportMarket) => {
     return Math.min(uniqueMarketsLength, 3);
 };
 
-export const getDefaultPlayerPropsLeague = (leagueCount: Record<number, number>) => {
+export const getDefaultPlayerPropsLeague = (leagueCount: Partial<Record<League, number>>) => {
     if (leagueCount[League.NBA]) {
         return League.NBA;
     }
