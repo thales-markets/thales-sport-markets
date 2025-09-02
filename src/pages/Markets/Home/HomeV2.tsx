@@ -762,6 +762,19 @@ const Home: React.FC = () => {
 
     const boostedMarketsCount = useMemo(() => gamesCount?.Promo.total || 0, [gamesCount]);
 
+    // set default selected to All if Boosted is empty
+    const isDefaultSportFilterSet = useRef(false);
+    useEffect(() => {
+        if (!isDefaultSportFilterSet.current) {
+            if (gamesCount) {
+                if (sportFilter === SportFilter.Boosted && gamesCount.Promo.total === 0) {
+                    dispatch(setSportFilter(SportFilter.All));
+                }
+                isDefaultSportFilterSet.current = true;
+            }
+        }
+    }, [gamesCount, sportFilter, sportParam, dispatch]);
+
     const { tournamentsLiveMarkets } = useMemo(() => {
         if (liveMarkets) {
             const tournaments: Tournament[] = [];
