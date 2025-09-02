@@ -7,7 +7,6 @@ import { generalConfig } from 'config/general';
 import { MIGRATE_MODAL_OPENED } from 'constants/events';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { NAV_MENU_WIDTH, SPEED_MARKETS_WIDGET_DEFAULT_RIGHT } from 'constants/ui';
-import { Network } from 'enums/network';
 import { ScreenSizeBreakpoint, Theme } from 'enums/ui';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useWidgetBotScript from 'hooks/useWidgetBotScript';
@@ -83,9 +82,9 @@ const DappLayout: React.FC<DappLayoutProps> = ({ children }) => {
     }, [freeBetFromServer, setFreeBet]);
 
     useEffect(() => {
-        if (freeBetModalParam && switchChain) {
+        if (freeBetModalParam && switchChain && freeBetFromServer) {
             switchChain(
-                { chainId: Network.OptimismMainnet },
+                { chainId: freeBetFromServer.network },
                 {
                     onSuccess: () => {
                         setFreeBetModalShown(true);
