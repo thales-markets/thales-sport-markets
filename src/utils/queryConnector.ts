@@ -26,20 +26,26 @@ export const refetchBalances = (walletAddress: string, networkId: Network) => {
 };
 
 export const refetchProofs = (networkId: Network, markets: TicketMarket[]) => {
+    const sport = ''; // using game IDs
+    const leaguedIds = ''; // using game IDs
     const gameIds = markets.map((market) => market.gameId).join(',');
     const typeIds = markets.map((market) => market.typeId).join(',');
     const playerIds = markets.map((market) => market.playerProps.playerId).join(',');
     const lines = markets.map((market) => market.line).join(',');
+    const nextHours = ''; // using game IDs
 
     queryConnector.queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.SportMarketsV2(
             StatusFilter.OPEN_MARKETS,
             networkId,
             true,
+            sport,
+            leaguedIds,
             gameIds,
             typeIds,
             playerIds,
-            lines
+            lines,
+            nextHours
         ),
     });
 };

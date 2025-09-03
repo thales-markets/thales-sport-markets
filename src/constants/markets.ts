@@ -1,3 +1,4 @@
+import { TimeFilter } from 'enums/filters';
 import { GameStatus, OddsType } from 'enums/markets';
 import { Network } from 'enums/network';
 import { League, Sport } from 'overtime-utils';
@@ -95,3 +96,8 @@ export const SPORTS_BY_TOURNAMENTS = [Sport.TENNIS, Sport.ESPORTS];
 export const COUNTRY_BASED_TOURNAMENTS = [Sport.TENNIS];
 
 export const MARKET_DURATION_IN_DAYS = 90;
+
+export const TIME_FILTER_THRESHOLDS: [number, TimeFilter][] = [
+    [300, TimeFilter.TWELVE_HOURS], // above 300 games use 12H
+    [150, TimeFilter.DAY], // above 150 games use 12H
+];

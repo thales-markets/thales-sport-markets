@@ -51,8 +51,8 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     if (statusFilter === StatusFilter.OPEN_MARKETS) {
         if (sortType === SortType.DEFAULT) {
-            const leaguesWithSameMinMaturityShortDateMap = new Map<number, number[]>(); // MinMaturityShortDate => League[]
-            const leaguesWithMinMaturityDateMap = new Map<number, number>(); // League => MinMaturityDate
+            const leaguesWithSameMinMaturityShortDateMap = new Map<number, League[]>(); // MinMaturityShortDate => League[]
+            const leaguesWithMinMaturityDateMap = new Map<League, number>(); // League => MinMaturityDate
 
             // for every league, set array of leagues with the same min maturity date
             sortedLeagues.forEach((league: number) => {

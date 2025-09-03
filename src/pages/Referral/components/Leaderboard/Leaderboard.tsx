@@ -1,18 +1,22 @@
 import Table from 'components/Table';
 import { USD_SIGN } from 'constants/currency';
-import { getTableProps, RankNumber, UserXP } from 'pages/Referral/styled-components';
+import { getTableProps, RankNumber, StyledLink, UserXP } from 'pages/Referral/styled-components';
 import useAffiliateLeaderboardQuery from 'queries/overdrop/useAffiliateLeaderboardQuery';
 import useOverdropLeaderboardQuery from 'queries/overdrop/useOverdropLeaderboardQuery';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getIsMobile } from 'redux/modules/app';
-import { formatCurrency, formatCurrencyWithSign, truncateAddress } from 'thales-utils';
+import { formatCurrency, formatCurrencyWithSign, getEtherscanAddressLink, truncateAddress } from 'thales-utils';
 import { RootState } from 'types/redux';
 import { getCurrentLevelByPoints, getCurrentSeasonAndMiniSeason } from 'utils/overdrop';
+import { useChainId } from 'wagmi';
 
 const Leaderboard: React.FC = () => {
     const { t } = useTranslation();
+
+    const networkId = useChainId();
+
     const noResultsMessage = t('referral.no-result');
     const currentSeasonAndMiniSeason = getCurrentSeasonAndMiniSeason();
     const overdropLeaderboardQuery = useOverdropLeaderboardQuery(
@@ -67,7 +71,15 @@ const Leaderboard: React.FC = () => {
                             header: <>{t('referral.leaderboard.table-headers.user')}</>,
                             accessorKey: 'owner',
                             sortable: true,
-                            cell: (cellProps: any) => <>{truncateAddress(cellProps.cell.getValue(), 4, 4)}</>,
+                            cell: (cellProps: any) => (
+                                <StyledLink
+                                    href={getEtherscanAddressLink(networkId, cellProps.cell.getValue())}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {truncateAddress(cellProps.cell.getValue(), 4, 4)}
+                                </StyledLink>
+                            ),
                             size: 110,
                         },
                         ...(isMobile

@@ -47,6 +47,7 @@
                 "column-view": "Switch to three column view",
                 "sorting": "Select games sorting",
                 "date": "Select date range",
+                "date-limited": "Date range is limited for this sport filter!",
                 "odds": "Select odds format"
             }
         },
@@ -373,7 +374,7 @@
             "deposit": "Deposit",
             "token": "Overtime token",
             "over": "$OVER",
-            "swap": "Buy $OVER",
+            "swap": "Swap",
             "withdraw": "Withdraw",
             "use-eoa": "Switch to EOA mode",
             "use-smart": "Switch to your Overtime Account",
@@ -406,9 +407,10 @@
         "swap": {
             "title": "<icon /> swap",
             "swap": "BUY ${{token}}",
-            "note": "Swap your crypto to $OVER",
+            "note": "The easiest way to swap tokens",
             "token-price": "${{token}} price",
-            "token-to-receive": "${{token}} to receive"
+            "token-to-receive": "${{token}} to receive",
+            "fetching": "Fetching quote..."
         },
         "wrapper-nav": {
             "my-tickets": "My tickets",
@@ -1162,8 +1164,8 @@
             "title": "Welcome to <icon />",
             "subtitle": "Best decentralized sportsbook",
             "explainer": "More details on how to use Free Bet <docsLink>here</docsLink>.",
-            "gifted-free-bet": "You have been gifted a <span>{{amount}}</span> Free Bet.",
-            "claim-free-bet": "Claim a <span>{{amount}}</span> Free Bet.",
+            "gifted-free-bet": "You have been gifted a <span>{{amount}}</span> Free Bet on {{network}}.",
+            "claim-free-bet": "Claim a <span>{{amount}}</span> Free Bet on {{network}}.",
             "claimed-free-bet": "You just claimed a <span>{{amount}}</span> Free Bet.",
             "already-claimed-free-bet": "Bet already claimed!",
             "sign-in": "Sign in to Overtime to claim.",
@@ -1211,10 +1213,12 @@
             "tooltip-4": "Send funds from your wallet to your Overtime Account.",
             "tooltip-universal": "Use this option to fund your Overtime Account from any network or chain with ETH, USDC, USDT, SOL or BNB",
             "tooltip-5": "Buy Crypto using your credit card or wire transfer",
+            "tooltip-6": "Deposit from a Crypto exchange such as Coinbase, Binance, Kraken...",
             "powered-by": "Powered by <icon/>",
             "current-network": "Current network: ",
             "address": "Your deposit address",
             "from-exchange": "Fund from Exchange",
+            "cex-guide": "Deposit from an Exchange",
             "buy-crypto": "Buy crypto",
             "from-wallet": "Deposit from Wallet",
             "next": "Next: Wait for Deposit",
@@ -1458,6 +1462,13 @@
             "total-value": "Total value",
             "affiliate-cta": "Get even more XP by referring users to Overtime.",
             "affiliate-cta-link": "Check Affiliate page for more details."
+        },
+        "badge-history": {
+            "month": "Month",
+            "rank": "Rank",
+            "eth-rewards": "ETH rewards",
+            "total-xp": "Total XP",
+            "loyalty-bonus": "Loyalty bonus"
         },
         "leveling-tree": {
             "heading": "The overdrop farming league",

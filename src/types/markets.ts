@@ -277,7 +277,7 @@ export type Team = {
 
 export type Tournament = {
     leagueId: League;
-    leageueName: string;
+    total: number;
     name: string;
 };
 
@@ -306,3 +306,23 @@ export type GameData = {
     tickets: Ticket[];
     gameStats: GameStats;
 };
+
+type LeagueSummary = {
+    total: number;
+    tournaments?: Record<string, number>;
+};
+
+type SportSummary = {
+    leagues: Record<League, LeagueSummary>;
+    total: number;
+};
+
+export type NonEmptySport = Exclude<Sport, Sport.EMPTY>;
+
+export type GamesCount = {
+    Promo: Record<NonEmptySport, SportSummary> & { total: number };
+    Live: Record<NonEmptySport, SportSummary> & { total: number };
+    PlayerProps: Record<NonEmptySport, SportSummary> & { total: number };
+    QuickSgp: Record<NonEmptySport, SportSummary> & { total: number };
+    All: { total: number };
+} & Record<NonEmptySport, SportSummary>;

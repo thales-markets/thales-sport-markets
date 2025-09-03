@@ -25,6 +25,7 @@ export const LINKS = {
     Tip238:
         'https://www.thales.io/dao/thalesgov.eth/0xe77747ec77bf8b41c7bc0101d5103e06ed972860e9438a9e429d4a866648e5a4',
     OvertimeAccount: 'https://docs.overtime.io/about-overtime-sportsbook/overtime-account',
+    CexDeposit: 'https://docs.overtime.io/overtime-guides/deposit-from-exchange',
     UnstakingThales: 'https://www.overtime.io/token/staking',
     UnstakingLp: 'https://www.overtime.io/token/lp-staking',
     Particle: 'https://particle.network/',

@@ -96,15 +96,20 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
 
     const sportsAmmDataQuery = useSportsAmmDataQuery({ networkId, client });
 
-    const sportMarketsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, false, { networkId }, undefined, {
-        enabled: !!openMarkets,
-    });
+    const sportMarketsProofsQuery = useSportsMarketsV2Query(
+        { status: StatusFilter.OPEN_MARKETS, includeProofs: true, ticket },
+        { networkId },
+        { enabled: !!ticket.length && !isLive }
+    );
 
-    const sportMarketsProofsQuery = useSportsMarketsV2Query(StatusFilter.OPEN_MARKETS, true, { networkId }, ticket, {
-        enabled: !!ticket.length,
-    });
+    const openSportMarketsProofs = useMemo(() => {
+        if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
+            return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
+        }
+        return undefined;
+    }, [sportMarketsProofsQuery.data, sportMarketsProofsQuery.isSuccess]);
 
-    const liveSportMarketsQuery = useLiveSportsMarketsQuery(isLiveFilterSelected, { networkId });
+    const liveSportMarketsQuery = useLiveSportsMarketsQuery({ networkId }, { enabled: isLive });
 
     const sportsAmmRiskManagerQuery = useSportsAmmRiskManagerQuery(
         ticket[0]?.leagueId || 0,
@@ -294,35 +299,19 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
         }
     }, [isLiveFilterSelected, liveSportMarketsQuery.data, liveSportMarketsQuery.isSuccess, ticket]);
 
-    const sportMarkets = useMemo(() => {
-        if (sportMarketsProofsQuery.isSuccess && sportMarketsProofsQuery.data) {
-            return sportMarketsProofsQuery.data[StatusFilter.OPEN_MARKETS];
-        }
-        if (openMarkets) {
-            return openMarkets;
-        }
-        if (sportMarketsQuery.isSuccess && sportMarketsQuery.data) {
-            return sportMarketsQuery.data[StatusFilter.OPEN_MARKETS];
-        }
-        return undefined;
-    }, [
-        openMarkets,
-        sportMarketsProofsQuery.data,
-        sportMarketsProofsQuery.isSuccess,
-        sportMarketsQuery.data,
-        sportMarketsQuery.isSuccess,
-    ]);
-
     // Non-Live matches
     useEffect(() => {
-        if (sportMarkets && !isLiveFilterSelected) {
-            const sportOpenMarkets = sportMarkets.reduce((acc: SportMarket[], market: SportMarket) => {
-                acc.push(market);
-                market.childMarkets.forEach((childMarket: SportMarket) => {
-                    acc.push(childMarket);
-                });
-                return acc;
-            }, []);
+        if (!isLiveFilterSelected) {
+            const sportOpenMarkets = (openSportMarketsProofs || [...ticketMarkets, ...(openMarkets || [])]).reduce(
+                (acc: SportMarkets, market: SportMarket) => {
+                    acc.push(market);
+                    (market.childMarkets || []).forEach((childMarket: SportMarket) => {
+                        acc.push(childMarket);
+                    });
+                    return acc;
+                },
+                []
+            );
 
             const openTicketMarkets: TicketMarket[] = ticket
                 .filter((ticketPosition) =>
@@ -342,14 +331,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     };
                 });
 
-            if (ticket.length > openTicketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                    openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
-                );
+            // check if odds are missing for some ticket markets
+            if (openSportMarketsProofs) {
+                if (ticket.length > openTicketMarkets.length) {
+                    const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                        openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
+                    );
 
-                setUnavailableMarkets(notOpenedMarkets);
-            } else {
-                setUnavailableMarkets([]);
+                    setUnavailableMarkets(notOpenedMarkets);
+                } else {
+                    setUnavailableMarkets([]);
+                }
             }
 
             const ticketOdds = openTicketMarkets.map((market) => ({
@@ -366,7 +358,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                 previousTicketOdds.current = ticketOdds;
             }
         }
-    }, [sportMarkets, ticket, dispatch, isLiveFilterSelected]);
+    }, [openSportMarketsProofs, ticket, ticketMarkets, isLiveFilterSelected, openMarkets]);
 
     useEffect(() => {
         if (isLive !== isLiveFilterSelected) {
