@@ -81,27 +81,7 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     const { smartAddress } = useBiconomy();
     const walletAddress = (isBiconomy ? smartAddress : address) || '';
 
-    const openTicketMarkets: TicketMarket[] = openMarkets
-        ? ticket
-              .filter((ticketPosition) =>
-                  openMarkets.some(
-                      (market: SportMarket) =>
-                          isSameMarket(market, ticketPosition) && market.odds[ticketPosition.position] !== 0
-                  )
-              )
-              .map((ticketPosition) => {
-                  const openMarket: SportMarket = openMarkets.filter((market: SportMarket) =>
-                      isSameMarket(market, ticketPosition)
-                  )[0];
-                  return {
-                      ...openMarket,
-                      position: ticketPosition.position,
-                      odd: openMarket.odds[ticketPosition.position],
-                  };
-              })
-        : [];
-
-    const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>(openTicketMarkets);
+    const [ticketMarkets, setTicketMarkets] = useState<TicketMarket[]>([]);
     const [unavailableMarkets, setUnavailableMarkets] = useState<TicketPosition[]>([]);
     const [oddsChanged, setOddsChanged] = useState<boolean>(false);
     const [acceptOdds, setAcceptOdds] = useState<boolean>(false);
