@@ -303,9 +303,9 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
     useEffect(() => {
         if (!isLiveFilterSelected) {
             const sportOpenMarkets = (openSportMarketsProofs || [...ticketMarkets, ...(openMarkets || [])]).reduce(
-                (acc: SportMarket[], market: SportMarket) => {
+                (acc: SportMarkets, market: SportMarket) => {
                     acc.push(market);
-                    market.childMarkets.forEach((childMarket: SportMarket) => {
+                    (market.childMarkets || []).forEach((childMarket: SportMarket) => {
                         acc.push(childMarket);
                     });
                     return acc;
