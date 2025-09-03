@@ -11,7 +11,6 @@ import { getProtectedApiRoute } from 'utils/api';
 const marketsCache = { live: [] as SportMarkets };
 
 const useLiveSportsMarketsQuery = (
-    isLiveSelected: boolean,
     networkConfig: NetworkConfig,
     options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
 ) => {
@@ -53,7 +52,7 @@ const useLiveSportsMarketsQuery = (
 
             return marketsCache;
         },
-        refetchInterval: secondsToMilliseconds(isLiveSelected ? 2 : 10),
+        refetchInterval: secondsToMilliseconds(2),
         ...options,
     });
 };

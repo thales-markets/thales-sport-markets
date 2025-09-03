@@ -2,16 +2,16 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 import { generalConfig, noCacheConfig } from 'config/general';
 import QUERY_KEYS from 'constants/queryKeys';
-import { secondsToMilliseconds } from 'date-fns';
-import { StatusFilter } from 'enums/markets';
+import { addHours, millisecondsToSeconds, secondsToMilliseconds, subDays } from 'date-fns';
+import { SportFilter, StatusFilter } from 'enums/markets';
 import { orderBy } from 'lodash';
-import { League, LeagueMap } from 'overtime-utils';
+import { League, LeagueMap, Sport } from 'overtime-utils';
 import { MarketsCache, TicketPosition } from 'types/markets';
 import { NetworkConfig } from 'types/network';
 import { getProtectedApiRoute } from 'utils/api';
 import { packMarket } from 'utils/marketsV2';
 
-const marketsCache: MarketsCache = {
+export const marketsCache: MarketsCache = {
     [StatusFilter.OPEN_MARKETS]: [],
     [StatusFilter.ONGOING_MARKETS]: [],
     [StatusFilter.RESOLVED_MARKETS]: [],
@@ -19,14 +19,34 @@ const marketsCache: MarketsCache = {
     [StatusFilter.CANCELLED_MARKETS]: [],
 };
 
+export type SportsMarketsFilterProps = {
+    includeProofs: boolean;
+    status: StatusFilter;
+    sport?: SportFilter;
+    leaguedIds?: League[];
+    gameIds?: string[];
+    ticket?: TicketPosition[];
+    timeLimitHours?: number;
+    isDisabled?: boolean;
+};
+
 const useSportsMarketsV2Query = (
-    statusFilter: StatusFilter,
-    includeProofs: boolean,
+    filters: SportsMarketsFilterProps,
     networkConfig: NetworkConfig,
-    ticket?: TicketPosition[],
-    options?: Omit<UseQueryOptions<any>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<MarketsCache>, 'queryKey' | 'queryFn'>
 ) => {
-    const gameIds = ticket?.map((market) => market.gameId).join(',') || '';
+    const {
+        status: statusFilter,
+        includeProofs,
+        sport: sportFilter,
+        leaguedIds: leaguedIdsFilter,
+        gameIds: gameIdsFilter,
+        ticket,
+        timeLimitHours,
+    } = filters;
+
+    const leaguedIds = leaguedIdsFilter?.map((leagueId) => leagueId).join(',') || '';
+    const gameIds = ticket?.map((market) => market.gameId).join(',') || gameIdsFilter?.join(',') || '';
     const typeIds = ticket?.map((market) => market.typeId).join(',') || '';
     const playerIds = ticket?.map((market) => market.playerId).join(',') || '';
     const lines = ticket?.map((market) => market.line).join(',') || '';
@@ -36,31 +56,57 @@ const useSportsMarketsV2Query = (
             statusFilter,
             networkConfig.networkId,
             includeProofs,
+            sportFilter || '',
+            leaguedIds,
             gameIds,
             typeIds,
             playerIds,
-            lines
+            lines,
+            timeLimitHours?.toString() || ''
         ),
         queryFn: async () => {
             try {
                 const status = statusFilter.toLowerCase().split('market')[0];
-                const today = new Date();
+                const sport = sportFilter
+                    ? Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) ||
+                      ''
+                    : '';
+
                 // API takes timestamp argument in seconds
-                const minMaturity = Math.round(new Date(new Date().setDate(today.getDate() - 7)).getTime() / 1000); // show history for 7 days in the past
+                // show history for 7 days in the past
+                const today = new Date();
+                const minMaturity = !ticket ? millisecondsToSeconds(subDays(today, 7).getTime()) : '';
+                // show all markets for next hours
+                const maxMaturity = timeLimitHours
+                    ? millisecondsToSeconds(addHours(today, timeLimitHours).getTime())
+                    : '';
 
                 const fetchLiveScore = statusFilter === StatusFilter.ONGOING_MARKETS;
                 const fetchGameInfo =
                     statusFilter === StatusFilter.ONGOING_MARKETS || statusFilter === StatusFilter.RESOLVED_MARKETS;
+
+                // TODO: delete after testing
+                if (!sport && !maxMaturity && !leaguedIds && !gameIds && !typeIds && !playerIds && !lines) {
+                    console.log('Fetching ALL markets without filters!');
+                }
+
                 const [marketsResponse, gamesInfoResponse, liveScoresResponse] = await Promise.all([
                     axios.get(
                         getProtectedApiRoute(
                             networkConfig.networkId,
                             'markets',
-                            `status=${status}&ungroup=true&onlyBasicProperties=true&includeProofs=${includeProofs}${
-                                ticket ? '' : `&minMaturity=${minMaturity}`
-                            }${ticket ? `&gameIds=${gameIds}` : ''}${ticket ? `&typeIds=${typeIds}` : ''}${
-                                ticket ? `&playerIds=${playerIds}` : ''
-                            }${ticket ? `&lines=${lines}` : ''}`
+                            'ungroup=true&onlyBasicProperties=true' +
+                                `&status=${status}` +
+                                `&includeProofs=${includeProofs}` +
+                                `${sport ? `&sport=${sport}` : ''}` +
+                                `${sport ? '&includeFuturesInSport=true' : ''}` +
+                                `${minMaturity ? `&minMaturity=${minMaturity}` : ''}` +
+                                `${maxMaturity ? `&maxMaturity=${maxMaturity}` : ''}` +
+                                `${leaguedIds ? `&leagueIds=${leaguedIds}` : ''}` +
+                                `${gameIds ? `&gameIds=${gameIds}` : ''}` +
+                                `${ticket ? `&typeIds=${typeIds}` : ''}` +
+                                `${ticket ? `&playerIds=${playerIds}` : ''}` +
+                                `${ticket ? `&lines=${lines}` : ''}`
                         ),
                         noCacheConfig
                     ),

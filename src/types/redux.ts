@@ -1,3 +1,4 @@
+import { TimeFilter } from 'enums/filters';
 import { OddsType, SortType, SportFilter, StatusFilter } from 'enums/markets';
 import { MarketTypeGroup } from 'enums/marketTypes';
 import { Theme } from 'enums/ui';
@@ -13,7 +14,7 @@ export type AppSliceState = {
 
 export type MarketSliceState = {
     marketSearch: string;
-    datePeriodFilter: number;
+    datePeriodFilter: TimeFilter;
     statusFilter: StatusFilter;
     sportFilter: SportFilter;
     marketTypeFilter: MarketType | undefined;

@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { USD_SIGN } from 'constants/currency';
+import { SUPPORTED_NETWORKS_PARAMS } from 'constants/network';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import useLocalStorage from 'hooks/useLocalStorage';
@@ -20,7 +21,7 @@ import { getCollateralByAddress } from 'utils/collaterals';
 import { claimFreeBet } from 'utils/freeBet';
 import { navigateTo } from 'utils/routes';
 import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
-import { useAccount, useChainId, useClient, useSwitchChain } from 'wagmi';
+import { useAccount, useChainId, useClient } from 'wagmi';
 
 type ClaimFreeBetModalProps = {
     freeBet: FreeBet & { id: string };
@@ -33,7 +34,6 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
     const dispatch = useDispatch();
     const history = useHistory();
     const client = useClient();
-    const { switchChain } = useSwitchChain();
 
     const isBiconomy = useSelector((state: RootState) => getIsBiconomy(state));
 
@@ -49,7 +49,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
             onClose();
             navigateTo(ROUTES.Markets.Home);
         } else if (walletAddress) {
-            await claimFreeBet(walletAddress, freeBet.id, networkId, setFreeBet, history, switchChain);
+            await claimFreeBet(walletAddress, freeBet.id, networkId, setFreeBet, history);
         } else {
             dispatch(
                 setWalletConnectModalVisibility({
@@ -57,17 +57,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                 })
             );
         }
-    }, [
-        walletAddress,
-        dispatch,
-        freeBet.id,
-        freeBet.claimSuccess,
-        networkId,
-        setFreeBet,
-        history,
-        onClose,
-        switchChain,
-    ]);
+    }, [walletAddress, dispatch, freeBet.id, freeBet.claimSuccess, networkId, setFreeBet, history, onClose]);
 
     const exchangeRatesQuery = useExchangeRatesQuery({ networkId, client });
     const exchangeRates = exchangeRatesQuery.isSuccess && exchangeRatesQuery.data ? exchangeRatesQuery.data : null;
@@ -123,6 +113,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                           )})`
                                         : ''
                                 }`,
+                                network: SUPPORTED_NETWORKS_PARAMS[freeBet.network].shortChainName,
                             }}
                         />
                     </Message>
@@ -143,6 +134,7 @@ const ClaimFreeBetModal: React.FC<ClaimFreeBetModalProps> = ({ freeBet, onClose 
                                           )})`
                                         : ''
                                 }`,
+                                network: SUPPORTED_NETWORKS_PARAMS[freeBet.network].shortChainName,
                             }}
                         />
                     </Message>

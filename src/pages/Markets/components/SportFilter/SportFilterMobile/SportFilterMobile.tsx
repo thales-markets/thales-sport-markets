@@ -1,7 +1,7 @@
 import liveAnimationData from 'assets/lotties/live-markets-filter.json';
 import { SportFilter } from 'enums/markets';
 import Lottie from 'lottie-react';
-import { LeagueMap, Sport, getSportLeagueIds } from 'overtime-utils';
+import { League, LeagueMap, Sport, getSportLeagueIds } from 'overtime-utils';
 import React, { CSSProperties, Dispatch, SetStateAction, useContext } from 'react';
 import { ScrollMenu, VisibilityContext, publicApiType } from 'react-horizontal-scrolling-menu';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
@@ -16,9 +16,9 @@ import useQueryParam from 'utils/useQueryParams';
 type SportFilterMobileProps = {
     tagsList: Tags;
     setAvailableTags: Dispatch<SetStateAction<Tags>>;
-    playerPropsCountPerTag: Record<number, number>;
-    openMarketsCountPerSport: Record<SportFilter, number>;
-    liveMarketsCountPerSport: Record<SportFilter, number>;
+    playerPropsCountPerTag: Partial<Record<League, number>>;
+    openMarketsCountPerSport: Partial<Record<SportFilter, number>>;
+    liveMarketsCountPerSport: Partial<Record<SportFilter, number>>;
     boostedMarketsCount: number;
     showActive: boolean;
     isLoading: boolean;
@@ -78,11 +78,11 @@ const SportFilterMobile: React.FC<SportFilterMobileProps> = ({
                             (filterItem: SportFilter) =>
                                 (showActive &&
                                     filterItem !== SportFilter.Live &&
-                                    openMarketsCountPerSport[filterItem] > 0) ||
+                                    (openMarketsCountPerSport[filterItem] || 0) > 0) ||
                                 (showActive && filterItem === SportFilter.Boosted && boostedMarketsCount > 0) ||
                                 (showActive &&
                                     filterItem === SportFilter.Live &&
-                                    liveMarketsCountPerSport[filterItem] > 0) ||
+                                    (liveMarketsCountPerSport[filterItem] || 0) > 0) ||
                                 !showActive ||
                                 isLoading ||
                                 filterItem === SportFilter.Favourites

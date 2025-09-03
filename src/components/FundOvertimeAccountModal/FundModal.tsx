@@ -41,6 +41,7 @@ import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import { LINKS } from 'constants/links';
 
 type FundModalProps = {
     onClose: () => void;
@@ -327,6 +328,20 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-6')}
+                        open={!isSmallDevice}
+                    >
+                        <ButtonLocal
+                            onClick={() => {
+                                window.open(LINKS.CexDeposit, '_blank');
+                            }}
+                        >
+                            <ButtonText>{t('get-started.fund-account.cex-guide')}</ButtonText>
+                            <Icon className="icon icon--affiliate" />
+                        </ButtonLocal>
+                    </Tooltip>
                     {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && !showVerificationButton && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
@@ -375,17 +390,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             </ButtonLocal>
                         </Tooltip>
                     )}
-
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-3')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal disabled>
-                            <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
-                            <Icon className="icon icon--affiliate" />
-                        </ButtonLocal>
-                    </Tooltip>
                 </Container>
             </Wrapper>
             {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}

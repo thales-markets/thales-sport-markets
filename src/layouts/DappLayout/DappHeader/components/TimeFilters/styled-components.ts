@@ -39,6 +39,7 @@ export const Label = styled.label`
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    margin-left: 4px;
     @media (max-width: 950px) {
         line-height: 20px;
         color: ${(props) => props.theme.textColor.primary};

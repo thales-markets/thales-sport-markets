@@ -41,9 +41,10 @@ import {
 
 type FiltersProps = {
     isMainPageView?: boolean;
+    isTimeLimited?: boolean;
 };
 
-const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
+const Filters: React.FC<FiltersProps> = ({ isMainPageView, isTimeLimited }) => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const selectedOddsType = useSelector(getOddsType);
@@ -138,7 +139,15 @@ const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
                     }}
                 >
                     <SettingsWrapper>
-                        <Tooltip overlay={isMobile ? '' : t('common.filter.tooltip.date')}>
+                        <Tooltip
+                            overlay={
+                                isMobile
+                                    ? ''
+                                    : isTimeLimited
+                                    ? t('common.filter.tooltip.date-limited')
+                                    : t('common.filter.tooltip.date')
+                            }
+                        >
                             <FlexDivCentered gap={2}>
                                 <HeaderIcon
                                     iconColor={datePeriodFilter > 0 ? theme.textColor.quaternary : ''}
@@ -151,7 +160,7 @@ const Filters: React.FC<FiltersProps> = ({ isMainPageView }) => {
                         {timeFiltersOpen && (
                             <TimeFiltersDropdown>
                                 <DropDown>
-                                    <TimeFilters />
+                                    <TimeFilters isTimeLimited={isTimeLimited} />
                                 </DropDown>
                             </TimeFiltersDropdown>
                         )}
