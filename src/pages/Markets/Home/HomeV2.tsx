@@ -307,10 +307,12 @@ const Home: React.FC = () => {
 
             const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
             const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
-            const isSportValid =
-                Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) !==
-                undefined;
-            const isLeagueFilterRedudant = isSportValid && !isSportFilterTimeLimited;
+            const isLeagueFilterRedudant =
+                sportMarketsQueryFilters.sport &&
+                sportMarketsQueryFilters.sport === sportFilter &&
+                sportMarketsQueryFilters.leaguedIds &&
+                !sportMarketsQueryFilters.leaguedIds.length &&
+                !isSportFilterTimeLimited;
 
             const sportMarketsFilters: SportsMarketsFilterProps = {
                 status: statusFilter,
