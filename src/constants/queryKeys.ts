@@ -20,11 +20,26 @@ const QUERY_KEYS = {
         statusFilter: StatusFilter,
         networkId: Network,
         includeProofs: boolean,
+        sport: string,
+        leaguedIds: string,
         gameIds: string,
         typeIds: string,
         playerIds: string,
-        lines: string
-    ) => ['sportMarketsV2', statusFilter, networkId, includeProofs, gameIds, typeIds, playerIds, lines],
+        lines: string,
+        nextHours: string
+    ) => [
+        'sportMarketsV2',
+        statusFilter,
+        networkId,
+        includeProofs,
+        sport,
+        leaguedIds,
+        gameIds,
+        typeIds,
+        playerIds,
+        lines,
+        nextHours,
+    ],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],
     SportMarketSgp: (networkId: Network, gameId: string, params: string) => [
@@ -39,6 +54,7 @@ const QUERY_KEYS = {
         networkId,
         isLive,
     ],
+    GamesCount: (networkId: Network) => ['gamesCount', networkId],
     Prices: {
         PythPrices: (priceId: string, publishTime: number) => ['prices', 'pythPrices', priceId, publishTime],
         PythCandlestickData: (asset: string, dateRange: number, resolution: string) => [

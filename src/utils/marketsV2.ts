@@ -1,8 +1,9 @@
-import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE } from 'constants/markets';
+import { LIVE_MARKETS_STALE_PAUSED_MINUTES, NOT_AVAILABLE, TIME_FILTER_THRESHOLDS } from 'constants/markets';
 import { differenceInMinutes, secondsToMilliseconds } from 'date-fns';
+import { TimeFilter } from 'enums/filters';
 import { MarketTypeGroup } from 'enums/marketTypes';
-import { GameStatus, MarketStatus, Position } from 'enums/markets';
-import _, { orderBy } from 'lodash';
+import { GameStatus, MarketStatus, Position, SportFilter } from 'enums/markets';
+import _, { orderBy, sumBy } from 'lodash';
 import {
     getLeagueInitialSport,
     getLeagueLabel,
@@ -38,11 +39,14 @@ import {
     Sport,
 } from 'overtime-utils';
 import {
+    GamesCount,
     LiveTradingRequest,
     LiveTradingRequestRaw,
+    NonEmptySport,
     SerializableSportMarket,
     SerializableTicketMarket,
     SportMarket,
+    Tags,
     Team,
     Ticket,
     TicketMarket,
@@ -480,7 +484,7 @@ export const isSameMarket = (market: SportMarket | TicketPosition, ticketPositio
 export const isStalePausedMarket = (market: SportMarket) =>
     market.isPaused &&
     market.pausedAt &&
-    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES;
+    differenceInMinutes(Date.now(), market.pausedAt) >= LIVE_MARKETS_STALE_PAUSED_MINUTES; // TODO: Move this to overtime-utils
 
 export const getTradeData = (markets: TicketMarket[]): TradeData[] =>
     markets.map((market) => {
@@ -920,7 +924,7 @@ export const getPlayerPropsMarketsOverviewLength = (market: SportMarket) => {
     return Math.min(uniqueMarketsLength, 3);
 };
 
-export const getDefaultPlayerPropsLeague = (leagueCount: Record<number, number>) => {
+export const getDefaultPlayerPropsLeague = (leagueCount: Partial<Record<League, number>>) => {
     if (leagueCount[League.NBA]) {
         return League.NBA;
     }
@@ -955,4 +959,86 @@ export const getSortedSgpBuilderMarkets = (markets: SportMarket[]) => {
         });
     }
     return sortedMarkets;
+};
+
+export const getTimeFilter = (gamesCount: number, sportFilter: SportFilter) => {
+    if (sportFilter === SportFilter.All) {
+        return TimeFilter.DAY;
+    } else {
+        return TimeFilter.ALL;
+    }
+    // TODO: for now not in use
+    for (const [threshold, filter] of TIME_FILTER_THRESHOLDS) {
+        if (gamesCount > threshold) return filter;
+    }
+    return TimeFilter.ALL;
+};
+
+export const getFiltersInfo = (
+    sportFilter: SportFilter,
+    tagFilter: Tags,
+    gamesCount: GamesCount | undefined,
+    favouriteLeagues: Tags
+) => {
+    let leagueIdsFilter: League[] = [];
+    let gamesCountFilter: number | null = 0;
+    let timeLimitFilter = TimeFilter.ALL;
+
+    if (tagFilter.length > 0 && sportFilter !== SportFilter.Boosted) {
+        leagueIdsFilter = tagFilter.map((tag) => tag.id);
+        gamesCountFilter = gamesCount
+            ? sumBy(leagueIdsFilter, (leagueId: League) => {
+                  const sportForGamesCount = getLeagueSport(leagueId);
+                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+              })
+            : null;
+    } else {
+        switch (sportFilter) {
+            case SportFilter.Boosted:
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount.Promo)
+                          .map((sportKey) => Object.keys(gamesCount.Promo[sportKey as NonEmptySport]?.leagues || ''))
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCountFilter = gamesCount ? gamesCount.Promo.total : null;
+                break;
+            case SportFilter.Favourites:
+                leagueIdsFilter = favouriteLeagues.map((tag) => tag.id);
+                gamesCountFilter = gamesCount
+                    ? sumBy(leagueIdsFilter, (leagueId: League) => {
+                          const sportForGamesCount = getLeagueSport(leagueId);
+                          return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+                      })
+                    : null;
+                break;
+            case SportFilter.PlayerProps:
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount.PlayerProps)
+                          .map((sportKey) =>
+                              Object.keys(gamesCount.PlayerProps[sportKey as NonEmptySport]?.leagues || '')
+                          )
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCountFilter = gamesCount ? gamesCount.PlayerProps.total : null;
+                break;
+            case SportFilter.QuickSgp:
+                leagueIdsFilter = gamesCount
+                    ? Object.keys(gamesCount[SportFilter.QuickSgp])
+                          .map((sportKey) => Object.keys(gamesCount.QuickSgp[sportKey as NonEmptySport]?.leagues || ''))
+                          .flat()
+                          .map((leagueId) => Number(leagueId) as League)
+                    : [];
+                gamesCountFilter = gamesCount ? gamesCount.QuickSgp.total : null;
+                break;
+            default:
+                gamesCountFilter = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total || 0 : null;
+        }
+    }
+
+    timeLimitFilter =
+        gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter, sportFilter);
+
+    return { leagueIdsFilter, gamesCountFilter, timeLimitFilter };
 };
