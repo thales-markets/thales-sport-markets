@@ -41,6 +41,7 @@ import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
+import { LINKS } from 'constants/links';
 
 type FundModalProps = {
     onClose: () => void;
@@ -109,8 +110,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
-
-    const docsCexUrl = 'https://docs.overtime.io/overtime-guides/deposit-from-exchange';
 
     useEffect(() => {
         if (isBiconomy && smartAddress) {
@@ -336,7 +335,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                     >
                         <ButtonLocal
                             onClick={() => {
-                                window.open(docsCexUrl, '_blank');
+                                window.open(LINKS.CexDeposit, '_blank');
                             }}
                         >
                             <ButtonText>{t('get-started.fund-account.cex-guide')}</ButtonText>
