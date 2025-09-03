@@ -105,6 +105,8 @@ const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ '.
 
 let finalMarketsCached: SportMarkets = [];
 
+const FETCH_ALL_MARKETS = true;
+
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -133,10 +135,10 @@ const Home: React.FC = () => {
     const [sportMarketsQueryFilters, setSportMarketsQueryFilters] = useState<SportsMarketsFilterProps>({
         status: statusFilter,
         includeProofs: false,
-        sport: sportFilter,
-        leaguedIds: [],
-        gameIds: [],
-        timeLimitHours: TimeFilter.TWELVE_HOURS,
+        sport: FETCH_ALL_MARKETS ? undefined : sportFilter,
+        leaguedIds: FETCH_ALL_MARKETS ? undefined : [],
+        gameIds: FETCH_ALL_MARKETS ? undefined : [],
+        timeLimitHours: FETCH_ALL_MARKETS ? undefined : TimeFilter.DAY,
     });
     const [isFilterTimeLimited, setIsFilterTimeLimited] = useState(false);
 
@@ -284,6 +286,21 @@ const Home: React.FC = () => {
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
         if (sportFilter !== SportFilter.Live) {
+            if (FETCH_ALL_MARKETS) {
+                const sportMarketsFilters: SportsMarketsFilterProps = {
+                    status: statusFilter,
+                    includeProofs: false,
+                    sport: undefined,
+                    leaguedIds: undefined,
+                    timeLimitHours: undefined,
+                    isDisabled: false,
+                };
+
+                if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+                    setSportMarketsQueryFilters(sportMarketsFilters);
+                }
+                return;
+            }
             const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
                 sportFilter,
                 tagFilter,
