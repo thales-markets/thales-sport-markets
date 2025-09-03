@@ -351,14 +351,17 @@ const Parlay: React.FC<ParlayProps> = ({ onSuccess, openMarkets }) => {
                     };
                 });
 
-            if (openSportMarketsProofs && ticket.length > openTicketMarkets.length) {
-                const notOpenedMarkets = ticket.filter((ticketPosition) =>
-                    openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
-                );
+            // check if odds are missing for some ticket markets
+            if (openSportMarketsProofs) {
+                if (ticket.length > openTicketMarkets.length) {
+                    const notOpenedMarkets = ticket.filter((ticketPosition) =>
+                        openTicketMarkets.every((market: SportMarket) => !isSameMarket(market, ticketPosition))
+                    );
 
-                setUnavailableMarkets(notOpenedMarkets);
-            } else {
-                setUnavailableMarkets([]);
+                    setUnavailableMarkets(notOpenedMarkets);
+                } else {
+                    setUnavailableMarkets([]);
+                }
             }
 
             const ticketOdds = openTicketMarkets.map((market) => ({
