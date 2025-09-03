@@ -110,6 +110,8 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);
     }, [walletAddress, networkId, apiKey]);
 
+    const docsCexUrl = 'https://docs.overtime.io/overtime-guides/deposit-from-exchange';
+
     useEffect(() => {
         if (isBiconomy && smartAddress) {
             const verifiedOvertimeAccounts = new Set(
@@ -327,6 +329,20 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
+                    <Tooltip
+                        customIconStyling={{ color: theme.textColor.secondary }}
+                        overlay={t('get-started.fund-account.tooltip-6')}
+                        open={!isSmallDevice}
+                    >
+                        <ButtonLocal
+                            onClick={() => {
+                                window.open(docsCexUrl, '_blank');
+                            }}
+                        >
+                            <ButtonText>{t('get-started.fund-account.cex-guide')}</ButtonText>
+                            <Icon className="icon icon--affiliate" />
+                        </ButtonLocal>
+                    </Tooltip>
                     {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && !showVerificationButton && (
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
@@ -375,17 +391,6 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                             </ButtonLocal>
                         </Tooltip>
                     )}
-
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-3')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal disabled>
-                            <ButtonText>{t('get-started.fund-account.from-exchange')}</ButtonText>
-                            <Icon className="icon icon--affiliate" />
-                        </ButtonLocal>
-                    </Tooltip>
                 </Container>
             </Wrapper>
             {showQRModal && <QRCodeModal onClose={() => setShowQRModal(false)} walletAddress={walletAddress} />}
