@@ -283,44 +283,49 @@ const Home: React.FC = () => {
     // set sport market filters
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
-        const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
-            sportFilter,
-            tagFilter,
-            gamesCount,
-            favouriteLeagues
-        );
+        if (sportFilter !== SportFilter.Live) {
+            const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
+                sportFilter,
+                tagFilter,
+                gamesCount,
+                favouriteLeagues
+            );
 
-        const isFilterTimeLimited = statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
-        setIsFilterTimeLimited(isFilterTimeLimited);
+            const isFilterTimeLimited =
+                statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
+            setIsFilterTimeLimited(isFilterTimeLimited);
 
-        if (isFilterTimeLimited) {
-            dispatch(setDatePeriodFilter(timeLimitFilter));
-            setDateParam(`${timeLimitFilter}hours`);
-            wasSportTimeLimited.current = true;
-        } else if (wasSportTimeLimited.current) {
-            dispatch(setDatePeriodFilter(TimeFilter.ALL));
-            setDateParam('');
-            wasSportTimeLimited.current = false;
-        }
+            if (isFilterTimeLimited) {
+                dispatch(setDatePeriodFilter(timeLimitFilter));
+                setDateParam(`${timeLimitFilter}hours`);
+                wasSportTimeLimited.current = true;
+            } else if (wasSportTimeLimited.current) {
+                dispatch(setDatePeriodFilter(TimeFilter.ALL));
+                setDateParam('');
+                wasSportTimeLimited.current = false;
+            }
 
-        const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
-        const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
-        const isSportValid =
-            Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) !==
-            undefined;
-        const isLeagueFilterRedudant = isSportValid && !isSportFilterTimeLimited;
+            const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
+            const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
+            const isLeagueFilterRedudant =
+                sportMarketsQueryFilters.sport &&
+                sportMarketsQueryFilters.sport === sportFilter &&
+                sportMarketsQueryFilters.leaguedIds &&
+                !sportMarketsQueryFilters.leaguedIds.length &&
+                !isSportFilterTimeLimited;
 
-        const sportMarketsFilters: SportsMarketsFilterProps = {
-            status: statusFilter,
-            includeProofs: false,
-            sport: sportFilter,
-            leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
-            timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
-            isDisabled: !gamesCountFilter,
-        };
+            const sportMarketsFilters: SportsMarketsFilterProps = {
+                status: statusFilter,
+                includeProofs: false,
+                sport: sportFilter,
+                leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
+                timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
+                isDisabled: !gamesCountFilter,
+            };
 
-        if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
-            setSportMarketsQueryFilters(sportMarketsFilters);
+            if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+                setSportMarketsQueryFilters(sportMarketsFilters);
+            }
         }
     }, [
         statusFilter,
