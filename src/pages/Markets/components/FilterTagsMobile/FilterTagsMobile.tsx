@@ -36,11 +36,11 @@ const FilterTagsMobile: React.FC = () => {
     const [, setSportParam] = useQueryParam('sport', '');
     const [, setStatusParam] = useQueryParam('status', '');
     const [, setSearchParam] = useQueryParam('search', '');
-    const [dateParam, setDateParam] = useQueryParam('date', '');
+    const [, setDateParam] = useQueryParam('date', '');
     const [, setTagParam] = useQueryParam('tag', '');
     const [, setTournamentParam] = useQueryParam('tournament', '');
 
-    const dateTagLabel = dateParam?.split('h')[0] + ' ' + t('common.time-remaining.hours');
+    const dateTagLabel = `${datePeriodFilter} ${t('common.time-remaining.hours')}`;
     const hideContainer =
         marketSearch == '' &&
         statusFilter == StatusFilter.OPEN_MARKETS &&
