@@ -989,7 +989,7 @@ export const getFiltersInfo = (
         gamesCountFilter = gamesCount
             ? sumBy(leagueIdsFilter, (leagueId: League) => {
                   const sportForGamesCount = getLeagueSport(leagueId);
-                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId]?.total || 0;
               })
             : null;
     } else {
