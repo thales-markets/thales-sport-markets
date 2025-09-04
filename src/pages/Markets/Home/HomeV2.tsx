@@ -312,14 +312,17 @@ const Home: React.FC = () => {
                 statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
             setIsFilterTimeLimited(isFilterTimeLimited);
 
-            if (isFilterTimeLimited) {
-                dispatch(setDatePeriodFilter(timeLimitFilter));
-                setDateParam(`${timeLimitFilter}hours`);
-                wasSportTimeLimited.current = true;
-            } else if (wasSportTimeLimited.current) {
-                dispatch(setDatePeriodFilter(TimeFilter.ALL));
-                setDateParam('');
-                wasSportTimeLimited.current = false;
+            // update date filter
+            if (!selectedMarket) {
+                if (isFilterTimeLimited) {
+                    dispatch(setDatePeriodFilter(timeLimitFilter));
+                    setDateParam(`${timeLimitFilter}hours`);
+                    wasSportTimeLimited.current = true;
+                } else if (wasSportTimeLimited.current) {
+                    dispatch(setDatePeriodFilter(TimeFilter.ALL));
+                    setDateParam('');
+                    wasSportTimeLimited.current = false;
+                }
             }
 
             const sportMarketsFilters: SportsMarketsFilterProps = {
@@ -352,6 +355,7 @@ const Home: React.FC = () => {
         dispatch,
         setDateParam,
         sportMarketsQueryFilters,
+        selectedMarket,
     ]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(
