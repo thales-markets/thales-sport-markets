@@ -1,3 +1,4 @@
+import { TimeFilter } from 'enums/filters';
 import { SportFilter, StatusFilter } from 'enums/markets';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +24,7 @@ import { FlexDiv, FlexDivRowCentered } from 'styles/common';
 import { getMarketTypeName } from 'utils/markets';
 import useQueryParam from 'utils/useQueryParams';
 
-const FilterTagsMobile: React.FC = () => {
+const FilterTagsMobile: React.FC<{ isFilterTimeLimited: boolean }> = ({ isFilterTimeLimited }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const marketSearch = useSelector(getMarketSearch);
@@ -36,15 +37,15 @@ const FilterTagsMobile: React.FC = () => {
     const [, setSportParam] = useQueryParam('sport', '');
     const [, setStatusParam] = useQueryParam('status', '');
     const [, setSearchParam] = useQueryParam('search', '');
-    const [dateParam, setDateParam] = useQueryParam('date', '');
+    const [, setDateParam] = useQueryParam('date', '');
     const [, setTagParam] = useQueryParam('tag', '');
     const [, setTournamentParam] = useQueryParam('tournament', '');
 
-    const dateTagLabel = dateParam?.split('h')[0] + ' ' + t('common.time-remaining.hours');
+    const dateTagLabel = datePeriodFilter + ' ' + t('common.time-remaining.hours');
     const hideContainer =
         marketSearch == '' &&
         statusFilter == StatusFilter.OPEN_MARKETS &&
-        datePeriodFilter == 0 &&
+        (datePeriodFilter == TimeFilter.ALL || isFilterTimeLimited) &&
         sportFilter == SportFilter.All &&
         marketTypeFilter == undefined;
 
@@ -78,14 +79,14 @@ const FilterTagsMobile: React.FC = () => {
                     </FilterTagLabel>
                 </FilterTagContainer>
             )}
-            {datePeriodFilter != 0 && (
+            {datePeriodFilter != TimeFilter.ALL && !isFilterTimeLimited && (
                 <FilterTagContainer>
                     <FilterTagLabel>
                         {dateTagLabel}
                         <ClearIcon
                             className="icon icon--close"
                             onClick={() => {
-                                dispatch(setDatePeriodFilter(0));
+                                dispatch(setDatePeriodFilter(TimeFilter.ALL));
                                 setDateParam('');
                             }}
                         />
