@@ -122,7 +122,7 @@ const Tag: React.FC<TagProps> = ({ setTagFilter, sport, tag, count, tournaments 
                     ) : (
                         <ArrowIcon onClick={() => setIsOpen(true)} className="icon icon--caret-right" />
                     ))}
-                <Count isMobile={isMobile}>{count}</Count>
+                {count > 0 && <Count isMobile={isMobile}>{count}</Count>}
 
                 <StarIcon
                     hidden={tag.label === SportFilter.Favourites}

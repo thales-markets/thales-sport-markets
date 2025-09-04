@@ -76,7 +76,7 @@ import {
 } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { getDefaultPlayerPropsLeague, getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague, getFiltersInfo, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -104,6 +104,8 @@ const FooterSidebarMobile = lazy(
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
 let finalMarketsCached: SportMarkets = [];
+
+const FETCH_ALL_MARKETS = false;
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -133,10 +135,10 @@ const Home: React.FC = () => {
     const [sportMarketsQueryFilters, setSportMarketsQueryFilters] = useState<SportsMarketsFilterProps>({
         status: statusFilter,
         includeProofs: false,
-        sport: sportFilter,
-        leaguedIds: [],
-        gameIds: [],
-        timeLimitHours: TimeFilter.TWELVE_HOURS,
+        sport: FETCH_ALL_MARKETS ? undefined : sportFilter,
+        leaguedIds: FETCH_ALL_MARKETS ? undefined : [],
+        gameIds: FETCH_ALL_MARKETS ? undefined : [],
+        timeLimitHours: FETCH_ALL_MARKETS ? undefined : TimeFilter.DAY,
     });
     const [isFilterTimeLimited, setIsFilterTimeLimited] = useState(false);
 
@@ -284,6 +286,21 @@ const Home: React.FC = () => {
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
         if (sportFilter !== SportFilter.Live) {
+            if (FETCH_ALL_MARKETS) {
+                const sportMarketsFilters: SportsMarketsFilterProps = {
+                    status: statusFilter,
+                    includeProofs: false,
+                    sport: undefined,
+                    leaguedIds: undefined,
+                    timeLimitHours: undefined,
+                    isDisabled: false,
+                };
+
+                if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+                    setSportMarketsQueryFilters(sportMarketsFilters);
+                }
+                return;
+            }
             const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
                 sportFilter,
                 tagFilter,
@@ -305,26 +322,24 @@ const Home: React.FC = () => {
                 wasSportTimeLimited.current = false;
             }
 
-            const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
-            const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
-            const isLeagueFilterRedudant =
-                sportMarketsQueryFilters.sport &&
-                sportMarketsQueryFilters.sport === sportFilter &&
-                sportMarketsQueryFilters.leaguedIds &&
-                !sportMarketsQueryFilters.leaguedIds.length &&
-                !isSportFilterTimeLimited;
-
             const sportMarketsFilters: SportsMarketsFilterProps = {
                 status: statusFilter,
                 includeProofs: false,
                 sport: sportFilter,
-                leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
+                leaguedIds: leagueIdsFilter,
                 timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
                 isDisabled: !gamesCountFilter,
             };
 
             if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
                 setSportMarketsQueryFilters(sportMarketsFilters);
+            }
+        } else {
+            if (wasSportTimeLimited.current) {
+                wasSportTimeLimited.current = false;
+                setIsFilterTimeLimited(false);
+                dispatch(setDatePeriodFilter(TimeFilter.ALL));
+                setDateParam('');
             }
         }
     }, [
@@ -1067,7 +1082,7 @@ const Home: React.FC = () => {
                                     />
                                 )}
                             <Filters isMainPageView isTimeLimited={isFilterTimeLimited} />
-                            <FilterTagsMobile />
+                            <FilterTagsMobile isFilterTimeLimited={isFilterTimeLimited} />
                         </>
                     )}
                     {marketsLoading ? (
