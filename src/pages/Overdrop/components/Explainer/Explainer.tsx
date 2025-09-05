@@ -115,17 +115,6 @@ const Explainer: React.FC = () => {
                             }}
                         />
                     </Content>
-                    <Label>{t('overdrop.leveling-tree.explainer.twitter-share-bonus')}</Label>
-                    <Content>
-                        <Trans
-                            i18nKey="overdrop.leveling-tree.explainer.twitter-content"
-                            components={{
-                                br: <br />,
-                                bold: <Bold />,
-                                highlight: <HighlightedText />,
-                            }}
-                        />
-                    </Content>
                     <Label>{t('overdrop.leveling-tree.explainer.loyalty-boost')}</Label>
                     <Content>
                         <Trans

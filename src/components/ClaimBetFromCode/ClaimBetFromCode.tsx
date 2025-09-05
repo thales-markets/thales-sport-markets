@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import TextInput from 'components/fields/TextInput';
 import { generalConfig } from 'config/general';
