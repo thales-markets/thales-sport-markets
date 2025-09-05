@@ -7,8 +7,10 @@ import Modal from 'components/Modal';
 import NetworkSwitcher from 'components/NetworkSwitcher';
 import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
+import { getEnv, ViteEnvKeys } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
@@ -41,7 +43,6 @@ import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { LINKS } from 'constants/links';
 
 type FundModalProps = {
     onClose: () => void;
@@ -105,7 +106,7 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
         }
     };
 
-    const apiKey = import.meta.env.VITE_APP_ONRAMPER_KEY || '';
+    const apiKey = getEnv(ViteEnvKeys.VITE_APP_ONRAMPER_KEY) || '';
 
     const onramperUrl = useMemo(() => {
         return getOnRamperUrl(apiKey, walletAddress, networkId);

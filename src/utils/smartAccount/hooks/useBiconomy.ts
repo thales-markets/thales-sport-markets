@@ -1,8 +1,10 @@
 import { createSmartAccountClient } from '@biconomy/account';
+import { getEnv, ViteEnvKeys } from 'config/general';
 import { LINKS } from 'constants/links';
 import { RPC_LIST } from 'constants/network';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { SupportedNetwork } from 'types/network';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useDisconnect, useSwitchChain, useWalletClient } from 'wagmi';
 
@@ -13,7 +15,7 @@ function useBiconomy() {
         ((message: string | Uint8Array) => Promise<`0x${string}`>) | undefined
     >(undefined);
     const dispatch = useDispatch();
-    const networkId = useChainId();
+    const networkId = useChainId() as SupportedNetwork;
     const { data: walletClient } = useWalletClient();
     const { switchChain } = useSwitchChain();
     const { disconnect } = useDisconnect();
@@ -21,10 +23,17 @@ function useBiconomy() {
 
     useEffect(() => {
         if (walletClient && isConnected) {
-            const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${import.meta.env.VITE_APP_BICONOMY_BUNDLE_KEY}`;
+            const bundlerUrl = `${LINKS.Biconomy.Bundler}${networkId}/${getEnv(
+                ViteEnvKeys.VITE_APP_BICONOMY_BUNDLE_KEY
+            )}`;
 
             const createSmartAccount = async () => {
-                const PAYMASTER_API_KEY = import.meta.env['VITE_APP_PAYMASTER_KEY_' + networkId];
+                const vitePaymasterEnvKey = Object.values(ViteEnvKeys).find(
+                    (envKey) => envKey === `VITE_APP_PAYMASTER_KEY_${networkId}`
+                );
+                !vitePaymasterEnvKey && console.error(`Missing PAYMASTER KEY for network ${networkId}`);
+                const PAYMASTER_API_KEY = vitePaymasterEnvKey ? getEnv(vitePaymasterEnvKey) : '';
+
                 const smartAccount = await createSmartAccountClient({
                     signer: walletClient,
                     bundlerUrl: bundlerUrl,

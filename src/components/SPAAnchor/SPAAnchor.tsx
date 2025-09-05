@@ -1,3 +1,4 @@
+import { getEnv, ViteEnvKeys } from 'config/general';
 import React, { CSSProperties, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { navigateTo } from 'utils/routes';
@@ -11,7 +12,7 @@ type FieldValidationMessageProps = {
     children: React.ReactNode;
 };
 
-const ifIpfsDeployment = import.meta.env.VITE_APP_IPFS_DEPLOYMENT === 'true';
+const ifIpfsDeployment = getEnv(ViteEnvKeys.VITE_APP_IPFS_DEPLOYMENT) === 'true';
 
 const SPAAnchor: React.FC<FieldValidationMessageProps> = ({ onClick, children, href, style, className, state }) => {
     return (

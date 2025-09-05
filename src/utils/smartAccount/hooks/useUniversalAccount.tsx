@@ -1,4 +1,5 @@
 import { IAssetsResponse, UniversalAccount } from '@particle-network/universal-account-sdk';
+import { getEnv, ViteEnvKeys } from 'config/general';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
@@ -24,7 +25,7 @@ function useUniversalAccount() {
         if (walletClient && isConnected) {
             const createUniversalAccount = async () => {
                 const universalAccount = new UniversalAccount({
-                    projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
+                    projectId: getEnv(ViteEnvKeys.VITE_APP_UA_PROJECT_ID),
                     ownerAddress: walletClient?.account.address as any,
                 });
 
@@ -75,7 +76,7 @@ function useUniversalAccount() {
     const refetchUnifyBalance = async () => {
         let RETRY_COUNT = 0;
         const universalAccount = new UniversalAccount({
-            projectId: import.meta.env['VITE_APP_UA_PROJECT_ID'],
+            projectId: getEnv(ViteEnvKeys.VITE_APP_UA_PROJECT_ID),
             ownerAddress: walletClient?.account.address as any,
         });
 

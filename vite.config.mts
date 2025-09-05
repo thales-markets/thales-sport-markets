@@ -47,6 +47,18 @@ const plugins = (_mode: string): PluginOption[] => {
             // Whether to polyfill `Buffer` (true by default)
             include: ['buffer'],
         }),
+        {
+            name: 'obfuscate-env',
+            configResolved(config) {
+                for (const key in config.env) {
+                    if (key.startsWith('VITE_')) {
+                        const originalValue = config.env[key];
+                        const encodedKey = btoa(key.split('').reverse().join(''));
+                        config.env[encodedKey] = btoa(originalValue.split('').reverse().join(''));
+                    }
+                }
+            },
+        },
     ];
 };
 
