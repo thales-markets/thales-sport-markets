@@ -16,6 +16,7 @@ export enum ViteEnvKeys {
     VITE_APP_DRPC_PROJECT_ID = 'VITE_APP_DRPC_PROJECT_ID',
     VITE_APP_BICONOMY_BUNDLE_KEY = 'VITE_APP_BICONOMY_BUNDLE_KEY',
     VITE_APP_ADMIN_API_KEY = 'VITE_APP_ADMIN_API_KEY',
+    VITE_APP_CLIENT_TOTP_SECRET = 'VITE_APP_CLIENT_TOTP_SECRET',
     VITE_APP_WALLET_CONNECT_PROJECT_ID = 'VITE_APP_WALLET_CONNECT_PROJECT_ID',
     VITE_APP_PARTICLE_PROJECT_ID = 'VITE_APP_PARTICLE_PROJECT_ID',
     VITE_APP_PARTICLE_CLIENT_KEY = 'VITE_APP_PARTICLE_CLIENT_KEY',
@@ -36,11 +37,10 @@ export const getEnv = (name: ViteEnvKeys) => {
     const encodedName = btoa(name.split('').reverse().join(''));
     const value = process.env[encodedName] || '';
 
-    if (!value) {
-        console.error(`Env ${name} not defined`);
-        return '';
+    if (value) {
+        const decodedValue = atob(value).split('').reverse().join('');
+        return decodedValue;
     }
 
-    const decodedValue = atob(value).split('').reverse().join('');
-    return decodedValue;
+    return '';
 };

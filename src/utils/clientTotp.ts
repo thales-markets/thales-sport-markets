@@ -1,5 +1,6 @@
 // src/utils/axiosTotp.ts
 import axios, { AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
+import { getEnv, ViteEnvKeys } from 'config/general';
 
 // --- TOTP helpers ---
 const toHex = (buf: ArrayBuffer) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -12,7 +13,7 @@ async function hmacHex(key: CryptoKey, msg: string) {
 let cachedKey: CryptoKey | null = null;
 async function getKey() {
     if (cachedKey) return cachedKey;
-    const secret = import.meta.env.VITE_APP_CLIENT_TOTP_SECRET as string;
+    const secret = getEnv(ViteEnvKeys.VITE_APP_CLIENT_TOTP_SECRET);
     cachedKey = await crypto.subtle.importKey(
         'raw',
         new TextEncoder().encode(secret || ''),
