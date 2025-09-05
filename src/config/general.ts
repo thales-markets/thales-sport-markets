@@ -29,13 +29,11 @@ export enum ViteEnvKeys {
 }
 
 export const getEnv = (name: ViteEnvKeys) => {
-    console.log(process.env);
-    console.log(import.meta.env);
     if (import.meta.env.DEV) {
-        return import.meta.env[name];
+        return process.env[name];
     }
     const encodedName = btoa(name.split('').reverse().join(''));
-    const value = process.env[encodedName];
+    const value = import.meta.env[encodedName];
 
     if (!value) {
         console.error(`Env ${name} not defined`);
