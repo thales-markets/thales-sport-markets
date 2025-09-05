@@ -781,7 +781,8 @@
                 "longest-reception": "A wager on whether a certain player's longest reception will be over/under a certain amount.",
                 "longest-rush": "A wager on whether a certain player's longest rush will be over/under a certain amount.",
                 "passing-rushing": "A wager on whether a certain player's passing + rushing yards will be over/under a certain amount.",
-                "rushing-receiving": "A wager on whether a certain player's rushing + receiving yards will be over/under a certain amount."
+                "rushing-receiving": "A wager on whether a certain player's rushing + receiving yards will be over/under a certain amount.",
+                "handicap": "Handicap markets always refer to absolute score from 0-0."
             },
             "player-props": "Player props",
             "total-markets": "Total markets",
