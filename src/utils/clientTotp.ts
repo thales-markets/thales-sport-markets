@@ -12,7 +12,7 @@ async function hmacHex(key: CryptoKey, msg: string) {
 let cachedKey: CryptoKey | null = null;
 async function getKey() {
     if (cachedKey) return cachedKey;
-    const secret = import.meta.env.VITE_CLIENT_TOTP_SECRET as string;
+    const secret = import.meta.env.VITE_APP_CLIENT_TOTP_SECRET as string;
     cachedKey = await crypto.subtle.importKey(
         'raw',
         new TextEncoder().encode(secret || ''),
