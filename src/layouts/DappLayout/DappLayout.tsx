@@ -1,5 +1,5 @@
 import SpeedMarketsButtonAnimated from 'assets/images/speed-markets/speed-markets-animated.svg';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import ClaimFreeBetModal from 'components/ClaimFreeBetModal';
 import MetaData from 'components/MetaData';
 import ThalesToOverMigrationModal from 'components/ThalesToOverMigrationModal';

@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { generalConfig } from 'config/general';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { BATCH_SIZE } from 'constants/markets';

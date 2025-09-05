@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { generalConfig, noCacheConfig } from 'config/general';
 import { BATCH_SIZE } from 'constants/markets';
 import QUERY_KEYS from 'constants/queryKeys';

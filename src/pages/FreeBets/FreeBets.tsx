@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import CollateralSelector from 'components/CollateralSelector';
 import NumericInput from 'components/fields/NumericInput';
