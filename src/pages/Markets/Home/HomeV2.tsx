@@ -77,6 +77,7 @@ import {
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
 import { getDefaultPlayerPropsLeague, getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
+import { refetchSpeedMarketsLimits } from 'utils/queryConnector';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -130,6 +131,7 @@ const Home: React.FC = () => {
     const [showTicketMobileModal, setShowTicketMobileModal] = useState<boolean>(false);
     const [availableMarketTypes, setAvailableMarketTypes] = useState<MarketType[]>([]);
     const [unfilteredPlayerPropsMarkets, setUnfilteredPlayerPropsMarkets] = useState<SportMarket[]>([]);
+    const [pageNumber, setPageNumber] = useState(1);
     const [sportMarketsQueryFilters, setSportMarketsQueryFilters] = useState<SportsMarketsFilterProps>({
         status: statusFilter,
         includeProofs: false,
@@ -137,6 +139,7 @@ const Home: React.FC = () => {
         leaguedIds: [],
         gameIds: [],
         timeLimitHours: TimeFilter.TWELVE_HOURS,
+        pageNumber: pageNumber,
     });
     const [isFilterTimeLimited, setIsFilterTimeLimited] = useState(false);
 
@@ -317,10 +320,12 @@ const Home: React.FC = () => {
             leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
             timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
             isDisabled: !gamesCountFilter,
+            pageNumber,
         };
 
         if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
             setSportMarketsQueryFilters(sportMarketsFilters);
+            refetchSpeedMarketsLimits;
         }
     }, [
         statusFilter,
@@ -331,6 +336,7 @@ const Home: React.FC = () => {
         gameMultipliers,
         dispatch,
         setDateParam,
+        pageNumber,
         sportMarketsQueryFilters,
     ]);
 
@@ -1115,7 +1121,11 @@ const Home: React.FC = () => {
                                                 </LoaderContainer>
                                             }
                                         >
-                                            <MarketsGridV2 markets={finalMarkets} />
+                                            <MarketsGridV2
+                                                markets={finalMarkets}
+                                                setPageNumber={setPageNumber}
+                                                pageNumber={pageNumber}
+                                            />
                                         </Suspense>
 
                                         {isMobile ? (

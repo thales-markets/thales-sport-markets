@@ -26,7 +26,8 @@ const QUERY_KEYS = {
         typeIds: string,
         playerIds: string,
         lines: string,
-        nextHours: string
+        nextHours: string,
+        pageNumber: number
     ) => [
         'sportMarketsV2',
         statusFilter,
@@ -39,6 +40,7 @@ const QUERY_KEYS = {
         playerIds,
         lines,
         nextHours,
+        pageNumber,
     ],
     LiveSportMarkets: (networkId: Network) => ['liveSportMarkets', networkId],
     SgpData: (networkId: Network, gameId: string, params: string) => ['sgpData', networkId, gameId, params],

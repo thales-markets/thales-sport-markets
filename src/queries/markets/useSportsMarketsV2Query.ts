@@ -28,7 +28,10 @@ export type SportsMarketsFilterProps = {
     ticket?: TicketPosition[];
     timeLimitHours?: number;
     isDisabled?: boolean;
+    pageNumber?: number;
 };
+
+const PAGE_SIZE = 10;
 
 const useSportsMarketsV2Query = (
     filters: SportsMarketsFilterProps,
@@ -43,7 +46,12 @@ const useSportsMarketsV2Query = (
         gameIds: gameIdsFilter,
         ticket,
         timeLimitHours,
+        pageNumber,
     } = filters;
+
+    if (pageNumber && pageNumber > 0) {
+        console.log('Fetching page: ', pageNumber);
+    }
 
     const leaguedIds = leaguedIdsFilter?.map((leagueId) => leagueId).join(',') || '';
     const gameIds = ticket?.map((market) => market.gameId).join(',') || gameIdsFilter?.join(',') || '';
@@ -62,7 +70,8 @@ const useSportsMarketsV2Query = (
             typeIds,
             playerIds,
             lines,
-            timeLimitHours?.toString() || ''
+            timeLimitHours?.toString() || '',
+            pageNumber || 0
         ),
         queryFn: async () => {
             try {
@@ -106,7 +115,9 @@ const useSportsMarketsV2Query = (
                                 `${gameIds ? `&gameIds=${gameIds}` : ''}` +
                                 `${ticket ? `&typeIds=${typeIds}` : ''}` +
                                 `${ticket ? `&playerIds=${playerIds}` : ''}` +
-                                `${ticket ? `&lines=${lines}` : ''}`
+                                `${ticket ? `&lines=${lines}` : ''}` +
+                                `${pageNumber ? `&page=${pageNumber}` : ''}` +
+                                `${pageNumber ? `&pagesize=${PAGE_SIZE}` : ''}`
                         ),
                         noCacheConfig
                     ),

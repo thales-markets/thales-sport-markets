@@ -45,7 +45,8 @@ export const refetchProofs = (networkId: Network, markets: TicketMarket[]) => {
             typeIds,
             playerIds,
             lines,
-            nextHours
+            nextHours,
+            0
         ),
     });
 };

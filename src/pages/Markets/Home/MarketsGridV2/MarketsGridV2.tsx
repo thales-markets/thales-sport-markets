@@ -6,7 +6,7 @@ import i18n from 'i18n';
 import { groupBy, orderBy, sortBy, uniq } from 'lodash';
 import debounce from 'lodash/debounce';
 import { BOXING_LEAGUES, getLeagueSport, League, Sport } from 'overtime-utils';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { forceCheck } from 'react-lazyload';
 import { useSelector } from 'react-redux';
@@ -20,14 +20,18 @@ import MarketsListV2 from '../MarketsListV2';
 
 type MarketsGridProps = {
     markets: SportMarkets;
+    setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+    pageNumber: number;
 };
 
-const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
+const MarketsGrid: React.FC<MarketsGridProps> = ({ markets, setPageNumber, pageNumber }) => {
     const language = i18n.language;
     const isMarketSelected = useSelector(getIsMarketSelected);
     const isMobile = useSelector(getIsMobile);
     const sortType = useSelector(getSortType);
     const statusFilter = useSelector(getStatusFilter);
+
+    const [scrollRef, setScrollRef] = useState<Scrollbars | null>(null);
 
     const sortedMarkets = orderBy(
         markets,
@@ -140,11 +144,16 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
         return <ListContainer isMarketSelected={isMarketSelected}>{content}</ListContainer>;
     };
 
-    const onRefChange = useCallback((scrollRef: Scrollbars) => {
-        if (scrollRef) {
-            setScrollMainContainerToTop(scrollRef.scrollToTop);
-        }
-    }, []);
+    const onRefChange = useCallback(
+        (scrollRef: Scrollbars) => {
+            if (scrollRef) {
+                setPageNumber(1);
+                setScrollRef(scrollRef);
+                setScrollMainContainerToTop(scrollRef.scrollToTop);
+            }
+        },
+        [setPageNumber]
+    );
 
     return (
         <Container isMarketSelected={isMarketSelected}>
@@ -155,6 +164,13 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
                     innerRef={onRefChange}
                     onScroll={debounce(() => {
                         forceCheck();
+                        console.log('change scroll: ', scrollRef?.getValues());
+                        if (scrollRef) {
+                            const values = scrollRef.getValues();
+                            if (values.clientHeight + values.scrollTop >= values.scrollHeight - 50) {
+                                setPageNumber(pageNumber + 1);
+                            }
+                        }
                     }, 100)}
                     height="calc(100vh - 154px)"
                 >
