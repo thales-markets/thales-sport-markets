@@ -1,5 +1,5 @@
 import { getWalletClient } from '@wagmi/core';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { CRYPTO_CURRENCY_MAP } from 'constants/currency';
 import { NATIVE_TOKEN_ADDRESS, ZERO_ADDRESS } from 'constants/network';
 import { ContractType } from 'enums/contract';

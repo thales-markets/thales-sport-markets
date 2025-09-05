@@ -1,5 +1,5 @@
 import AIIcon from 'assets/images/svgs/ai-icon.svg?react';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import { TextAreaInput } from 'components/fields/common';
 import { generalConfig } from 'config/general';

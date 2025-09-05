@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { generalConfig } from 'config/general';
 import useAffiliateLeaderboardQuery from 'queries/overdrop/useAffiliateLeaderboardQuery';
 import useGetReffererIdQuery from 'queries/referral/useGetReffererIdQuery';

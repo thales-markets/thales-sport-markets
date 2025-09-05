@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';

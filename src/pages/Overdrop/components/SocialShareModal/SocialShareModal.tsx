@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import { Input } from 'components/fields/common';
 import GenerateAIContent from 'components/GenerateAIContent';

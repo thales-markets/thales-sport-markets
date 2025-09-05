@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import QUERY_KEYS from 'constants/queryKeys';
 import { ContractType } from 'enums/contract';
 import { orderBy } from 'lodash';
