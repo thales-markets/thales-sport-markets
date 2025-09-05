@@ -1232,7 +1232,8 @@
             "verify-account": "Verify your account",
             "verifying-account": "Verifying your account",
             "verifying-account-success": "Your account is verified",
-            "verifying-account-error": "Smart wallets are not compatible with Overtime Account. Switching to EOA wallet"
+            "verifying-account-error": "Smart wallets are not compatible with Overtime Account. Switching to EOA wallet",
+            "guide": "Guide"
         },
         "withdraw": {
             "title": "Withdraw from <icon/> account",

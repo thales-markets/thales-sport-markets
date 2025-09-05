@@ -9,6 +9,7 @@ import Tooltip from 'components/Tooltip';
 import UniversalModal from 'components/UniversalModal';
 import { getErrorToastOptions, getSuccessToastOptions } from 'config/toast';
 import { COLLATERAL_ICONS_CLASS_NAMES } from 'constants/currency';
+import { LINKS } from 'constants/links';
 import ROUTES from 'constants/routes';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { Network } from 'enums/network';
@@ -41,7 +42,6 @@ import useBiconomy from 'utils/smartAccount/hooks/useBiconomy';
 import useUniversalAccount from 'utils/smartAccount/hooks/useUniversalAccount';
 import smartAccountConnector from 'utils/smartAccount/smartAccountConnector';
 import { useAccount, useChainId, useClient } from 'wagmi';
-import { LINKS } from 'constants/links';
 
 type FundModalProps = {
     onClose: () => void;
@@ -328,67 +328,91 @@ const FundModal: React.FC<FundModalProps> = ({ onClose }) => {
                 )}
 
                 <Container>
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-6')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal
-                            onClick={() => {
-                                window.open(LINKS.CexDeposit, '_blank');
-                            }}
+                    <ButtonContainer>
+                        <Tooltip
+                            customIconStyling={{ color: theme.textColor.secondary }}
+                            overlay={t('get-started.fund-account.tooltip-6')}
+                            open={!isSmallDevice}
                         >
-                            <ButtonText>{t('get-started.fund-account.cex-guide')}</ButtonText>
-                            <Icon className="icon icon--affiliate" />
-                        </ButtonLocal>
-                    </Tooltip>
+                            <ButtonLocal
+                                onClick={() => {
+                                    window.open(LINKS.CexDeposit, '_blank');
+                                }}
+                            >
+                                <ButtonText>{t('get-started.fund-account.cex-guide')}</ButtonText>
+                                <Icon className="icon icon--affiliate" />
+                            </ButtonLocal>
+                        </Tooltip>
+                        <Guide>
+                            <Link href={LINKS.CexDeposit}>{t('get-started.fund-account.guide')}</Link>
+                            <ExternalArrow className={'icon icon--arrow-external'} />
+                        </Guide>
+                    </ButtonContainer>
                     {networkId === Network.OptimismMainnet && !isSmartAccountDisabled && !showVerificationButton && (
-                        <Tooltip
-                            customIconStyling={{ color: theme.textColor.secondary }}
-                            overlay={t('get-started.fund-account.tooltip-universal')}
-                            open={!isSmallDevice}
-                        >
-                            <ButtonLocal
-                                onClick={() => {
-                                    setShowUniversalModal(true);
-                                }}
+                        <ButtonContainer>
+                            <Tooltip
+                                customIconStyling={{ color: theme.textColor.secondary }}
+                                overlay={t('get-started.fund-account.tooltip-universal')}
+                                open={!isSmallDevice}
                             >
-                                <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
-                                <ParticleLogo src={particle} />
-                                <BetaTag>Beta</BetaTag>
-                            </ButtonLocal>
-                        </Tooltip>
+                                <ButtonLocal
+                                    onClick={() => {
+                                        setShowUniversalModal(true);
+                                    }}
+                                >
+                                    <ButtonText>{t('get-started.fund-account.universal-deposit')}</ButtonText>
+                                    <ParticleLogo src={particle} />
+                                    <BetaTag>Beta</BetaTag>
+                                </ButtonLocal>
+                            </Tooltip>
+                            <Guide>
+                                <Link href={LINKS.UniversalDeposit}>{t('get-started.fund-account.guide')}</Link>
+                                <ExternalArrow className={'icon icon--arrow-external'} />
+                            </Guide>
+                        </ButtonContainer>
                     )}
-                    <Tooltip
-                        customIconStyling={{ color: theme.textColor.secondary }}
-                        overlay={t('get-started.fund-account.tooltip-5')}
-                        open={!isSmallDevice}
-                    >
-                        <ButtonLocal
-                            onClick={() => {
-                                window.open(onramperUrl, '_blank');
-                            }}
-                        >
-                            <ButtonText>{t('get-started.fund-account.buy-crypto')}</ButtonText>
-                            <Icon className="icon icon--card" />
-                        </ButtonLocal>
-                    </Tooltip>
-                    {!isSmartAccountDisabled && !showVerificationButton && (
+                    <ButtonContainer>
                         <Tooltip
                             customIconStyling={{ color: theme.textColor.secondary }}
-                            overlay={t('get-started.fund-account.tooltip-4')}
+                            overlay={t('get-started.fund-account.tooltip-5')}
                             open={!isSmallDevice}
                         >
                             <ButtonLocal
-                                disabled={totalBalanceValue === 0}
                                 onClick={() => {
-                                    totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
+                                    window.open(onramperUrl, '_blank');
                                 }}
                             >
-                                <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
-                                <Icon className="icon icon--wallet-connected" />
+                                <ButtonText>{t('get-started.fund-account.buy-crypto')}</ButtonText>
+                                <Icon className="icon icon--card" />
                             </ButtonLocal>
                         </Tooltip>
+                        <Guide>
+                            <Link href={LINKS.OnramperDeposit}>{t('get-started.fund-account.guide')}</Link>
+                            <ExternalArrow className={'icon icon--arrow-external'} />
+                        </Guide>
+                    </ButtonContainer>
+                    {!isSmartAccountDisabled && !showVerificationButton && (
+                        <ButtonContainer>
+                            <Tooltip
+                                customIconStyling={{ color: theme.textColor.secondary }}
+                                overlay={t('get-started.fund-account.tooltip-4')}
+                                open={!isSmallDevice}
+                            >
+                                <ButtonLocal
+                                    disabled={totalBalanceValue === 0}
+                                    onClick={() => {
+                                        totalBalanceValue > 0 && setShowDepositFromWallet(!showDepositFromWallet);
+                                    }}
+                                >
+                                    <ButtonText>{t('get-started.fund-account.from-wallet')}</ButtonText>
+                                    <Icon className="icon icon--wallet-connected" />
+                                </ButtonLocal>
+                            </Tooltip>
+                            <Guide>
+                                <Link href={LINKS.WalletDeposit}>{t('get-started.fund-account.guide')}</Link>
+                                <ExternalArrow className={'icon icon--arrow-external'} />
+                            </Guide>
+                        </ButtonContainer>
                     )}
                 </Container>
             </Wrapper>
@@ -497,6 +521,36 @@ const FieldDesc = styled.p`
     span {
         color: ${(props) => props.theme.warning.textColor.primary};
     }
+`;
+
+const ButtonContainer = styled(FlexDivStart)`
+    gap: 10px;
+    width: 100%;
+`;
+
+const Guide = styled(FlexDivStart)`
+    max-width: fit-content;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+`;
+
+const Link = styled.a.attrs({
+    target: '_blank',
+    rel: 'noopener noreferrer',
+})`
+    color: ${(props) => props.theme.link.textColor.primary};
+    line-height: 18px;
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const ExternalArrow = styled.i`
+    margin-left: 4px;
+    font-size: 12px;
+    color: ${(props) => props.theme.textColor.quaternary};
+    cursor: pointer;
 `;
 
 const TooltipText = styled.span`
