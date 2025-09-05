@@ -70,7 +70,7 @@ export default defineConfig(({ mode, command }) => {
     return {
         // depending on your application, base can also be "/"
         define: {
-            'import.meta.env': JSON.stringify(isBuild ? obfuscatedEnv : env),
+            'process.env': JSON.stringify(isBuild ? obfuscatedEnv : env),
         },
         plugins: plugins(mode),
         server: {
