@@ -1,5 +1,5 @@
 import { Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import { generalConfig } from 'config/general';
 import { getErrorToastOptions, getLoadingToastOptions } from 'config/toast';
 import { ZERO_ADDRESS } from 'constants/network';

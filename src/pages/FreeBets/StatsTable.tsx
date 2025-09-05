@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import Table from 'components/Table';

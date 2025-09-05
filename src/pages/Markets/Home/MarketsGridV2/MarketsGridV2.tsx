@@ -43,7 +43,7 @@ const MarketsGrid: React.FC<MarketsGridProps> = ({ markets }) => {
 
     const sortedLeagues = uniq(sortedMarkets.map((market) => market.leagueId));
 
-    const marketsByLeagueMap: Record<number, SportMarket[]> = unifyBoxingMarkets(
+    const marketsByLeagueMap: Record<number, SportMarkets> = unifyBoxingMarkets(
         groupBy(sortedMarkets, (market) => Number(market.leagueId))
     );
 

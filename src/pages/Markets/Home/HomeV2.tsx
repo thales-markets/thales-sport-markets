@@ -76,7 +76,7 @@ import {
 } from 'types/markets';
 import { ThemeInterface } from 'types/ui';
 import { getCaseAccentInsensitiveString } from 'utils/formatters/string';
-import { getDefaultPlayerPropsLeague, getFiltersInfo, getTimeFilter, isStalePausedMarket } from 'utils/marketsV2';
+import { getDefaultPlayerPropsLeague, getFiltersInfo, isStalePausedMarket } from 'utils/marketsV2';
 import { history } from 'utils/routes';
 import { getScrollMainContainerToTop } from 'utils/scroll';
 import useQueryParam from 'utils/useQueryParams';
@@ -104,6 +104,8 @@ const FooterSidebarMobile = lazy(
 const MarketsGridV2 = lazy(() => import(/* webpackChunkName: "MarketsGrid" */ './MarketsGridV2'));
 
 let finalMarketsCached: SportMarkets = [];
+
+const FETCH_ALL_MARKETS = false;
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -133,10 +135,10 @@ const Home: React.FC = () => {
     const [sportMarketsQueryFilters, setSportMarketsQueryFilters] = useState<SportsMarketsFilterProps>({
         status: statusFilter,
         includeProofs: false,
-        sport: sportFilter,
-        leaguedIds: [],
-        gameIds: [],
-        timeLimitHours: TimeFilter.TWELVE_HOURS,
+        sport: FETCH_ALL_MARKETS ? undefined : sportFilter,
+        leaguedIds: FETCH_ALL_MARKETS ? undefined : [],
+        gameIds: FETCH_ALL_MARKETS ? undefined : [],
+        timeLimitHours: FETCH_ALL_MARKETS ? undefined : TimeFilter.DAY,
     });
     const [isFilterTimeLimited, setIsFilterTimeLimited] = useState(false);
 
@@ -283,44 +285,65 @@ const Home: React.FC = () => {
     // set sport market filters
     const wasSportTimeLimited = useRef<boolean>(false);
     useEffect(() => {
-        const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
-            sportFilter,
-            tagFilter,
-            gamesCount,
-            favouriteLeagues
-        );
+        if (sportFilter !== SportFilter.Live) {
+            if (FETCH_ALL_MARKETS) {
+                const sportMarketsFilters: SportsMarketsFilterProps = {
+                    status: statusFilter,
+                    includeProofs: false,
+                    sport: undefined,
+                    leaguedIds: undefined,
+                    timeLimitHours: undefined,
+                    isDisabled: false,
+                };
 
-        const isFilterTimeLimited = statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
-        setIsFilterTimeLimited(isFilterTimeLimited);
+                if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+                    setSportMarketsQueryFilters(sportMarketsFilters);
+                }
+                return;
+            }
+            const { leagueIdsFilter, gamesCountFilter, timeLimitFilter } = getFiltersInfo(
+                sportFilter,
+                tagFilter,
+                gamesCount,
+                favouriteLeagues
+            );
 
-        if (isFilterTimeLimited) {
-            dispatch(setDatePeriodFilter(timeLimitFilter));
-            setDateParam(`${timeLimitFilter}hours`);
-            wasSportTimeLimited.current = true;
-        } else if (wasSportTimeLimited.current) {
-            dispatch(setDatePeriodFilter(TimeFilter.ALL));
-            setDateParam('');
-            wasSportTimeLimited.current = false;
-        }
+            const isFilterTimeLimited =
+                statusFilter === StatusFilter.OPEN_MARKETS && timeLimitFilter !== TimeFilter.ALL;
+            setIsFilterTimeLimited(isFilterTimeLimited);
 
-        const fulGamesCountPerSport = gamesCount ? gamesCount[sportFilter.toString() as NonEmptySport]?.total : 0;
-        const isSportFilterTimeLimited = getTimeFilter(fulGamesCountPerSport, sportFilter) !== TimeFilter.ALL;
-        const isSportValid =
-            Object.values(Sport).find((value: string) => value.toLowerCase() === sportFilter.toLowerCase()) !==
-            undefined;
-        const isLeagueFilterRedudant = isSportValid && !isSportFilterTimeLimited;
+            // update date filter
+            if (!selectedMarket) {
+                if (isFilterTimeLimited) {
+                    dispatch(setDatePeriodFilter(timeLimitFilter));
+                    setDateParam(`${timeLimitFilter}hours`);
+                    wasSportTimeLimited.current = true;
+                } else if (wasSportTimeLimited.current) {
+                    dispatch(setDatePeriodFilter(TimeFilter.ALL));
+                    setDateParam('');
+                    wasSportTimeLimited.current = false;
+                }
+            }
 
-        const sportMarketsFilters: SportsMarketsFilterProps = {
-            status: statusFilter,
-            includeProofs: false,
-            sport: sportFilter,
-            leaguedIds: isLeagueFilterRedudant ? [] : leagueIdsFilter,
-            timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
-            isDisabled: !gamesCountFilter,
-        };
+            const sportMarketsFilters: SportsMarketsFilterProps = {
+                status: statusFilter,
+                includeProofs: false,
+                sport: sportFilter,
+                leaguedIds: leagueIdsFilter,
+                timeLimitHours: isFilterTimeLimited ? timeLimitFilter : undefined,
+                isDisabled: !gamesCountFilter,
+            };
 
-        if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
-            setSportMarketsQueryFilters(sportMarketsFilters);
+            if (!isEqual(sportMarketsFilters, sportMarketsQueryFilters)) {
+                setSportMarketsQueryFilters(sportMarketsFilters);
+            }
+        } else {
+            if (wasSportTimeLimited.current) {
+                wasSportTimeLimited.current = false;
+                setIsFilterTimeLimited(false);
+                dispatch(setDatePeriodFilter(TimeFilter.ALL));
+                setDateParam('');
+            }
         }
     }, [
         statusFilter,
@@ -332,6 +355,7 @@ const Home: React.FC = () => {
         dispatch,
         setDateParam,
         sportMarketsQueryFilters,
+        selectedMarket,
     ]);
 
     const sportMarketsQuery = useSportsMarketsV2Query(
@@ -1062,7 +1086,7 @@ const Home: React.FC = () => {
                                     />
                                 )}
                             <Filters isMainPageView isTimeLimited={isFilterTimeLimited} />
-                            <FilterTagsMobile />
+                            <FilterTagsMobile isFilterTimeLimited={isFilterTimeLimited} />
                         </>
                     )}
                     {marketsLoading ? (

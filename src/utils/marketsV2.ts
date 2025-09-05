@@ -989,7 +989,7 @@ export const getFiltersInfo = (
         gamesCountFilter = gamesCount
             ? sumBy(leagueIdsFilter, (leagueId: League) => {
                   const sportForGamesCount = getLeagueSport(leagueId);
-                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+                  return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId]?.total || 0;
               })
             : null;
     } else {
@@ -1008,7 +1008,7 @@ export const getFiltersInfo = (
                 gamesCountFilter = gamesCount
                     ? sumBy(leagueIdsFilter, (leagueId: League) => {
                           const sportForGamesCount = getLeagueSport(leagueId);
-                          return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId].total || 0;
+                          return gamesCount[sportForGamesCount as NonEmptySport]?.leagues[leagueId]?.total || 0;
                       })
                     : null;
                 break;
@@ -1037,8 +1037,7 @@ export const getFiltersInfo = (
         }
     }
 
-    timeLimitFilter =
-        gamesCountFilter === null ? TimeFilter.TWELVE_HOURS : getTimeFilter(gamesCountFilter, sportFilter);
+    timeLimitFilter = gamesCountFilter === null ? TimeFilter.DAY : getTimeFilter(gamesCountFilter, sportFilter);
 
     return { leagueIdsFilter, gamesCountFilter, timeLimitFilter };
 };
