@@ -95,7 +95,7 @@
     "scripts": {
         "start": "vite --host",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview --mode preview"
     },
     "browserslist": [
         ">0.2%",

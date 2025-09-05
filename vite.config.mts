@@ -52,11 +52,11 @@ const plugins = (_mode: string): PluginOption[] => {
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, process.cwd(), '');
-    const isBuild = command === 'build';
+    const isProduction = command === 'build' || mode === 'production';
 
     // Obfuscate only VITE_ variables
     const obfuscatedEnv: Record<string, string> = {};
-    if (isBuild) {
+    if (isProduction) {
         for (const key in env) {
             if (key.startsWith('VITE_')) {
                 const originalValue = env[key];
@@ -70,7 +70,7 @@ export default defineConfig(({ mode, command }) => {
     return {
         // depending on your application, base can also be "/"
         define: {
-            'process.env': isBuild ? obfuscatedEnv : env,
+            'process.env': isProduction ? obfuscatedEnv : env,
         },
         plugins: plugins(mode),
         server: {

@@ -28,9 +28,7 @@ export enum ViteEnvKeys {
 }
 
 export const getEnv = (name: ViteEnvKeys) => {
-    console.log(import.meta.env.DEV);
-    console.log('import.meta.env:', import.meta.env);
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || import.meta.env.VITE_IS_PREVIEW === 'true') {
         return import.meta.env[name];
     }
     const encodedName = btoa(name.split('').reverse().join(''));
