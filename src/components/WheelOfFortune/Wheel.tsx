@@ -1,5 +1,5 @@
 import pointer from 'assets/images/svgs/pointer.svg';
-import axios from 'axios';
+import axios from 'utils/clientTotp';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import { generalConfig } from 'config/general';
