@@ -47,27 +47,30 @@ const plugins = (_mode: string): PluginOption[] => {
             // Whether to polyfill `Buffer` (true by default)
             include: ['buffer'],
         }),
-        {
-            name: 'obfuscate-env',
-            configResolved(config) {
-                for (const key in config.env) {
-                    if (key.startsWith('VITE_')) {
-                        const originalValue = config.env[key];
-                        const encodedKey = btoa(key.split('').reverse().join(''));
-                        config.env[encodedKey] = btoa(originalValue.split('').reverse().join(''));
-                    }
-                }
-            },
-        },
     ];
 };
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, process.cwd(), '');
+    const isBuild = command === 'build';
+
+    // Obfuscate only VITE_ variables
+    const obfuscatedEnv: Record<string, string> = {};
+    if (isBuild) {
+        for (const key in env) {
+            if (key.startsWith('VITE_')) {
+                const originalValue = env[key];
+                const encodedKey = btoa(key.split('').reverse().join(''));
+                const encodedValue = btoa(originalValue.split('').reverse().join(''));
+                obfuscatedEnv[encodedKey] = encodedValue;
+            }
+        }
+    }
+
     return {
         // depending on your application, base can also be "/"
         define: {
-            'process.env': env,
+            'process.env': isBuild ? obfuscatedEnv : env,
         },
         plugins: plugins(mode),
         server: {
