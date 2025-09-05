@@ -25,10 +25,11 @@ export enum ViteEnvKeys {
     VITE_APP_PAYMASTER_KEY_ARB = `VITE_APP_PAYMASTER_KEY_${Network.Arbitrum}`,
     VITE_APP_PAYMASTER_KEY_BASE = `VITE_APP_PAYMASTER_KEY_${Network.Base}`,
     VITE_APP_PAYMASTER_KEY_OP_SEPOLIA = `VITE_APP_PAYMASTER_KEY_${Network.OptimismSepolia}`,
+    VITE_APP_SNAPSHOT_API_KEY = 'VITE_APP_SNAPSHOT_API_KEY',
 }
 
 export const getEnv = (name: ViteEnvKeys) => {
-    if (import.meta.env.DEV || import.meta.env.VITE_IS_PREVIEW === 'true') {
+    if (import.meta.env.DEV) {
         return import.meta.env[name];
     }
     const encodedName = btoa(name.split('').reverse().join(''));
