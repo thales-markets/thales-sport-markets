@@ -1,9 +1,10 @@
 import { AuthCoreContextProvider } from '@particle-network/authkit';
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import UnexpectedError from 'components/UnexpectedError';
 import WalletDisclaimer from 'components/WalletDisclaimer';
+import { getEnv, ViteEnvKeys } from 'config/general';
 import { PLAUSIBLE } from 'constants/analytics';
 import { LOCAL_STORAGE_KEYS } from 'constants/storage';
 import { ThemeMap } from 'constants/ui';
@@ -51,7 +52,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
     PLAUSIBLE.enableAutoPageviews();
 
     const onErrorHandler = (error: Error, info: ErrorInfo) => {
-        if (import.meta.env.DEV) {
+        if (getEnv(ViteEnvKeys.DEV)) {
             return;
         }
 
@@ -85,9 +86,9 @@ const Root: React.FC<RootProps> = ({ store }) => {
                 <Provider store={store}>
                     <AuthCoreContextProvider
                         options={{
-                            projectId: import.meta.env.VITE_APP_PARTICLE_PROJECT_ID,
-                            clientKey: import.meta.env.VITE_APP_PARTICLE_CLIENT_KEY,
-                            appId: import.meta.env.VITE_APP_PARTICLE_API_ID,
+                            projectId: getEnv(ViteEnvKeys.VITE_APP_PARTICLE_PROJECT_ID),
+                            clientKey: getEnv(ViteEnvKeys.VITE_APP_PARTICLE_CLIENT_KEY),
+                            appId: getEnv(ViteEnvKeys.VITE_APP_PARTICLE_API_ID),
                             language: 'en',
                             wallet: {
                                 visible: false,

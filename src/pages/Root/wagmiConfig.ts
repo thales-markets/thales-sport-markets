@@ -12,6 +12,7 @@ import {
     trustWallet,
     walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+import { getEnv, ViteEnvKeys } from 'config/general';
 import { RPC_LIST } from 'constants/network';
 import { farcasterRainbowWallet } from 'constants/wallet';
 import { NetworkId } from 'thales-utils';
@@ -67,7 +68,7 @@ export const wagmiConfig = createConfig({
         ],
         {
             appName: 'Overtime Sportsbook',
-            projectId: import.meta.env.VITE_APP_WALLET_CONNECT_PROJECT_ID || '',
+            projectId: getEnv(ViteEnvKeys.VITE_APP_WALLET_CONNECT_PROJECT_ID) || '',
         }
     ),
     transports: {
